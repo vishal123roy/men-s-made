@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Message Tag in Pill Shape</title>
+    <style>
+        .message-pill {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px; /* Creates the pill shape */
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        }
+        .message-pill.active {
+            background-color: #007bff; /* Active background color */
+            color: #fff; /* Active text color */
+        }
+    </style>
+</head>
+<body>
+    <div class="message-pill" onclick="toggleActive(this)">Active Message</div>
+
+    <script>
+        function toggleActive(element) {
+            element.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
+
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="imageUpload" class="form-label">Images</label>
+            <input class="form-control" type="file" id="imageUpload" name="image" required>
+        </div>
+    </div>
+</div> 
+
+<footer class="main-footer font-xs">
+    <div class="row pb-30 pt-15">
+        <div class="col-sm-6">
+            <script>
+                document.write(new Date().getFullYear())
+            </script> ©, Evara - HTML Ecommerce Template .
+        </div>
+        <div class="col-sm-6">
+            <div class="text-sm-end">
+                All rights reserved
+            </div>
+        </div>
+    </div>
+</footer>
