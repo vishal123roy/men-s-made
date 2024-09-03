@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<!-- belle/home2-default.html   11 Nov 2019 12:22:28 GMT -->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>men's made home</title>
+    <meta name="description" content="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="user_assets/images/favicon.png" />
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="user_assets/css/plugins.css">
+    <!-- Bootstap CSS -->
+    <link rel="stylesheet" href="user_assets/css/bootstrap.min.css">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="user_assets/css/style.css">
+    <link rel="stylesheet" href="user_assets/css/responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .logo-bar {
+            /* display: flex; */
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .logo-bar__item {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-bar__image {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+      
+        .carousel-item img {
+            width: 100%;
+            height: 600px; /* Adjust the height as needed */
+            object-fit: cover;
+        }
+
+        /* Custom positioning for text content */
+        .caption-left {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            text-align: left;
+        }
+
+        .caption-right {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            text-align: right;
+        }
+
+        .caption-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+    </style>
+
+</head>
+
+<body class="template-index home2-default">
+    <div id="pre-loader">
+        <img src="user_assets/images/loader.gif" alt="Loading..." />
+    </div>
+    <div class="pageWrapper">
+        <!--Promotion Bar-->
+        <div class="notification-bar mobilehide">
+            <a href="#" class="notification-bar__message">20% off your very first purchase, use coupon code: men's
+                made</a>
+            <span class="close-announcement">×</span>
+        </div>
+        <!--End Promotion Bar-->
+        <!--Search Form Drawer-->
+        <div class="search">
+            <div class="search__form">
+                <form class="search-bar__form" action="#">
+                    <button class="go-btn search__button" type="submit"><i class="icon anm anm-search-l"></i></button>
+                    <input class="search__input" type="search" name="q" value="" placeholder="Search entire store..."
+                        aria-label="Search" autocomplete="off">
+                </form>
+                <button type="button" class="search-trigger close-btn"><i class="anm anm-times-l"></i></button>
+            </div>
+        </div>
+        <!--End Search Form Drawer-->
+        <!--Top Header-->
+        <div class="top-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-10 col-sm-8 col-md-5 col-lg-4">
+                        <p class="phone-no"><i class="anm anm-phone-s"></i> +440 0(111) 044 833</p>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 d-none d-lg-none d-md-block d-lg-block">
+                        <div class="text-center">
+                            <p class="top-header_middle-text"> Worldwide Express Shipping</p>
+                        </div>
+                    </div>
+                    <div class="col-2 col-sm-4 col-md-3 col-lg-4 text-right">
+                        <span class="user-menu d-block d-lg-none"><i class="anm anm-user-al"
+                                aria-hidden="true"></i></span>
+                        <ul class="customer-links list-inline">
+                            <li><a href="/login">Login</a></li>
+                            <li><a href="/userProfile">My Account</a></li>
+                            <li><a href="/wishList">Wishlist</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Top Header-->
+        <!--Header-->
+        <div class="header-wrap animated d-flex border-bottom">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <!--Desktop Logo-->
+                    <div class="logo col-md-2 col-lg-2 d-none d-lg-block">
+                        <a href="index.html">
+                            <img src="user_assets/images/website3.png" alt="Belle Multipurpose Html Template"
+                                title="Belle Multipurpose Html Template" />
+                        </a>
+                    </div>
+                    <!--End Desktop Logo-->
+                    <div class="col-2 col-sm-3 col-md-3 col-lg-8">
+                        <div class="d-block d-lg-none">
+                            <button type="button"
+                                class="btn--link site-header__menu js-mobile-nav-toggle mobile-nav--open">
+                                <i class="icon anm anm-times-l"></i>
+                                <i class="anm anm-bars-r"></i>
+                            </button>
+                        </div>
+                        <!--Desktop Menu-->
+                        <nav class="grid__item" id="AccessibleNav"><!-- for mobile -->
+                            <ul id="siteNav" class="site-nav medium center hidearrow">
+                                <li class="lvl1 parent megamenu"><a href="#">Home <i
+                                            class="anm anm-angle-down-l"></i></a>
+                                </li>
+                                <li class="lvl1 parent megamenu"><a href="/landingShop">Shop <i
+                                            class="anm anm-angle-down-l"></i></a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!--End Desktop Menu-->
+                    </div>
+                    <!--Mobile Logo-->
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-2 d-block d-lg-none mobile-logo">
+                        <div class="logo">
+                            <a href="index.html">
+                                <img src="user_assets/images/logo.svg" alt="Belle Multipurpose Html Template"
+                                    title="Belle Multipurpose Html Template" />
+                            </a>
+                        </div>
+                    </div>
+                    <!--Mobile Logo-->
+                    <div class="col-4 col-sm-3 col-md-3 col-lg-2">
+                        <div class="site-cart">
+                            <a href="#" class="site-header__cart" title="Cart">
+                                <i class="icon anm anm-bag-l"></i>
+
+                            </a>
+                            <!--Minicart Popup-->
+                            <div id="header-cart" class="block block-cart">
+                                <div class="total">
+                                    <div class="buttonSet text-center">
+                                        <a href="/cartPage " class="btn btn-secondary btn--small">View Cart</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End Minicart Popup-->
+                        </div>
+                        <div class="site-header__search">
+                            <button type="button" class="search-trigger"><i class="icon anm anm-search-l"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Header-->
+        <!--Body Content-->
+        <div id="page-content">
+            <!--Home slider-->
+            <div id="bannerCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#bannerCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#bannerCarousel" data-slide-to="1"></li>
+                    <li data-target="#bannerCarousel" data-slide-to="2"></li>
+                </ol>
+            
+                <!-- Carousel Items -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="user_assets/images/slideshow-banners/confident.jpg" class="d-block w-100" alt="Shop Our New Collection" title="Shop Our New Collection">
+                        <div class="carousel-caption d-none d-md-block" style="margin-right:50%; margin-bottom:200px;">
+                            <h2 class="h1">Our New Collection</h2>
+                            <p>Save up to 50% Off</p>
+                            <a href="#" class="btn btn-primary">Shop now</a>
+                        </div>
+                    </div>
+                    <!-- Add more slides here if needed -->
+                    <div class="carousel-item">
+                        <img src="user_assets/images/slideshow-banners/handsome.jpg" class="d-block w-100" alt="Another Slide" title="Another Slide">
+                        <div class="carousel-caption d-none d-md-block" style="margin-bottom: 200px;">
+                            <h2 class="h1">Another Collection</h2>
+                            <p>New arrivals available</p>
+                            <a href="#" class="btn btn-primary">Explore now</a>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="user_assets/images/slideshow-banners/happy.jpg" class="d-block w-100" alt="Yet Another Slide" title="Yet Another Slide">
+                        <div class="carousel-caption d-none d-md-block" style="margin-bottom: 200px; margin-left: 200px;">
+                            <h2 class="h1">Season Sale</h2>
+                            <p>Exclusive offers this season</p>
+                            <a href="#" class="btn btn-primary">Discover more</a>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Controls -->
+                <a class="carousel-control-prev" href="#bannerCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#bannerCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <!--End Home slider-->
+            <!--Weekly Bestseller-->
+            <div class="section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="section-header text-center">
+                                <h2 class="h2">Weekly Bestseller</h2>
+                                <p>Our most popular products based on sales</p>
+                            </div>
+                            <div class="productSlider grid-products">
+                                <% for(let i=0; i<products.length; i++){ %>
+                                    <% if(products[i].productcategory==="T-shirts" ) { %>
+                                        <div class="col-12 item">
+                                            <!-- start product image -->
+                                            <div class="product-image">
+                                                <!-- start product image -->
+                                                <a href="/landingProduct?id=<%=products[i]._id%>"
+                                                    class="grid-view-item__link">
+                                                    <!-- image -->
+                                                    <img class="primary lazyload"
+                                                        src="/product_Assets/<%=products[i].images[0]%>" alt="image"
+                                                        title="product">
+                                                    <!-- End image -->
+                                                    <!-- Hover image -->
+                                                    <img class="hover lazyload"
+                                                        src="/product_Assets/<%=products[i].images[1]%>" alt="image"
+                                                        title="product">
+                                                    <!-- End hover image -->
+                                                    <!-- Variant Image-->
+                                                </a>
+                                                <!-- end product image -->
+                                                <!-- Start product button -->
+                                                <div class="button-set">
+                                                    <div class="wishlist-btn">
+                                                        <a class="wishlist add-to-wishlist" onclick="addTowishList('<%=products[i]._id%>')">
+                                                            <i class="icon anm anm-heart-l"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <!-- end product button -->
+                                            </div>
+                                            <!-- end product image -->
+                                            <!--start product details -->
+                                            <div class="product-details text-center">
+                                                <!-- product name -->
+                                                <div class="product-name">
+                                                    <a href="/landingProduct?id=<%=products[i]._id%>">
+                                                        <%=products[i].productname%>
+                                                    </a>
+                                                </div>
+                                                <!-- End product name -->
+                                                <!-- product price -->
+                                                <div class="product-price">
+                                                    <span class="old-price">
+                                                        <%= products[i].price %>
+                                                    </span>
+                                                    <span class="price">
+                                                        <%= products[i].offerPrice %>
+                                                    </span>
+                                                </div>
+                                                <!-- End product price -->
+                                            </div>
+                                            <!-- End product details -->
+                                        </div>
+                                        <% } %>
+                                    <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Weekly Bestseller-->
+            <!--Parallax Section-->
+            <div class="section">
+                <div class="hero hero--large hero__overlay bg-size">
+                    <img class="bg-img" src="user_assets/images/parallax-banners/handsome-banner.jpg" alt="" />
+                    <div class="hero__inner">
+                        <div class="container">
+                            <div class="wrap-text right text-small font-bold">
+                                <h2 class="h2 mega-title">Belle <br> The best choice for your store</h2>
+                                <div class="rte-setting mega-subtitle">Lorem Ipsum is simply dummy text of the printing
+                                    and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+                                    ever since the 1500s.</div>
+                                <a href="#" class="btn">Purchase Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Parallax Section-->
+            <!--New Arrivals-->
+            <div class="product-rows section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="section-header text-center">
+                                <h2 class="h2">New Arrivals</h2>
+                                <p>Grab these new items before they are gone!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid-products">
+                        <div class="row">
+                            <% for(let i=0; i <8 ; i++) { %>
+                                <!-- Check if the index is a multiple of 4 and close the previous row, start a new row -->
+                                <% if (i % 4===0 && i !==0) { %>
+                        </div>
+                        <div class="row">
+                            <% } %>
+                                <div class="col-6 col-sm-3 col-md-3 col-lg-3 item">
+                                    <!-- start product image -->
+                                    <div class="product-image">
+                                        <a href="/landingProduct?id=<%=products[i]._id%>" class="grid-view-item__link">
+                                            <!-- image -->
+                                            <img class="primary blur-up lazyload"
+                                                src="/product_Assets/<%= products[i].images[0] %>" alt="image"
+                                                title="product" />
+                                            <!-- End image -->
+                                            <!-- Hover image -->
+                                            <img class="hover blur-up lazyload"
+                                                src="/product_Assets/<%= products[i].images[1] %>" alt="image"
+                                                title="product" />
+                                            <!-- End hover image -->
+                                            <!-- Variant Image-->
+                                            <!-- end product image -->
+
+                                            <div class="button-set">
+                                                <div class="wishlist-btn">
+                                                    <a class="wishlist add-to-wishlist" onclick="addTowishList('<%=products[i]._id%>')">
+                                                        <i class="icon anm anm-heart-l"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- end product button -->
+                                    </div>
+                                    <!-- end product image -->
+                                    <!-- start product details -->
+                                    <div class="product-details text-center">
+                                        <!-- product name -->
+                                        <div class="product-name">
+                                            <a href="/landingProduct?id=<%=products[i]._id%>">
+                                                <%= products[i].productname %>
+                                            </a>
+                                        </div>
+                                        <!-- End product name -->
+                                        <!-- product price -->
+                                        <div class="product-price">
+                                            <span class="old-price">
+                                                <%= products[i].price.toFixed(2) %>
+                                            </span>
+                                            <span class="price">
+                                                <%= products[i].offerPrice.toFixed(2) %>
+                                            </span>
+                                        </div>
+                                        <!-- End product price -->
+                                    </div>
+                                    <!-- End product details -->
+                                </div>
+                                <% } %>
+                        </div>
+                        <!-- Ensure the last row is closed properly -->
+                    </div>
+
+                </div>
+            </div>
+            <!--End Featured Product-->
+
+            <!--Logo Slider-->
+            <div class="section logo-section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="section-header text-center">
+                                <h2 class="h2">The Most Loved Brands</h2>
+                            </div>
+                            <div class="logo-bar">
+                                <div class="logo-bar__item">
+                                    <img src="user_assets/images/logo/adidas.jpg" alt="Adidas Logo"
+                                        class="logo-bar__image" />
+                                </div>
+                                <div class="logo-bar__item">
+                                    <img src="user_assets/images/logo/allensolly.jpg" alt="Allen Solly Logo"
+                                        class="logo-bar__image" />
+                                </div>
+                                <div class="logo-bar__item">
+                                    <img src="user_assets/images/logo/diesel.png" alt="Diesel Logo"
+                                        class="logo-bar__image" />
+                                </div>
+                                <div class="logo-bar__item">
+                                    <img src="user_assets/images/logo/levis.jpg" alt="Levis Logo"
+                                        class="logo-bar__image" />
+                                </div>
+                                <div class="logo-bar__item">
+                                    <img src="user_assets/images/logo/peppe.png" alt="Peppe Logo"
+                                        class="logo-bar__image" />
+                                </div>
+                                <div class="logo-bar__item">
+                                    <img src="user_assets/images/logo/us-polo.jpg" alt="US Polo Logo"
+                                        class="logo-bar__image" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Logo Slider-->
+        </div>
+        <!--End Body Content-->
+
+        <!--Footer-->
+        <footer id="footer" class="footer-2">
+            <div class="newsletter-section">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div
+                            class="col-12 col-sm-12 col-md-12 col-lg-5 d-flex justify-content-center align-items-center">
+                            <div class="footer-social">
+                                <ul class="list--inline site-footer__social-icons social-icons">
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Facebook"><i
+                                                class="icon icon-facebook"></i></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Twitter"><i
+                                                class="icon icon-twitter"></i> <span
+                                                class="icon__fallback-text">Twitter</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Pinterest"><i
+                                                class="icon icon-pinterest"></i> <span
+                                                class="icon__fallback-text">Pinterest</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Instagram"><i
+                                                class="icon icon-instagram"></i> <span
+                                                class="icon__fallback-text">Instagram</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Tumblr"><i
+                                                class="icon icon-tumblr-alt"></i> <span
+                                                class="icon__fallback-text">Tumblr</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on YouTube"><i
+                                                class="icon icon-youtube"></i> <span
+                                                class="icon__fallback-text">YouTube</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Vimeo"><i
+                                                class="icon icon-vimeo-alt"></i> <span
+                                                class="icon__fallback-text">Vimeo</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="site-footer">
+                <div class="container">
+                    <!--Footer Links-->
+                    <div class="footer-top">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
+                                <h4 class="h4">Quick Shop</h4>
+                                <ul>
+                                    <li><a href="#">Women</a></li>
+                                    <li><a href="#">Men</a></li>
+                                    <li><a href="#">Kids</a></li>
+                                    <li><a href="#">Sportswear</a></li>
+                                    <li><a href="#">Sale</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
+                                <h4 class="h4">Informations</h4>
+                                <ul>
+                                    <li><a href="#">About us</a></li>
+                                    <li><a href="#">Careers</a></li>
+                                    <li><a href="#">Privacy policy</a></li>
+                                    <li><a href="#">Terms &amp; condition</a></li>
+                                    <li><a href="#">My Account</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
+                                <h4 class="h4">Customer Services</h4>
+                                <ul>
+                                    <li><a href="#">Request Personal Data</a></li>
+                                    <li><a href="#">FAQ's</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Orders and Returns</a></li>
+                                    <li><a href="#">Support Center</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 contact-box">
+                                <h4 class="h4">Contact Us</h4>
+                                <ul class="addressFooter">
+                                    <li><i class="icon anm anm-map-marker-al"></i>
+                                        <p>55 Gallaxy Enque,<br>2568 steet, 23568 NY</p>
+                                    </li>
+                                    <li class="phone"><i class="icon anm anm-phone-s"></i>
+                                        <p>(440) 000 000 0000</p>
+                                    </li>
+                                    <li class="email"><i class="icon anm anm-envelope-l"></i>
+                                        <p>sales@yousite.com</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Footer Links-->
+                    <hr>
+                    <div class="footer-bottom">
+                        <div class="row">
+                            <!--Footer Copyright-->
+                            <div
+                                class="col-12 col-sm-12 col-md-12 col-lg-12 order-1 order-md-0 order-lg-0 order-sm-1 copyright text-center">
+                                <span></span> <a href="templateshub.net">Templates Hub</a>
+                            </div>
+                            <!--End Footer Copyright-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--End Footer-->
+        <!--Scoll Top-->
+        <span id="site-scroll"><i class="icon anm anm-angle-up-r"></i></span>
+        <!--End Scoll Top-->
+
+        <!-- Newsletter Popup -->
+        <div class="newsletter-wrap" id="popup-container">
+            <div id="popup-window">
+                <a class="btn closepopup"><i class="icon icon anm anm-times-l"></i></a>
+                <!-- Modal content-->
+                <div class="display-table splash-bg">
+                    <div class="display-table-cell width40"><img src="user_assets/images/newsletter-img.jpg"
+                            alt="Join Our Mailing List" title="Join Our Mailing List" /> </div>
+                    <div class="display-table-cell width60 text-center">
+                        <div class="newsletter-left">
+                            <h2>Join Our Mailing List</h2>
+                            <p>Sign Up for our exclusive email list and be the first to know about new products and
+                                special offers</p>
+                            <form action="#" method="post">
+                                <div class="input-group">
+                                    <input type="email" class="input-group__field newsletter__input" name="EMAIL"
+                                        value="" placeholder="Email address" required="">
+                                    <span class="input-group__btn">
+                                        <button type="submit" class="btn newsletter__submit" name="commit"
+                                            id="subscribeBtn"> <span
+                                                class="newsletter__submit-text--large">Subscribe</span> </button>
+                                    </span>
+                                </div>
+                            </form>
+                            <ul class="list--inline site-footer__social-icons social-icons">
+                                <li><a class="social-icons__link" href="#" title="Facebook"><i
+                                            class="fa fa-facebook-official" aria-hidden="true"></i></a></li>
+                                <li><a class="social-icons__link" href="#" title="Twitter"><i class="fa fa-twitter"
+                                            aria-hidden="true"></i></a></li>
+                                <li><a class="social-icons__link" href="#" title="Pinterest"><i class="fa fa-pinterest"
+                                            aria-hidden="true"></i></a></li>
+                                <li><a class="social-icons__link" href="#" title="Instagram"><i class="fa fa-instagram"
+                                            aria-hidden="true"></i></a></li>
+                                <li><a class="social-icons__link" href="#" title="YouTube"><i class="fa fa-youtube"
+                                            aria-hidden="true"></i></a></li>
+                                <li><a class="social-icons__link" href="#" title="Vimeo"><i class="fa fa-vimeo"
+                                            aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Newsletter Popup -->
+
+        <!-- Including Jquery -->
+        <script src="user_assets/js/vendor/jquery-3.3.1.min.js"></script>
+        <script src="user_assets/js/vendor/modernizr-3.6.0.min.js"></script>
+        <script src="user_assets/js/vendor/jquery.cookie.js"></script>
+        <script src="user_assets/js/vendor/wow.min.js"></script>
+        <!-- Including Javascript -->
+        <script src="user_assets/js/bootstrap.min.js"></script>
+        <script src="user_assets/js/plugins.js"></script>
+        <script src="user_assets/js/popper.min.js"></script>
+        <script src="user_assets/js/lazysizes.js"></script>
+        <script src="user_assets/js/main.js"></script>
+        <!--For Newsletter Popup-->
+        <script>
+            jQuery(document).ready(function () {
+                jQuery('.closepopup').on('click', function () {
+                    jQuery('#popup-container').fadeOut();
+                    jQuery('#modalOverly').fadeOut();
+                });
+
+                var visits = jQuery.cookie('visits') || 0;
+                visits++;
+                jQuery.cookie('visits', visits, { expires: 1, path: '/' });
+                console.debug(jQuery.cookie('visits'));
+                if (jQuery.cookie('visits') > 1) {
+                    jQuery('#modalOverly').hide();
+                    jQuery('#popup-container').hide();
+                } else {
+                    var pageHeight = jQuery(document).height();
+                    jQuery('<div id="modalOverly"></div>').insertBefore('body');
+                    jQuery('#modalOverly').css("height", pageHeight);
+                    jQuery('#popup-container').show();
+                }
+                if (jQuery.cookie('noShowWelcome')) { jQuery('#popup-container').hide(); jQuery('#active-popup').hide(); }
+            });
+
+            jQuery(document).mouseup(function (e) {
+                var container = jQuery('#popup-container');
+                if (!container.is(e.target) && container.has(e.target).length === 0) {
+                    container.fadeOut();
+                    jQuery('#modalOverly').fadeIn(200);
+                    jQuery('#modalOverly').hide();
+                }
+            });
+
+            /*--------------------------------------
+                Promotion / Notification Cookie Bar 
+              -------------------------------------- */
+            if (Cookies.get('promotion') != 'true') {
+                $(".notification-bar").show();
+            }
+            $(".close-announcement").on('click', function () {
+                $(".notification-bar").slideUp();
+                Cookies.set('promotion', 'true', { expires: 1 });
+                return false;
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var productPrices = document.querySelectorAll('.product-price');
+
+                productPrices.forEach(function (priceDiv) {
+                    var oldPrice = priceDiv.querySelector('.old-price');
+                    var newPrice = priceDiv.querySelector('.price');
+
+                    if (oldPrice && newPrice) {
+                        var oldPriceValue = parseFloat(oldPrice.textContent.trim());
+                        var newPriceValue = parseFloat(newPrice.textContent.trim());
+
+                        if (oldPriceValue === newPriceValue) {
+                            oldPrice.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        </script>
+
+        <!--End For Newsletter Popup-->
+    </div>
+</body>
+
+<!-- belle/home2-default.html   11 Nov 2019 12:23:42 GMT -->
+
+</html>

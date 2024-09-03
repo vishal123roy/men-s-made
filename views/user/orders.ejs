@@ -82,23 +82,23 @@
                                 <div class="dashboard-menu">
                                     <ul class="nav flex-column" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="/userProfile"><i
-                                                    class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                            <a class="nav-link" href="/userProfile"><i
+                                                    class="fi-rs-settings-sliders mr-10"></i>User Profile</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/orders"><i
+                                            <a class="nav-link active" href="/orders"><i
                                                     class="fi-rs-shopping-bag mr-10"></i>Orders</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/trackOrders"><i
-                                                    class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="/address"><i class="fi-rs-marker mr-10"></i>My
+                                            <a class="nav-link" href="/addressList"><i class="fi-rs-marker mr-10"></i>My
                                                 Address</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="page-login-register.html"><i
+                                            <a class="nav-link" href="/wallet"><i class="fi-rs-marker mr-10"></i>
+                                                Wallet </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/logout"><i
                                                     class="fi-rs-sign-out mr-10"></i>Logout</a>
                                         </li>
                                     </ul>
@@ -107,47 +107,44 @@
                             <div class="col-md-8">
                                 <div class="dashboard-content">
                                     <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Your Orders</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Order</th>
-                                                            <th>Date</th>
-                                                            <th>Status</th>
-                                                            <th>Total</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>#1357</td>
-                                                            <td>March 45, 2020</td>
-                                                            <td>Processing</td>
-                                                            <td>$125.00 for 2 item</td>
-                                                            <td><a href="#" class="btn-small d-block">View</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>#2468</td>
-                                                            <td>June 29, 2020</td>
-                                                            <td>Completed</td>
-                                                            <td>$364.00 for 5 item</td>
-                                                            <td><a href="#" class="btn-small d-block">View</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>#2366</td>
-                                                            <td>August 02, 2020</td>
-                                                            <td>Completed</td>
-                                                            <td>$280.00 for 3 item</td>
-                                                            <td><a href="#" class="btn-small d-block">View</a></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Your Orders</h5>
                                             </div>
-                                        </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Order</th>
+                                                                <th>Date</th>
+                                                                <th>Status</th>
+                                                                <th>Total</th>
+                                                                <th>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% orderData.forEach(element=> { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <%= element.orderNumber%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= element.orderDate.toDateString()%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= element.status%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= element.totalAmount.toFixed(2)%>Rs
+                                                                    </td>
+                                                                    <td><a href="/viewOrder?id=<%=element._id%>"
+                                                                            class="btn-small d-block">View</a></td>
+                                                                </tr>
+                                                                <% }); %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                     </div>
                                 </div>
                             </div>

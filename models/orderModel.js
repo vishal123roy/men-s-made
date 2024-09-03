@@ -1,0 +1,112 @@
+const req = require('express/lib/request');
+const mongoose = require('mongoose');
+
+const orderSchema = new mongoose.Schema({
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'customer',
+        required:true
+    },
+    orderNumber:{
+        type:String,
+        required:true,
+        unique:true
+    },
+    items:[
+        {
+            product:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:'Product',
+                required:true
+            },
+            size:{
+                type:String,
+                required:true
+            },
+            quantity:{
+                type:Number,
+                required:true
+            },
+            price:{
+                type:Number,
+                required:true
+            }           
+        }
+    ],
+    totalAmount:{
+        type:Number,
+        required:false
+    },
+    orderDate:{
+        type:Date,
+        default:Date.now
+
+    },
+    status:{
+        type:String,
+        enum:['pending','failed','delivered','canceled','returned','Return pending'],
+        default:'pending'
+    },
+    shippingAddress:{
+        
+            address:{
+                type:String,
+                required:true
+            },
+            pincode:{
+                type:String,
+                required:true
+            },
+            state:{
+                type:String,
+                requried:true
+            },
+            locality:{
+                type:String
+            },
+            landmark:{
+                type:String
+            },
+            locationType:{
+                type:String
+            },
+            mobile:{
+                type:Number
+            },
+            alternativeNumber:{
+                type:Number
+            },
+            district:{
+                type:String
+            }
+    },
+    payment:{
+        type:String,
+        required:true
+    },
+    couponApplied:{
+        type:Boolean,
+        required:false
+    },
+    couponAmount:{
+        type:Number,
+        required:false,
+        default:0
+    },
+    isCancelled:{
+        type:Boolean,
+        default:false
+    },
+    isReturned:{
+        type:Boolean,
+        default:false
+    },
+    reasonForCancel:{
+        type:String
+    },
+    reasonForReturn:{
+        type:String
+    }
+})
+
+module.exports = mongoose.model("order",orderSchema);

@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Profile</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="profile_assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="profile_assets/css/main.css?v=3.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header class="header-area header-style-5">
+        <div class="header-top header-top-ptb-1 d-none d-lg-block">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info">
+                            <ul>
+                                <li><i class="fi-rs-smartphone"></i> <a href="#">(+01) - 2345 - 6789</a></li>
+                                <li><i class="fi-rs-marker"></i><a href="page-contact.html">Our location</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-4">
+                        <div class="text-center">
+                            <div id="news-flash" class="d-inline-block">
+                                <ul>
+                                    <li>Get great devices up to 50% off <a href="shop-grid-right.html">View details</a>
+                                    </li>
+                                    <li>Supper Value Deals - Save more with coupons</li>
+                                    <li>Trendy 25silver jewelry, save up 35% off today <a
+                                            href="shop-grid-right.html">Shop now</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info header-info-right">
+                            <ul>
+                                <li><i class="fi-rs-user"></i><a href="page-login-register.html">Log In / Sign Up</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom sticky-bar sticky-white-bg">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="logo logo-width-1">
+                        <a href="index.html"><img src="profile_assets/imgs/theme/website3.png" alt="logo"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/home" rel="nofollow">Home</a>
+                    <span></span> Account
+                </div>
+            </div>
+        </div>
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dashboard-menu">
+                                    <ul class="nav flex-column" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="/userProfile"><i
+                                                    class="fi-rs-settings-sliders mr-10"></i>User Profile</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/orders"><i
+                                                    class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/addressList"><i class="fi-rs-marker mr-10"></i>My
+                                                Address</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/wallet"><i class="fi-rs-marker mr-10"></i>My
+                                                wallet</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/logout"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="dashboard-content">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Hello <%=user.name%>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul>
+                                                <li><strong>Name</strong> : <%=user.name%>
+                                                </li>
+                                                <li><strong>Email</strong> : <%=user.email%>
+                                                </li>
+                                                <li><strong>Phone No</strong> : <%=user.phoneNumber%>
+                                                </li>
+                                            </ul>
+                                            <a href="/editUser?id=<%=user._id%>">Edit</a>
+                                            <a href="/passwordPage"><br>Change Password</a>
+                                        </div>
+                                    </div>
+                                    <div class="card" style="margin-top: 50px;">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Referral Code</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                                <li
+                                                    style="display: flex; justify-content: space-between; align-items: center;">
+                                                    <strong id="referralCode">
+                                                        <%=user.referralCode%>
+                                                    </strong>
+                                                    <button id="copyButton" class="btn btn-sm btn-outline-secondary"
+                                                        style="background-color: white; color: rgb(213, 213, 213); border-radius: 0; border-color: rgb(218, 218, 218);">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="main">
+        <div class="col-12 mb-20">
+            <div class="footer-bottom"></div>
+        </div>
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widget-about font-md mb-md-5 mb-lg-0">
+                            <div class="logo logo-width-1 wow fadeIn animated">
+                                <a href="index.html"><img src="profile_assets/imgs/theme/logo.svg" alt="logo"></a>
+                            </div>
+                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                            <p class="wow fadeIn animated">
+                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                            </p>
+                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">About</h5>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2  col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                        <ul class="footer-list wow fadeIn animated">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Order</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                        <div class="row">
+                            <div class="col-md-8 col-lg-12">
+                                <p class="wow fadeIn animated">From App Store or Google Play</p>
+                                <div class="download-app wow fadeIn animated">
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
+                                            src="profile_assets/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="profile_assets/imgs/theme/google-play.jpg"
+                                            alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                                <img class="wow fadeIn animated" src="profile_assets/imgs/theme/payment-method.png"
+                                    alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container pb-20 wow fadeIn animated">
+            <div class="row">
+                <div class="col-12 mb-20">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-lg-6">
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong
+                            class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                </div>
+                <div class="col-lg-6">
+                    <p class="text-lg-end text-start font-sm text-muted mb-0">
+                        Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights
+                        reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <script src="profile_assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="profile_assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="profile_assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="profile_assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="profile_assets/js/plugins/slick.js"></script>
+    <script src="profile_assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="profile_assets/js/plugins/wow.js"></script>
+    <script src="profile_assets/js/plugins/jquery-ui.js"></script>
+    <script src="profile_assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="profile_assets/js/plugins/magnific-popup.js"></script>
+    <script src="profile_assets/js/plugins/select2.min.js"></script>
+    <script src="profile_assets/js/plugins/waypoints.js"></script>
+    <script src="profile_assets/js/plugins/counterup.js"></script>
+    <script src="profile_assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="profile_assets/js/plugins/images-loaded.js"></script>
+    <script src="profile_assets/js/plugins/isotope.js"></script>
+    <script src="profile_assets/js/plugins/scrollup.js"></script>
+    <script src="profile_assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="profile_assets/js/plugins/jquery.theia.sticky.js"></script>
+    <!-- Template  JS -->
+    <script src="./profile_assets/js/main.js?v=3.4"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const copyButton = document.getElementById('copyButton');
+            const referralCode = document.getElementById('referralCode').innerText;
+
+            copyButton.addEventListener('click', function () {
+                // Create a temporary textarea element to copy the text
+                const tempInput = document.createElement('textarea');
+                tempInput.value = referralCode;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+
+                // Optionally, change the button icon to indicate success
+                copyButton.innerHTML = '<i class="fas fa-check"></i>';
+
+                // Revert the button icon after a short delay
+                setTimeout(() => {
+                    copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+
+</html>

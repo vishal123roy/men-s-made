@@ -13,12 +13,12 @@ const customerschema = new mongoose.Schema({
     },
     phoneNumber:{
         type:String,
-        required:true,
+        required:false,
         trim: true
     },
     password:{
         type:String,
-        required:true,
+        required:false,
                
     },
     is_verified:{
@@ -28,7 +28,14 @@ const customerschema = new mongoose.Schema({
     is_blocked:{
         type:Boolean,
         default:false
-    }
+    },
+    referralCode: {
+        type: String,
+    },
+    appliedCoupon:[{
+        type:String,
+        required:false
+    }]
 
 });
 

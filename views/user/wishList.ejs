@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<!-- belle/cart-variant1.html   11 Nov 2019 12:44:31 GMT -->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>men's made</title>
+    <meta name="description" content="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="user_assets/images/favicon.png" />
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="user_assets/css/plugins.css">
+    <!-- Bootstap CSS -->
+    <link rel="stylesheet" href="user_assets/css/bootstrap.min.css">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="user_assets/css/style.css">
+    <link rel="stylesheet" href="user_assets/css/responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            /* Adjust spacing between the radio buttons */
+        }
+
+        .swatch-element {
+            position: relative;
+        }
+
+        .swatchInput {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .swatchLbl {
+            display: inline-block;
+            padding: 5px 10px;
+            /* Adjust padding for better visibility */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .swatchLbl:hover {
+            background-color: #e6e6e6;
+        }
+
+        .swatchInput:checked+.swatchLbl {
+            background-color: #007bff;
+            /* Change this color to your preferred active color */
+            color: #fff;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+
+<body class="page-template belle cart-variant1">
+    <div class="pageWrapper">
+        <!--Search Form Drawer-->
+        <div class="search">
+            <div class="search__form">
+                <form class="search-bar__form" action="#">
+                    <button class="go-btn search__button" type="submit"><i class="icon anm anm-search-l"></i></button>
+                    <input class="search__input" type="search" name="q" value="" placeholder="Search entire store..."
+                        aria-label="Search" autocomplete="off">
+                </form>
+                <button type="button" class="search-trigger close-btn"><i class="icon anm anm-times-l"></i></button>
+            </div>
+        </div>
+        <!--End Search Form Drawer-->
+        <!--Top Header-->
+        <div class="top-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-10 col-sm-8 col-md-5 col-lg-4">
+                        <p class="phone-no"><i class="anm anm-phone-s"></i> +440 0(111) 044 833</p>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 d-none d-lg-none d-md-block d-lg-block">
+                    </div>
+                    <div class="col-2 col-sm-4 col-md-3 col-lg-4 text-right">
+                        <span class="user-menu d-block d-lg-none"><i class="anm anm-user-al"
+                                aria-hidden="true"></i></span>
+                        <ul class="customer-links list-inline">
+                            <li><a href="/cartPage">cart Page</a></li>
+                            <li><a href="/userProfile">My Account</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Top Header-->
+        <!--Header-->
+        <div class="header-wrap animated d-flex">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <!--Desktop Logo-->
+                    <div class="logo col-md-2 col-lg-2 d-none d-lg-block">
+                        <a href="index.html">
+                            <img src="user_assets/images/website3.png" alt="Belle Multipurpose Html Template"
+                                title="Belle Multipurpose Html Template" />
+                        </a>
+                    </div>
+                    <!--End Desktop Logo-->
+                    <div class="col-2 col-sm-3 col-md-3 col-lg-8">
+                        <div class="d-block d-lg-none">
+                            <button type="button"
+                                class="btn--link site-header__menu js-mobile-nav-toggle mobile-nav--open">
+                                <i class="icon anm anm-times-l"></i>
+                                <i class="anm anm-bars-r"></i>
+                            </button>
+                        </div>
+                        <!--Desktop Menu-->
+                        <nav class="grid__item" id="AccessibleNav"><!-- for mobile -->
+                            <ul id="siteNav" class="site-nav medium center hidearrow">
+                                <li class="lvl1 parent megamenu"><a href="/home">Home <i
+                                            class="anm anm-angle-down-l"></i></a>
+                                </li>
+                                <li class="lvl1 parent megamenu"><a href="/shopPage">Shop <i
+                                            class="anm anm-angle-down-l"></i></a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!--End Desktop Menu-->
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-2 d-block d-lg-none mobile-logo">
+                        <div class="logo">
+                            <a href="index.html">
+                                <img src="user_assets/images/logo.svg" alt="Belle Multipurpose Html Template"
+                                    title="Belle Multipurpose Html Template" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Body Content-->
+        <div id="page-content">
+            <!--Page Title-->
+            <div class="page section-header text-center">
+                <div class="page-title">
+                    <div class="wrapper">
+                        <h1 class="page-width">WISH LIST</h1>
+                    </div>
+                </div>
+            </div>
+            <!--End Page Title-->
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
+                        <form action="#" method="post" class="cart style2">
+                            <table>
+                                <thead class="cart__row cart__header">
+                                    <tr>
+                                        <th colspan="2" class="text-center">Product</th>
+                                        <th class="text-center">Brand</th>
+                                        <th class="text-center">Price</th>
+                                        <th class="text-center">Offer Price</th>
+                                        <th class="action">&nbsp;</th>
+                                        <th class="action">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% productData.products.forEach((data)=> { %>
+                                        <tr class="cart__row border-bottom line1 cart-flex border-top">
+                                            <td class="cart__image-wrapper cart-flex-item">
+                                                <a href="#"><img class="cart__image"
+                                                        src="product_Assets/<%=data.product.images[0]%>"
+                                                        alt="Elastic Waist Dress - Navy / Small"></a>
+                                            </td>
+                                            <td class="cart__meta small--text-left cart-flex-item">
+                                                <div class="list-view-item__title">
+                                                    <a href="/productPage?id=<%=data.product._id%>">
+                                                        <%=data.product.productname%>
+                                                    </a>
+                                                </div>
+                                                <div class="cart__meta-text">
+                                                    <label class="header">Size:</label>
+                                                    <div class="size-options">
+                                                        <% data.product.sizes.forEach((size)=> { %>
+                                                            <div
+                                                                class="swatch-element <%= size.quantity === 0 ? 'disabled' : 'available' %>">
+                                                                <input class="swatchInput"
+                                                                    id="swatch-<%=data.product._id%>-<%= size.size %>"
+                                                                    type="radio" name="option-<%=data.product._id%>"
+                                                                    value="<%= size.size %>" <%=size.quantity===0
+                                                                    ? 'disabled' : '' %>>
+                                                                <label
+                                                                    class="swatchLbl small rounded <%= size.quantity === 0 ? 'text-danger' : '' %>"
+                                                                    for="swatch-<%=data.product._id%>-<%= size.size %>"
+                                                                    title="<%= size.size %>">
+                                                                    <%= size.size %>
+                                                                </label>
+                                                            </div>
+                                                            <% }); %>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="cart__price-wrapper cart-flex-item">
+                                                <span class="money">
+                                                    <%=data.product.brand%>
+                                                </span>
+                                            </td>
+                                            <td class="text-right small--hide cart-price">
+                                                <div><span class="money">
+                                                        <%=data.product.price.toFixed(2)%>
+                                                    </span></div>
+                                            </td>
+                                            <td class="text-right small--hide cart-price">
+                                                <div><span class="money">
+                                                        <%=data.product.offerPrice.toFixed(2)%>
+                                                    </span></div>
+                                            </td>
+                                            <td class="text-right small--hide cart-price">
+                                                <div class="product-action clearfix">
+                                                    <div class="product-form__item--submit">
+                                                        <button type="button" name="add"
+                                                            class="btn product-form__cart-submit"
+                                                            data-product-id="<%=data.product._id %>">
+                                                            <span>Add to cart</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center small--hide"><a href="#"
+                                                    class="btn btn--secondary cart__remove"
+                                                    onclick="remove('<%=data.product._id%>')" title="Remove item"><i
+                                                        class="icon icon anm anm-times-l"></i></a></td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+
+
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-left"><a href="/shopPage"
+                                                class="btn btn-secondary btn--small cart-continue">Continue shopping</a>
+                                        </td>
+                                        <td colspan="3" class="text-right">
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                </div>
+            </div>
+
+        </div>
+        <!--End Body Content-->
+
+        <!--Footer-->
+        <footer id="footer">
+            <div class="newsletter-section">
+                <div class="container">
+                    <div class="row" style="justify-content: center;">
+                        <div
+                            class="col-12 col-sm-12 col-md-12 col-lg-5 d-flex justify-content-center align-items-center">
+                            <div class="footer-social">
+                                <ul class="list--inline site-footer__social-icons social-icons">
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Facebook"><i
+                                                class="icon icon-facebook"></i></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Twitter"><i
+                                                class="icon icon-twitter"></i> <span
+                                                class="icon__fallback-text">Twitter</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Pinterest"><i
+                                                class="icon icon-pinterest"></i> <span
+                                                class="icon__fallback-text">Pinterest</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Instagram"><i
+                                                class="icon icon-instagram"></i> <span
+                                                class="icon__fallback-text">Instagram</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Tumblr"><i
+                                                class="icon icon-tumblr-alt"></i> <span
+                                                class="icon__fallback-text">Tumblr</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on YouTube"><i
+                                                class="icon icon-youtube"></i> <span
+                                                class="icon__fallback-text">YouTube</span></a></li>
+                                    <li><a class="social-icons__link" href="#" target="_blank"
+                                            title="Belle Multipurpose Bootstrap 4 Template on Vimeo"><i
+                                                class="icon icon-vimeo-alt"></i> <span
+                                                class="icon__fallback-text">Vimeo</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="site-footer">
+                <div class="container">
+                    <!--Footer Links-->
+                    <div class="footer-top">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
+                                <h4 class="h4">Quick Shop</h4>
+                                <ul>
+                                    <li><a href="#">Women</a></li>
+                                    <li><a href="#">Men</a></li>
+                                    <li><a href="#">Kids</a></li>
+                                    <li><a href="#">Sportswear</a></li>
+                                    <li><a href="#">Sale</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
+                                <h4 class="h4">Informations</h4>
+                                <ul>
+                                    <li><a href="#">About us</a></li>
+                                    <li><a href="#">Careers</a></li>
+                                    <li><a href="#">Privacy policy</a></li>
+                                    <li><a href="#">Terms &amp; condition</a></li>
+                                    <li><a href="#">My Account</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
+                                <h4 class="h4">Customer Services</h4>
+                                <ul>
+                                    <li><a href="#">Request Personal Data</a></li>
+                                    <li><a href="#">FAQ's</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Orders and Returns</a></li>
+                                    <li><a href="#">Support Center</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3 contact-box">
+                                <h4 class="h4">Contact Us</h4>
+                                <ul class="addressFooter">
+                                    <li><i class="icon anm anm-map-marker-al"></i>
+                                        <p>55 Gallaxy Enque,<br>2568 steet, 23568 NY</p>
+                                    </li>
+                                    <li class="phone"><i class="icon anm anm-phone-s"></i>
+                                        <p>(440) 000 000 0000</p>
+                                    </li>
+                                    <li class="email"><i class="icon anm anm-envelope-l"></i>
+                                        <p>sales@yousite.com</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Footer Links-->
+                    <hr>
+                    <div class="footer-bottom">
+                        <div class="row">
+                            <!--Footer Copyright-->
+                            <div
+                                class="col-12 col-sm-12 col-md-6 col-lg-6 order-1 order-md-0 order-lg-0 order-sm-1 copyright text-sm-center text-md-left text-lg-left">
+                                <span></span> <a href="templateshub.net">Templates Hub</a>
+                            </div>
+                            <!--End Footer Copyright-->
+                            <!--Footer Payment Icon-->
+                            <div
+                                class="col-12 col-sm-12 col-md-6 col-lg-6 order-0 order-md-1 order-lg-1 order-sm-0 payment-icons text-right text-md-center">
+                                <ul class="payment-icons list--inline">
+                                    <li><i class="icon fa fa-cc-visa" aria-hidden="true"></i></li>
+                                    <li><i class="icon fa fa-cc-mastercard" aria-hidden="true"></i></li>
+                                    <li><i class="icon fa fa-cc-discover" aria-hidden="true"></i></li>
+                                    <li><i class="icon fa fa-cc-paypal" aria-hidden="true"></i></li>
+                                    <li><i class="icon fa fa-cc-amex" aria-hidden="true"></i></li>
+                                    <li><i class="icon fa fa-credit-card" aria-hidden="true"></i></li>
+                                </ul>
+                            </div>
+                            <!--End Footer Payment Icon-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--End Footer-->
+        <!--Scoll Top-->
+        <span id="site-scroll"><i class="icon anm anm-angle-up-r"></i></span>
+        <!--End Scoll Top-->
+
+        <!-- Including Jquery -->
+        <script src="user_assets/js/vendor/jquery-3.3.1.min.js"></script>
+        <script src="user_assets/js/vendor/jquery.cookie.js"></script>
+        <script src="user_assets/js/vendor/modernizr-3.6.0.min.js"></script>
+        <script src="user_assets/js/vendor/wow.min.js"></script>
+        <!-- Including Javascript -->
+        <script src="user_assets/js/bootstrap.min.js"></script>
+        <script src="user_assets/js/plugins.js"></script>
+        <script src="user_assets/js/popper.min.js"></script>
+        <script src="user_assets/js/lazysizes.js"></script>
+        <script src="user_assets/js/main.js"></script>
+        <script>
+            const buttons = document.querySelectorAll('.product-form__cart-submit');
+            buttons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    try {
+                        const productId = button.dataset.productId;
+                        const sizeElement = document.querySelector(`input[name="option-${productId}"]:checked`);
+                        if (!sizeElement) {
+                            alert('Please select a size.');
+                            return;
+                        }
+                        const size = sizeElement.value;
+                        const response = await fetch(`/addCart/${productId}?size=${size}`, { method: 'GET' });
+                        if (response.ok) {
+                            console.log('Success');
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Product added to the cart',
+                                icon: 'success',
+                                timer: 2000
+                            });
+                        } else {
+                            console.log('Failed to add to cart');
+                        }
+                    } catch (error) {
+                        console.log(error.message);
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            async function remove(productId) {
+                try {
+                    const response = await fetch('/removeWishList', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ id: productId })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error('Error removing item from wishList:', data.message);
+                        alert('Failed to remove item from wishList. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error removing item from wishlist:', error.message);
+                    alert('An error occurred while removing the item from wishlist. Please try again.');
+                }
+            }
+        </script>
+    </div>
+</body>
+
+<!-- belle/cart-variant1.html   11 Nov 2019 12:44:32 GMT -->
+
+</html>

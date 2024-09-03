@@ -1,0 +1,512 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>offer page</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/admin_assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/admin_assets/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .container {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            /* Align the container content to the center */
+        }
+
+        nav1 ul {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            /* Added to remove default margin */
+            justify-content: center;
+            /* Align the list items to the center */
+        }
+
+        nav1 li {
+            margin-right: 20px;
+        }
+
+        .horizontal-menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 24px;
+            /* Increase the font size of the links */
+        }
+
+        .horizontal-menu a:hover {
+            text-decoration: underline;
+        }
+
+        .content-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            /* Align the content to the center */
+        }
+
+        .content {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            flex: 1;
+        }
+
+        .content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+
+<div class="screen-overlay"></div>
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="index.html" class="brand-wrap">
+            <img src="admin_assets/imgs/theme/website3.png" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item active">
+                <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="users"> <i class="icon material-icons md-shopping_cart"></i>
+                    <span class="text">Users</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/userlist">User List</a>
+    
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
+                    <span class="text">Products</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/productlist">Product List</a>
+                    <a href="/admin/addProduct">Add product </a>
+
+           
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Categories</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/Category">Categories</a>
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Orders</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/orderList">OrderList</a>
+                </div>
+            </li> 
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Coupons</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/couponList">CouponList</a>
+                </div>
+            </li>
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Offer</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/offerPage">offerList</a>
+                </div>
+            </li>  
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Sales</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/salesReport">saleReport</a>
+                </div>
+            </li> 
+        </ul> 
+        <br>
+        <br>
+    </nav>
+</aside>
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+        </div>
+        <div class="col-nav">
+            <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                    class="material-icons md-apps"></i> </button>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link btn-icon" href="#"> <i class="material-icons md-nights_stay"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                </li>
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                        aria-expanded="false"> <img class="img-xs rounded-circle" src="admin_assets/imgs/people/admin1.png" alt="User"></a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                            Profile</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                            Settings</a>
+                        <a class="dropdown-item" href="#"><i
+                                class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                            center</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/admin/login"><i
+                                class="material-icons md-exit_to_app"></i>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div>
+        <div class="container">
+            <nav1>
+                <ul class="horizontal-menu">
+                    <li><a href="#" onclick="showContent('product')">
+                            <H6>PRODUCT OFFERS</H6>
+                        </a></li>
+                    <li><a href="#" onclick="showContent('category')">
+                            <H6>CATEGORY OFFERS</H6>
+                        </a></li>
+
+                </ul>
+            </nav1>
+
+            <div class="content-container">
+                <div id="product" class="content active">
+                    <!-- <h1>Product</h1> -->
+                    <!-- <p>This is the content for the Product section.</p> -->
+                    <div class="container" style="max-height: 80vh; overflow-y: auto;">
+                        <div class="row">
+                            <% products.forEach(function(product) { %>
+                                <div class="col-md-3 mb-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <img src="/product_Assets/<%= product.images[0] %>"
+                                                class="card-img-top img-fluid mx-auto d-block" style="max-width: 150px;"
+                                                alt="...">
+                                            <h5 class="card-title">
+                                                <%= product.productname %>
+                                            </h5>
+
+                                            <p class="card-text">Price: $<%= product.price %>
+                                            </p>
+                                            <% if (product.offerPrice) { %>
+                                                <p class="card-text">Offer Price: $<%= product.offerPrice.toFixed(2) %>
+                                                </p>
+                                                <button class="btn btn-primary edit-offer-price"
+                                                    style="border-radius:0 ;" data-product-id="<%= product._id %>"
+                                                    data-offer-price="<%= product.offerPrice %>">Edit Offer
+                                                    Price</button>
+                                                <% } else { %>
+                                                    <div class="form-group">
+                                                        <label for="offerPrice">Offer Price:</label>
+                                                        <input type="number" class="form-control" id="offerPrice"
+                                                            name="offerPrice" placeholder="Enter offer price"
+                                                            data-product-id="<%= product._id %>">
+                                                        <button class="btn btn-primary add-offer-price"
+                                                            style="border-radius: 0;">Add Offer
+                                                            Price</button>
+                                                    </div>
+                                                    <% } %>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+
+                    <!-- <a href="/productpage">Go to Product Page</a> -->
+                </div>
+                <div id="category" class="content">
+                    <h1>Category</h1>
+                    <section class="content-main">
+                        <div class="content-header">
+                            <div>
+                                <h2 class="content-title card-title">Category offer management</h2>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row row-cols-1 row-cols-md-3">
+                                    <% categories.forEach((category, index)=> { %>
+                                        <div class="col">
+                                            <div class="card card-product-grid">
+                                                <div class="info-wrap">
+                                                    <a href="#" class="title text-truncate"
+                                                        style="font-size: 24px; color: rgb(138, 138, 138);">
+                                                        <%= category.name %>
+                                                    </a>
+                                                    <a href="#" class="description">
+                                                        <%= category.description %>
+                                                    </a>
+                                                    <br><br>
+                                                    <form id="discountForm_<%= index %>"
+                                                        onsubmit="applyDiscount(event, '<%= index %>', '<%= category._id %>')">
+                                                        <label for="discountPercentage_<%= index %>">Discount
+                                                            Percentage:</label>
+                                                        <input type="number" id="discountPercentage_<%= index %>"
+                                                            name="discountPercentage" min="0" max="99" required>
+                                                        <br><br>
+                                                        <button type="submit" class="btn btn-sm font-sm btn-brand" style="margin-top:10px ;"
+                                                            style="border-radius: 0;">Apply Discount</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }); %>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showContent(id) {
+            // Hide all content
+            var contents = document.getElementsByClassName('content');
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+
+            // Show the selected content
+            document.getElementById(id).classList.add('active');
+
+            // Scroll to the selected content
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+
+
+
+    <!-- Modal for editing offer price -->
+    <div class="modal fade" id="editOfferModal" tabindex="-1" aria-labelledby="editOfferModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editOfferModalLabel">Edit Offer Price</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editOfferForm">
+                        <div class="form-group">
+                            <label for="newOfferPrice">New Offer Price:</label>
+                            <input type="number" class="form-control" id="newOfferPrice" name="newOfferPrice"
+                                placeholder="Enter new offer price">
+                            <input type="hidden" id="productId" name="productId">
+                        </div>
+                        <button type="submit" style="align-items:center ; border-radius: 0;"
+                            class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script>
+                    document.write(new Date().getFullYear())
+                </script> ©,
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">
+                    All rights reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+<script src="/admin_assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="/admin_assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="/admin_assets/js/vendors/select2.min.js"></script>
+<script src="/admin_assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="/admin_assets/js/vendors/jquery.fullscreen.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Main Script -->
+<script src="/admin_assets/js/main.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add offer price
+        document.querySelectorAll('.add-offer-price').forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.previousElementSibling.dataset.productId;
+                const offerPrice = this.previousElementSibling.value;
+
+                fetch('/admin/addOfferPrice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productId, offerPrice }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Offer price updated successfully');
+                            location.reload();
+                        } else {
+                            console.error('Failed to update offer price');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Internal server error:', error);
+                    });
+
+                // Show the edit button
+                this.nextElementSibling.style.display = 'inline-block';
+            });
+        });
+
+        // Edit offer price
+        document.querySelectorAll('.edit-offer-price').forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.dataset.productId;
+                const offerPrice = this.dataset.offerPrice;
+
+
+                const modal = document.getElementById('editOfferModal');
+                modal.querySelector('#productId').value = productId;
+                modal.querySelector('#newOfferPrice').value = offerPrice;
+
+
+                $('#editOfferModal').modal('show');
+            });
+        });
+
+        // Submit edited offer price
+        document.getElementById('editOfferForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const productId = this.querySelector('#productId').value;
+            const newOfferPrice = this.querySelector('#newOfferPrice').value;
+
+            fetch('/admin/editOfferPrice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId, newOfferPrice }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+
+                        $('#editOfferModal').modal('hide');
+                        location.reload();
+                    } else {
+                        console.error('Failed to edit offer price');
+                    }
+                })
+                .catch(error => {
+                    console.error('Internal server error:', error);
+                });
+        });
+
+        document.querySelector('#editOfferModal .close').addEventListener('click', function () {
+            $('#editOfferModal').modal('hide');
+        });
+
+        // Alternative: Close modal when clicking outside the modal
+        $('#editOfferModal').on('click', function (e) {
+            if (e.target === this) {
+                $(this).modal('hide');
+            }
+        });
+    });
+</script>
+
+<script>
+async function applyDiscount(event, index, categoryId) {
+    try {
+        event.preventDefault();
+        const discountPercentage = document.getElementById(`discountPercentage_${index}`).value;
+
+        const response = await fetch(`/admin/applyDiscount/${categoryId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ discountPercentage })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            await Swal.fire({
+                icon: 'success',
+                title: "Success",
+                text: "Discount applied successfully",
+                timer: 2000,
+                showConfirmButton: false
+            });
+            window.location.reload();
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: "Error",
+                text: data.message || "Failed to apply discount",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    } catch (error) {
+        console.error("Error applying discount:", error);
+        await Swal.fire({
+            icon: 'error',
+            title: "Error",
+            text: "An unexpected error occurred",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+}
+</script>
+
+</body>
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
+</html>

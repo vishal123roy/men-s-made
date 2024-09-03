@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Profile</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="profile_assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="profile_assets/css/main.css?v=3.4">
+</head>
+
+<body>
+    <header class="header-area header-style-5">
+        <div class="header-bottom sticky-bar sticky-white-bg">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="logo logo-width-1">
+                        <a href="index.html"><img src="profile_assets/imgs/theme/website3.png" alt="logo"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/home" rel="nofollow">Home</a>
+                    <span></span> Account
+                </div>
+            </div>
+        </div>
+
+        <section class="pt-150 pb-150">
+            <div class="container-lg"> <!-- Change to container-lg for wider container -->
+                <div class="row">
+                    <div class="col-lg-8 m-auto"> <!-- Adjust col-lg-8 for wider content -->
+                        <div class="row">
+                            <div class="col-lg-6 mx-auto" style="width: 100%;">
+                                <!-- Adjust col-lg-6 for wider content -->
+                                <div
+                                    class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                    <div class="padding_eight_all bg-white">
+
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30 text-center">Edit Address</h3>
+                                        </div>
+                                        <% if(typeof message !=='undefined' ){ %>
+                                            <h4 id="errormsm">
+                                                <%= message %>
+                                            </h4>
+                                            <% } %>
+                                                <form method="post" action="/updateAddress?id=<%=Address._id%>"
+                                                    id="addressForm" data-location-type="<%= Address.locationType %>">
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label>Name <span class="required">*</span></label>
+                                                            <input type="hidden" name="source" value="<%=source%>">
+                                                            <input class="form-control square" name="name" type="text"
+                                                                value="<%=Address.name%>" id="name">
+                                                            <p id="nameError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label>Pin code<span class="required">*</span></label>
+                                                            <input type="number" class="form-control square"
+                                                                value="<%=Address.pincode%>" name="pincode"
+                                                                placeholder="Enter pinCode" id="pinCode">
+                                                            <p id="pinCodeError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label>locality <span class="required">*</span></label>
+                                                            <input class="form-control square" name="locality"
+                                                                value="<%=Address.locality%>" type="text"
+                                                                placeholder="Enter locality" id="locality">
+                                                            <p id="localityError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Address(area and Street) <span
+                                                                    class="required">*</span></label>
+                                                            <input class="form-control square" name="addressArea"
+                                                                value="<%=Address.address%>" type="text"
+                                                                placeholder="Enter address (area /street)" id="address">
+                                                            <p id="addressAreaError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="district">City/District <span
+                                                                    class="required">*</span></label>
+                                                            <input id="district" class="form-control square"
+                                                                name="district" type="text"
+                                                                value="<%=Address.district%>"
+                                                                placeholder="Enter district">
+                                                            <p id="districtError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>State <span class="required">*</span></label>
+                                                            <input id="state" class="form-control square" name="state"
+                                                                value="<%=Address.state%>" type="text"
+                                                                placeholder="Enter the State">
+                                                            <p id="stateError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Landmark(optional) </label>
+                                                            <input class="form-control square" id="landmark"
+                                                                name="landmark" type="text"
+                                                                value="<%=Address.landmark%>"
+                                                                placeholder="Enter the Landmark">
+                                                            <p id="LandmarkError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Alternative Number <span
+                                                                    class="required">*</span></label>
+                                                            <input class="form-control square" name="mobile" id="mobile"
+                                                                value="<%=Address.alternativeNumber%>" type="number"
+                                                                placeholder="Alternative Number">
+                                                            <p id="mobileError" class="alert text-danger"></p>
+                                                        </div>
+                                                        <div>
+                                                            <div class="form-group"
+                                                                style="display: inline-block; margin-right: 10px; vertical-align: middle;">
+                                                                <input type="radio" name="locationType" value="home"
+                                                                    style="width: fit-content; vertical-align: middle;"
+                                                                    required>
+                                                                <label style="display: inline; vertical-align: middle;">
+                                                                    Home </label>
+                                                                <p id="locationTypeError" class="alert text-danger"></p>
+                                                            </div>
+                                                            <div class="form-group"
+                                                                style="display: inline-block; vertical-align: middle;">
+                                                                <input type="radio" name="locationType" value="work"
+                                                                    style="width: fit-content; vertical-align: middle;"
+                                                                    required>
+                                                                <label style="display: inline; vertical-align: middle;">
+                                                                    Work </label>
+                                                                <p id="locationTypeError" class="alert text-danger"></p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 d-flex justify-content-center">
+                                                            <button type="submit" class="btn btn-fill-out submit"
+                                                                style="width:25% ;" value="Submit">Change</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="main">
+        <div class="col-12 mb-20">
+            <div class="footer-bottom"></div>
+        </div>
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="widget-about font-md mb-md-5 mb-lg-0">
+                            <div class="logo logo-width-1 wow fadeIn animated">
+                                <a href="index.html"><img src="profile_assets/imgs/theme/logo.svg" alt="logo"></a>
+                            </div>
+                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                            <p class="wow fadeIn animated">
+                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                            </p>
+                            <p class="wow fadeIn animated">
+                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                            </p>
+                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                                <a href="#"><img src="profile_assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">About</h5>
+                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2  col-md-3">
+                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                        <ul class="footer-list wow fadeIn animated">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Order</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                        <div class="row">
+                            <div class="col-md-8 col-lg-12">
+                                <p class="wow fadeIn animated">From App Store or Google Play</p>
+                                <div class="download-app wow fadeIn animated">
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
+                                            src="profile_assets/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="profile_assets/imgs/theme/google-play.jpg"
+                                            alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                                <img class="wow fadeIn animated" src="profile_assets/imgs/theme/payment-method.png"
+                                    alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container pb-20 wow fadeIn animated">
+            <div class="row">
+                <div class="col-12 mb-20">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-lg-6">
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong
+                            class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                </div>
+                <div class="col-lg-6">
+                    <p class="text-lg-end text-start font-sm text-muted mb-0">
+                        Designed by <a href="http://alithemes.com" target="_blank">Alithemes.com</a>. All rights
+                        reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <script src="profile_assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="profile_assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="profile_assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="profile_assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="profile_assets/js/plugins/slick.js"></script>
+    <script src="profile_assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="profile_assets/js/plugins/wow.js"></script>
+    <script src="profile_assets/js/plugins/jquery-ui.js"></script>
+    <script src="profile_assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="profile_assets/js/plugins/magnific-popup.js"></script>
+    <script src="profile_assets/js/plugins/select2.min.js"></script>
+    <script src="profile_assets/js/plugins/waypoints.js"></script>
+    <script src="profile_assets/js/plugins/counterup.js"></script>
+    <script src="profile_assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="profile_assets/js/plugins/images-loaded.js"></script>
+    <script src="profile_assets/js/plugins/isotope.js"></script>
+    <script src="profile_assets/js/plugins/scrollup.js"></script>
+    <script src="profile_assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="profile_assets/js/plugins/jquery.theia.sticky.js"></script>
+    <!-- Template  JS -->
+    <script src="./profile_assets/js/main.js?v=3.4"></script>
+    <script>
+        function hidemessage() {
+            const hidmess = document.getElementById('errormsm');
+            hidmess.style.display = "none";
+        }
+        setTimeout(hidemessage, 4000);
+
+
+        window.onload = function () {
+            const form = document.getElementById('addressForm');
+            const locationType = form.getAttribute('data-location-type');
+            const radioButtons = document.getElementsByName('locationType');
+
+            radioButtons.forEach(radio => {
+                if (radio.value === locationType) {
+                    radio.checked = true;
+                }
+            });
+        }
+
+        document.getElementById('addressForm').addEventListener('submit', function (e) {
+            console.log('Form submission attempted');
+            e.preventDefault();
+            if (validateForm()) {
+                console.log('Form validation passed, submitting form');
+                this.submit();
+            } else {
+                console.log('Form validation failed');
+            }
+        });
+        function validateForm() {
+            let isValid = true;
+
+            // Name validation
+            const name = document.getElementById('name');
+            if (name.value.trim() === '') {
+                showError('nameError', 'Name is required');
+                isValid = false;
+            } else {
+                clearError('nameError');
+            }
+
+            // Pin code validation
+            const pinCode = document.getElementById('pinCode');
+            if (pinCode.value.trim() === '' || !/^\d{6}$/.test(pinCode.value)) {
+                showError('pinCodeError', 'Enter a valid 6-digit pin code');
+                isValid = false;
+            } else {
+                clearError('pinCodeError');
+            }
+
+            // Locality validation
+            const locality = document.getElementById('locality');
+            if (locality.value.trim() === '') {
+                showError('localityError', 'Locality is required');
+                isValid = false;
+            } else {
+                clearError('localityError');
+            }
+
+            // Address validation
+            const address = document.getElementById('address');
+            if (address.value.trim() === '') {
+                showError('addressAreaError', 'Address is required');
+                isValid = false;
+            } else {
+                clearError('addressAreaError');
+            }
+
+            // District validation
+            const district = document.getElementById('district');
+            if (district.value.trim() === '') {
+                showError('districtError', 'City/District is required');
+                isValid = false;
+            } else {
+                clearError('districtError');
+            }
+
+            // State validation
+            const state = document.getElementById('state');
+            if (state.value.trim() === '') {
+                showError('stateError', 'State is required');
+                isValid = false;
+            } else {
+                clearError('stateError');
+            }
+
+            // Mobile validation
+            const mobile = document.getElementById('mobile');
+            if (mobile.value.trim() === '' || !/^\d{10}$/.test(mobile.value)) {
+                showError('mobileError', 'Enter a valid 10-digit mobile number');
+                isValid = false;
+            } else {
+                clearError('mobileError');
+            }
+
+            // Location Type validation
+            const locationType = document.querySelector('input[name="locationType"]:checked');
+            if (!locationType) {
+                showError('locationTypeError', 'Please select a location type');
+                isValid = false;
+            } else {
+                clearError('locationTypeError');
+            }
+
+            return isValid;
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        }
+
+        function clearError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+        }
+    </script>
+</body>
+
+</html>

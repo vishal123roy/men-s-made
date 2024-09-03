@@ -42,7 +42,7 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/userlist">User List</a>
-
+        
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -53,7 +53,7 @@
                         <a href="/admin/productlist">Product List</a>
                         <a href="/admin/addProduct">Add product </a>
 
-
+               
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
                         <span class="text">Categories</span>
@@ -62,26 +62,46 @@
                         <a href="/admin/Category">Categories</a>
                     </div>
                 </li>
-                <br>
-                <br>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/orderList">OrderList</a>
+                    </div>
+                </li> 
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/couponList">CouponList</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Offer</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/offerPage">offerList</a>
+                    </div>
+                </li>  
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Sales</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/salesReport">saleReport</a>
+                    </div>
+                </li> 
+            </ul> 
+            <br>
+            <br>
         </nav>
     </aside>
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i
-                                class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
-                        <option value="New orders">
-                        <option value="Apple iphone">
-                        <option value="Ahmed Hassan">
-                    </datalist>
-                </form>
             </div>
             <div class="col-nav">
                 <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
@@ -98,7 +118,7 @@
                     <li class="dropdown nav-item">
                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
                             aria-expanded="false"> <img class="img-xs rounded-circle"
-                                src="admin_assets/imgs/people/avatar2.jpg" alt="User"></a>
+                                src="admin_assets/imgs/people/admin1.png" alt="User"></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                             <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
                                 Profile</a>
@@ -122,19 +142,17 @@
                 <div>
                     <h2 class="content-title card-title">Categories </h2>
                 </div>
-                <div>
-                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
-                </div>
             </div>
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
                             <form id="insert">
-                                <div class="mb-4">
+                                <div>
                                     <label for="product_name" class="form-label">Name</label>
                                     <input type="text" placeholder="Type here" class="form-control" id="name"
                                         name="categoryname">
+                                        <label id="message" style="color: crimson;"></label>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Description</label>
@@ -142,7 +160,7 @@
                                         name="description"></textarea>
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Create category</button>
+                                    <button type="submit" style="border-radius: 0;" class="btn btn-primary">Create category</button>
                                 </div>
                             </form>
                         </div>
@@ -244,7 +262,18 @@
             })
 
             if (response.ok) {
-                window.location.href = '/admin/addcategory';
+                window.location.href = '/admin/Category';
+            }
+            else{
+                const msm = document.getElementById('message').innerHTML = 'Already exist';
+                setTimeout(()=>{
+                    const msm = document.getElementById('message').innerHTML ='';
+                },4000);
+                setTimeout(()=>{
+                    const msm = document.getElementById('message');
+                    msm.style.display = 'b';
+                },8000);
+                
             }
         })
 
@@ -262,7 +291,7 @@
             })
             if (response.ok) {
                     // document.getElementById('enable').innerText = 'Disable'
-                        window.location.href ="/admin/addcategory";
+                        window.location.href ="/admin/Category";
                 }
         }
     </script>

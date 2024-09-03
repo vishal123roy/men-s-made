@@ -3,12 +3,15 @@ const express = require('express');
 const path = require('path');
 const user_Route = require('./routes/userRoute'); 
 const admin_Route = require('./routes/adminRoute');
+const nocache = require('nocache');
 
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
 const app = express();
 const PORT = 4200;
+
+app.use(nocache());
 
 mongoose.connect('mongodb://127.0.0.1:27017/company', {
     useNewUrlParser: true,
@@ -20,6 +23,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/company', {
 .catch((err) => {
     console.error('Failed to connect to MongoDB', err);
 });
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,6 +43,9 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', user_Route);
 app.use('/admin', admin_Route);
+app.use('*',(req,res)=>{
+    res.render('user/404');
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

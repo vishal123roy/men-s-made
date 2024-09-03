@@ -1,0 +1,546 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>men's made</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="admin_assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="admin_assets/css/main.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="admin_assets/imgs/theme/website3.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="users"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Users</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/userlist">User List</a>
+
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/productlist">Product List</a>
+                        <a href="/admin/addProduct">Add product </a>
+
+
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/Category">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/orderList">OrderList</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/couponList">CouponList</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Offer</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/offerPage">offerList</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Sales</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/salesReport">saleReport</a>
+                    </div>
+                </li>
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside">
+                    <i class="material-icons md-apps"></i>
+                </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#">
+                            <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon">
+                            <i class="material-icons md-cast"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false">
+                            <img class="img-xs rounded-circle" src="admin_assets/imgs/people/admin1.png" alt="User">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+
+                <div>
+                    <h2 class="content-title card-title">Sales Report</h2>
+                </div>
+                <div class="export-buttons">
+                    <button type="button" class="btn btn-primary" style="border-radius: 0%;" data-bs-toggle="modal"
+                        data-bs-target="#salesReportModal" id="generateReportBtn" onclick="openPdfPreview()">
+                        Preview PDF
+                    </button>
+                    <button type="button" class="btn btn-primary" style="border-radius: 0%;" data-bs-toggle="modal"
+                        data-bs-target="#salesReportModal" id="generateReportBtn" onclick="excelConvert()">
+                        Download excel
+                    </button>
+                </div>
+            </div>
+            <div class="row" style="display: flex;">
+                <header class="card-header ">
+                    <div class="row gx-3">
+                        <div class="col-lg-2 col-6 col-md-3">
+                            <select class="btn btn-light" id="filterByDate">
+                                <option value="">Filter</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="input-group" style="display: flex; justify-content: space-between;">
+                                <input type="date" id="startDate" class="form-control">
+                                <span class="input-group-text">to</span>
+                                <input type="date" id="endDate" class="form-control">
+                                <span>
+                                    <button id="apply-filter"
+                                        style="border-radius: 0%;position: relative;margin-left: 0%;"
+                                        class="btn btn-primary" onclick="customFilter()">Apply</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <h3 style="display: flex; align-items: center; justify-content: center;">SALES REPORT</h3>
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="align-middle" scope="col">Order ID</th>
+                                    <th class="align-middle" scope="col">Customer</th>
+                                    <th class="align-middle" scope="col">Status</th>
+                                    <th class="align-middle" scope="col">Total Products</th>
+                                    <th class="align-middle" scope="col">Total Price</th>
+                                    <th class="align-middle" scope="col">Coupon Amount</th>
+                                    <th class="align-middle" scope="col">Payment Method</th>
+                                    <th class="align-middle" scope="col">Bill Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="saleReport">
+                                <% deliveredList.forEach((order)=> { %>
+                                    <tr>
+                                        <td><a href="#" class="fw-bold">
+                                                <%= order.orderNumber %>
+                                            </a></td>
+                                        <td>
+                                            <%= order.userId.name %>
+                                        </td>
+                                        <td><span class="badge badge-pill badge-soft-success">
+                                                <%= order.status %>
+                                            </span></td>
+                                        <td>
+                                            <%= order.items.length %>
+                                        </td>
+                                        <td>
+                                            <%= order.totalAmount.toFixed(2) %>
+                                        </td>
+                                        <td>
+                                            <%= order.couponAmount %>
+                                        </td>
+                                        <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>
+                                            <%= order.payment %>
+                                        </td>
+                                        <td>
+                                            <%=(order.totalAmount - order.couponAmount).toFixed(2) %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+
+                        <!-- Pagination Controls -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mt-3">
+                                <% if (currentPage> 1) { %>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <% } %>
+                                        <% for (let i=1; i <=totalPages; i++) { %>
+                                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                <a class="page-link" href="?page=<%= i %>">
+                                                    <%= i %>
+                                                </a>
+                                            </li>
+                                            <% } %>
+                                                <% if (currentPage < totalPages) { %>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=<%= currentPage + 1 %>"
+                                                            aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    <% } %>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pdfModal" class="modal">
+                <div class="modal-content">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span class="close" style="font-size: 15px;" onclick="closePdfPreview()">&#10060;</span>
+                        <button class="btn-success text-center" style="width: fit-content;"
+                            onclick="downloadPdf()">Download PDF</button>
+                    </div>
+                    <iframe id="pdfPreview" style="width: 80%; height: 80vh;"></iframe>
+                </div>
+            </div>
+
+            <style>
+                .modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 9999;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(0, 0, 0, 0.4);
+                }
+
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: 5% auto;
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%;
+                    max-width: 800px;
+                    position: relative;
+                    z-index: 10000;
+                }
+
+                .close {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    z-index: 10002;
+                    cursor: pointer;
+                    font-size: 15px;
+                }
+
+                #pdfPreview {
+                    width: 100%;
+                    height: 80vh;
+                    z-index: 10001;
+                    position: relative;
+                }
+
+                .modal-content .btn-success {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    z-index: 10002;
+                }
+
+                /* Existing styles */
+                .sales-report {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                    padding: 20px;
+                    border: 1px solid #ccc;
+                    background-color: #fff;
+                }
+
+                .report-header {
+                    text-align: center;
+                    font-size: 24px;
+                    margin-bottom: 20px;
+                }
+
+                .table-responsive {
+                    width: 100%;
+                }
+            </style>
+
+
+        </section>
+    </main>
+
+    <script src="admin_assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="admin_assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="admin_assets/js/vendors/select2.min.js"></script>
+    <script src="admin_assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="admin_assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="admin_assets/js/main.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script>
+        function generateHTML(deliveredList) {
+            let html = '';
+            if (deliveredList && deliveredList.length > 0) {
+                let totalAmount = 0;
+                let totalCouponAmount = 0;
+                let totalItems = 0;
+
+                deliveredList.forEach((order) => {
+                    html += `
+        <tr>
+          <td><a href="#" class="fw-bold">${order.orderNumber}</a></td>
+          <td>${order.userId.name}</td>
+          <td>
+            <span class="badge badge-pill badge-soft-success">${order.status}</span>
+          </td>
+          <td>${order.items.length}</td>
+          <td>${order.totalAmount.toFixed(2)}</td>
+          <td>${order.couponAmount}</td>
+          <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.payment}</td>
+          <td>${(order.totalAmount - order.couponAmount).toFixed(2)}</td>
+        </tr>`;
+
+                    totalAmount += order.totalAmount;
+                    totalCouponAmount += order.couponAmount;
+                    totalItems += order.items.length;
+                });
+
+                // Add a summary row
+                html += `
+      <tr style="background-color: #f8f9fa; font-weight: bold;">
+        <td colspan="3">Total</td>
+        <td>${totalItems}</td>
+        <td>${totalAmount.toFixed(2)}</td>
+        <td>${totalCouponAmount.toFixed(2)}</td>
+        <td></td>
+        <td>${(totalAmount - totalCouponAmount).toFixed(2)}</td>
+      </tr>`;
+            } else {
+                html = '<tr><td colspan="8">No orders found</td></tr>';
+            }
+            return html;
+        }
+
+        async function filter(option) {
+            try {
+                const response = await fetch('/admin/filterReport', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ option })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    console.log(data.success);
+                    let deliveredList = data.success;
+                    const html = generateHTML(deliveredList);
+                    document.getElementById('saleReport').innerHTML = html;
+                } else {
+                    console.error('Error in filter response:', data.error);
+                    document.getElementById('saleReport').innerHTML = '<tr><td colspan="8">Error loading data</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error in filter function:', error);
+                document.getElementById('saleReport').innerHTML = '<tr><td colspan="8">Error loading data</td></tr>';
+            }
+        }
+
+        document.getElementById('filterByDate').addEventListener('change', async function () {
+            const selectedOption = this.value;
+            if (selectedOption !== '') {
+                await filter(selectedOption);
+            }
+        });
+
+        async function customFilter() {
+            try {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+
+                const response = await fetch('/admin/customFilterReport', {
+                    method: 'POST',
+                    headers: {
+                        'content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ startDate, endDate })
+                })
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log(data.success);
+                    let deliveredList = data.success;
+                    const html = generateHTML(deliveredList);
+                    document.getElementById('saleReport').innerHTML = html;
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    </script>
+    <script>
+        function openPdfPreview() {
+            if (typeof jsPDF !== 'undefined') {
+                const content = document.querySelector('.table-responsive');
+                html2canvas(content).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF();
+                    const imgWidth = 200;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+                    // Convert PDF to blob
+                    const blob = pdf.output('blob');
+                    const url = URL.createObjectURL(blob);
+
+                    // Display PDF in iframe within modal dialog
+                    const iframe = document.getElementById('pdfPreview');
+                    iframe.src = url;
+
+                    // Show modal dialog
+                    document.getElementById('pdfModal').style.display = 'block';
+                });
+            } else {
+                console.error('jsPDF library is not available');
+            }
+        }
+
+        function closePdfPreview() {
+            document.getElementById('pdfModal').style.display = 'none';
+        }
+    </script>
+    <script>
+        window.jsPDF = window.jspdf.jsPDF;
+
+        function downloadPdf() {
+            if (typeof jsPDF !== 'undefined') {
+                const content = document.querySelector('.table-responsive');
+                html2canvas(content).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF();
+                    const imgWidth = 200;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    pdf.save('sales_report.pdf');
+                });
+            } else {
+                console.error('jsPDF library is not available');
+            }
+        }
+
+
+
+        function excelConvert() {
+            const table = document.querySelector('.table-responsive table');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            const headers = Array.from(table.querySelectorAll('th')).map(cell => cell.textContent.trim());
+            const data = rows.map(row => Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.trim()));
+
+            // Add headers as the first row of the data array
+            data.unshift(headers);
+
+            const worksheet = XLSX.utils.aoa_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sales_Report');
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'sales_report.xlsx');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('pdfReport').addEventListener('click', pdfConvert);
+
+    </script>
+</body>
+
+</html>

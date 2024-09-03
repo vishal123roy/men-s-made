@@ -16,6 +16,10 @@ const productschema = new mongoose.Schema({
         required:true,
         trim: true
     },
+    offerPrice:{
+        type:Number,
+        required:false
+      },
     productcategory:{
         type:String,
         required:true,
@@ -44,7 +48,12 @@ const productschema = new mongoose.Schema({
     is_listed:{
         type:Boolean,
         default:true
+    },
+    popularity:{
+        type:Number,
+        required:false,
+        default:0
     }
 });
 
-module.exports = mongoose.model('Products',productschema);
+module.exports = mongoose.model('Product',productschema);
