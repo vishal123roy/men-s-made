@@ -39,10 +39,11 @@
             height: 150px;
             object-fit: contain;
         }
-      
+
         .carousel-item img {
             width: 100%;
-            height: 600px; /* Adjust the height as needed */
+            height: 600px;
+            /* Adjust the height as needed */
             object-fit: cover;
         }
 
@@ -70,7 +71,6 @@
             transform: translate(-50%, -50%);
             text-align: center;
         }
-        
     </style>
 
 </head>
@@ -202,11 +202,12 @@
                     <li data-target="#bannerCarousel" data-slide-to="1"></li>
                     <li data-target="#bannerCarousel" data-slide-to="2"></li>
                 </ol>
-            
+
                 <!-- Carousel Items -->
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="user_assets/images/slideshow-banners/confident.jpg" class="d-block w-100" alt="Shop Our New Collection" title="Shop Our New Collection">
+                        <img src="user_assets/images/slideshow-banners/confident.jpg" class="d-block w-100"
+                            alt="Shop Our New Collection" title="Shop Our New Collection">
                         <div class="carousel-caption d-none d-md-block" style="margin-right:50%; margin-bottom:200px;">
                             <h2 class="h1">Our New Collection</h2>
                             <p>Save up to 50% Off</p>
@@ -215,7 +216,8 @@
                     </div>
                     <!-- Add more slides here if needed -->
                     <div class="carousel-item">
-                        <img src="user_assets/images/slideshow-banners/handsome.jpg" class="d-block w-100" alt="Another Slide" title="Another Slide">
+                        <img src="user_assets/images/slideshow-banners/handsome.jpg" class="d-block w-100"
+                            alt="Another Slide" title="Another Slide">
                         <div class="carousel-caption d-none d-md-block" style="margin-bottom: 200px;">
                             <h2 class="h1">Another Collection</h2>
                             <p>New arrivals available</p>
@@ -223,15 +225,17 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="user_assets/images/slideshow-banners/happy.jpg" class="d-block w-100" alt="Yet Another Slide" title="Yet Another Slide">
-                        <div class="carousel-caption d-none d-md-block" style="margin-bottom: 200px; margin-left: 200px;">
+                        <img src="user_assets/images/slideshow-banners/happy.jpg" class="d-block w-100"
+                            alt="Yet Another Slide" title="Yet Another Slide">
+                        <div class="carousel-caption d-none d-md-block"
+                            style="margin-bottom: 200px; margin-left: 200px;">
                             <h2 class="h1">Season Sale</h2>
                             <p>Exclusive offers this season</p>
                             <a href="#" class="btn btn-primary">Discover more</a>
                         </div>
                     </div>
                 </div>
-            
+
                 <!-- Controls -->
                 <a class="carousel-control-prev" href="#bannerCarousel" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -253,31 +257,30 @@
                                 <p>Our most popular products based on sales</p>
                             </div>
                             <div class="productSlider grid-products">
-                                <% for(let i=0; i<products.length; i++){ %>
+                                <% for(let i=0; i < products.length; i++) { %>
                                     <% if(products[i].productcategory==="T-shirts" ) { %>
                                         <div class="col-12 item">
                                             <!-- start product image -->
                                             <div class="product-image">
-                                                <!-- start product image -->
-                                                <a href="/landingProduct?id=<%=products[i]._id%>"
+                                                <a href="/landingProduct?id=<%= products[i]._id %>"
                                                     class="grid-view-item__link">
                                                     <!-- image -->
                                                     <img class="primary lazyload"
-                                                        src="/product_Assets/<%=products[i].images[0]%>" alt="image"
+                                                        src="/product_Assets/<%= products[i].images[0] %>" alt="image"
                                                         title="product">
                                                     <!-- End image -->
                                                     <!-- Hover image -->
                                                     <img class="hover lazyload"
-                                                        src="/product_Assets/<%=products[i].images[1]%>" alt="image"
+                                                        src="/product_Assets/<%= products[i].images[1] %>" alt="image"
                                                         title="product">
                                                     <!-- End hover image -->
-                                                    <!-- Variant Image-->
                                                 </a>
                                                 <!-- end product image -->
                                                 <!-- Start product button -->
                                                 <div class="button-set">
                                                     <div class="wishlist-btn">
-                                                        <a class="wishlist add-to-wishlist" onclick="addTowishList('<%=products[i]._id%>')">
+                                                        <a class="wishlist add-to-wishlist"
+                                                            onclick="addTowishList('<%= products[i]._id %>')">
                                                             <i class="icon anm anm-heart-l"></i>
                                                         </a>
                                                     </div>
@@ -285,22 +288,23 @@
                                                 <!-- end product button -->
                                             </div>
                                             <!-- end product image -->
-                                            <!--start product details -->
+                                            <!-- start product details -->
                                             <div class="product-details text-center">
                                                 <!-- product name -->
                                                 <div class="product-name">
-                                                    <a href="/landingProduct?id=<%=products[i]._id%>">
-                                                        <%=products[i].productname%>
+                                                    <a href="/landingProduct?id=<%= products[i]._id %>">
+                                                        <%= products[i].productname %>
                                                     </a>
                                                 </div>
                                                 <!-- End product name -->
                                                 <!-- product price -->
                                                 <div class="product-price">
                                                     <span class="old-price">
-                                                        <%= products[i].price %>
+                                                        <%= products[i].price.toFixed(2) %>₹
                                                     </span>
                                                     <span class="price">
-                                                        <%= products[i].offerPrice %>
+                                                        <%= products[i].offerPrice ? products[i].offerPrice.toFixed(2) :
+                                                            products[i].price.toFixed(2) %>₹
                                                     </span>
                                                 </div>
                                                 <!-- End product price -->
@@ -308,8 +312,9 @@
                                             <!-- End product details -->
                                         </div>
                                         <% } %>
-                                    <% } %>
+                                            <% } %>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -371,7 +376,8 @@
 
                                             <div class="button-set">
                                                 <div class="wishlist-btn">
-                                                    <a class="wishlist add-to-wishlist" onclick="addTowishList('<%=products[i]._id%>')">
+                                                    <a class="wishlist add-to-wishlist"
+                                                        onclick="addTowishList('<%=products[i]._id%>')">
                                                         <i class="icon anm anm-heart-l"></i>
                                                     </a>
                                                 </div>
@@ -394,9 +400,14 @@
                                                 <%= products[i].price.toFixed(2) %>
                                             </span>
                                             <span class="price">
-                                                <%= products[i].offerPrice.toFixed(2) %>
+                                                <% if (products[i].offerPrice) { %>
+                                                    <%= products[i].offerPrice.toFixed(2) %>
+                                                        <% } else { %>
+                                                            <%= products[i].price.toFixed(2) %>
+                                                                <% } %>
                                             </span>
                                         </div>
+
                                         <!-- End product price -->
                                     </div>
                                     <!-- End product details -->
