@@ -10,10 +10,10 @@ const session = require('express-session');
 
 const app = express();
 const PORT = 4200;
-
+require('dotenv').config()
 app.use(nocache());
 
-mongoose.connect('mongodb://127.0.0.1:27017/company', {
+mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
