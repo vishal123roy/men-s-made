@@ -459,6 +459,7 @@ const sendEmail = async (req, res) => {
             req.session.Data = otpdata;
             res.redirect('newPassword');
         }
+        
     } catch (error) {
         console.log(error.message);
     }
