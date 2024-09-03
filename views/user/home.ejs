@@ -336,7 +336,7 @@
                     </div>
                     <div class="grid-products">
                         <div class="row">
-                            <% for(let i=0; i <8 ; i++) { %>
+                            <% for(let i=0; i < products.length && i < 8; i++) { %>
                                 <!-- Check if the index is a multiple of 4 and close the previous row, start a new row -->
                                 <% if (i % 4===0 && i !==0) { %>
                         </div>
@@ -345,7 +345,7 @@
                                 <div class="col-6 col-sm-3 col-md-3 col-lg-3 item">
                                     <!-- start product image -->
                                     <div class="product-image">
-                                        <a href="/productPage?id=<%=products[i]._id%>" class="grid-view-item__link">
+                                        <a href="/productPage?id=<%= products[i]._id %>" class="grid-view-item__link">
                                             <!-- image -->
                                             <img class="primary blur-up lazyload"
                                                 src="/product_Assets/<%= products[i].images[0] %>" alt="image"
@@ -362,7 +362,7 @@
                                             <div class="button-set">
                                                 <div class="wishlist-btn">
                                                     <a class="wishlist add-to-wishlist"
-                                                        onclick="addTowishList('<%=products[i]._id%>')">
+                                                        onclick="addTowishList('<%= products[i]._id %>')">
                                                         <i class="icon anm anm-heart-l"></i>
                                                     </a>
                                                 </div>
@@ -374,7 +374,7 @@
                                     <div class="product-details text-center">
                                         <!-- product name -->
                                         <div class="product-name">
-                                            <a href="/productPage?id=<%=products[i]._id%>">
+                                            <a href="/productPage?id=<%= products[i]._id %>">
                                                 <%= products[i].productname %>
                                             </a>
                                         </div>
@@ -385,7 +385,8 @@
                                                 <%= products[i].price.toFixed(2) %>₹
                                             </span>
                                             <span class="price">
-                                                <%= products[i].offerPrice.toFixed(2) %>₹
+                                                <%= products[i].offerPrice ? products[i].offerPrice.toFixed(2) :
+                                                    products[i].price.toFixed(2) %>₹
                                             </span>
                                         </div>
                                         <!-- End product price -->
@@ -396,6 +397,7 @@
                         </div>
                         <!-- Ensure the last row is closed properly -->
                     </div>
+
 
                 </div>
             </div>
