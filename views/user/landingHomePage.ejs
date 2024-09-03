@@ -351,7 +351,7 @@
                     </div>
                     <div class="grid-products">
                         <div class="row">
-                            <% for(let i=0; i <8 ; i++) { %>
+                            <% for (let i=0; i < 8; i++) { %>
                                 <!-- Check if the index is a multiple of 4 and close the previous row, start a new row -->
                                 <% if (i % 4===0 && i !==0) { %>
                         </div>
@@ -360,7 +360,8 @@
                                 <div class="col-6 col-sm-3 col-md-3 col-lg-3 item">
                                     <!-- start product image -->
                                     <div class="product-image">
-                                        <a href="/landingProduct?id=<%=products[i]._id%>" class="grid-view-item__link">
+                                        <a href="/landingProduct?id=<%= products[i]._id %>"
+                                            class="grid-view-item__link">
                                             <!-- image -->
                                             <img class="primary blur-up lazyload"
                                                 src="/product_Assets/<%= products[i].images[0] %>" alt="image"
@@ -371,25 +372,23 @@
                                                 src="/product_Assets/<%= products[i].images[1] %>" alt="image"
                                                 title="product" />
                                             <!-- End hover image -->
-                                            <!-- Variant Image-->
-                                            <!-- end product image -->
-
-                                            <div class="button-set">
-                                                <div class="wishlist-btn">
-                                                    <a class="wishlist add-to-wishlist"
-                                                        onclick="addTowishList('<%=products[i]._id%>')">
-                                                        <i class="icon anm anm-heart-l"></i>
-                                                    </a>
-                                                </div>
+                                        </a>
+                                        <div class="button-set">
+                                            <div class="wishlist-btn">
+                                                <a class="wishlist add-to-wishlist"
+                                                    onclick="addTowishList('<%= products[i]._id %>')">
+                                                    <i class="icon anm anm-heart-l"></i>
+                                                </a>
                                             </div>
-                                            <!-- end product button -->
+                                        </div>
+                                        <!-- end product button -->
                                     </div>
                                     <!-- end product image -->
                                     <!-- start product details -->
                                     <div class="product-details text-center">
                                         <!-- product name -->
                                         <div class="product-name">
-                                            <a href="/landingProduct?id=<%=products[i]._id%>">
+                                            <a href="/landingProduct?id=<%= products[i]._id %>">
                                                 <%= products[i].productname %>
                                             </a>
                                         </div>
@@ -407,7 +406,6 @@
                                                                 <% } %>
                                             </span>
                                         </div>
-
                                         <!-- End product price -->
                                     </div>
                                     <!-- End product details -->
@@ -416,6 +414,7 @@
                         </div>
                         <!-- Ensure the last row is closed properly -->
                     </div>
+
 
                 </div>
             </div>
