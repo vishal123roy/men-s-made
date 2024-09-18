@@ -367,38 +367,46 @@
             }
 
         </script>
-        <script>
-            
-            async function updateQuantity(productId, action) {
-                try {
-                    const response = await fetch(`/updateQuantity/${productId}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ action: action })
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        const subTotal = document.getElementById(`subTotal-${data.productId}`);
-                        subTotal.textContent = `₹${data.newSubtotal.toFixed(2)}`;
+  <script>
+    async function updateQuantity(productId, action) {
+        try {
+            const response = await fetch(`/updateQuantity/${productId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: action })
+            });
 
-                    } else {
-                        const data = await response.json();
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Out of stock',
-                            text: data.error
-                        }).then(() => {
-                            console.error('failed to update quantity');
-                            location.reload();
-                        })
-                    }
-                } catch (error) {
-                    console.log(error.message);
+            if (response.ok) {
+                const data = await response.json();
+                
+          
+                const subTotal = document.getElementById(`subTotal-${data.productId}`);
+                subTotal.textContent = `₹${data.newSubtotal.toFixed(2)}`;
+                
+                const totalCartValue = document.getElementById('totalCartValue');
+                if (totalCartValue && data.newTotal) {
+                    totalCartValue.textContent = `₹${data.newTotal.toFixed(2)}`;
                 }
+
+            } else {
+                const data = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Out of stock',
+                    text: data.error
+                }).then(() => {
+                    console.error('failed to update quantity');
+                    location.reload();  
+                });
             }
-        </script>
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+</script>
+
     </div>
 </body>
 
