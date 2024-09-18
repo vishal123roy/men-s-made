@@ -143,6 +143,11 @@ const otpExpiryTime = () => {
     return now;
 };
 
+function generateOrder() {
+    let number = Math.floor(Math.random() * 10000);
+    let order = number.toString().split('').join('-');
+    return order;
+}
 
 function generateReferralCode(length = 8) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
