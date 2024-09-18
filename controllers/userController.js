@@ -326,7 +326,6 @@ const Resend = async (req, res) => {
         req.session.Data.otp = newotp;
         req.session.Data.otpexpiry = newotpexpiry;
         await req.session.save();
-
         res.status(200).json({ success: true, message: 'otp sent successfully' });
 
     } catch (error) {
@@ -388,10 +387,12 @@ const googleSignIn = async (req, res) => {
                 res.status(200).send('User data received successfully');
             }
         } else {
+            const newReferralCode = generateReferralCode();
             const newUser = new customer({
                 name: displayName,
-                email: email
-            })
+                email: email,
+                referralCode: newReferralCode
+            });
             await newUser.save();
             if (newUser) {
                 const userWallet = new Wallet({
@@ -516,15 +517,12 @@ const ShopPage = async (req, res) => {
 
         const { brand: selectedBrand, category: selectedCategory, sort: selectedSort, search: searchQuery } = req.query;
 
-        // Initialize filter object
         let filter = {is_listed:true};
 
-        // Apply category filter if selected
         if (selectedCategory) {
             filter.productcategory = selectedCategory;
         }
 
-        // Apply brand filter if selected
         if (selectedBrand) {
             filter.brand = selectedBrand;
         }

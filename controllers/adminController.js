@@ -552,13 +552,9 @@ const editcategory = async (req, res) => {
 
         const { name, description } = req.body;
 
-        console.log("cate name is", name);
-
         const data = await Category.findOne({ _id: id });
-        console.log("message", name, data);
 
         const newData = await Category.findOne({ name: name });
-        console.log("newData is ", newData);
 
         if (newData == null) {
 
@@ -627,30 +623,25 @@ const orderPage = async (req, res) => {
     try {
         const { status = 'All', page = 1, limit = 10 } = req.query;
 
-        // Ensure page and limit are numbers
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
         let query = {};
 
-        // Filter by status if it's not 'All'
         if (status !== 'All') {
             query.status = status;
         }
 
-        // Calculate pagination
         const skip = (pageNumber - 1) * limitNumber;
         const totalOrders = await orders.countDocuments(query);
         const totalPages = Math.ceil(totalOrders / limitNumber);
 
-        // Fetch orders with pagination and filtering
         const orderList = await orders.find(query)
             .populate('userId')
             .sort({ orderDate: -1 })
             .skip(skip)
             .limit(limitNumber);
 
-        // Render the page with data
         res.render('orderList', {
             AllOrders: orderList,
             currentPage: pageNumber,
