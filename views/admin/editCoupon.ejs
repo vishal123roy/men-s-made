@@ -150,50 +150,52 @@
         <div class="container mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title">Create a New Coupon</h2>
-                    <form id="add-coupon-form" novalidate>
+                    <h2 class="card-title">Edit Coupon</h2>
+                    <form id="edit-coupon-form" novalidate>
                         <div class="mb-3">
                             <label for="coupon-id" class="form-label">Coupon ID</label>
+                            <input type="hidden" id="couponId" value="<%=couponData._id %>">
                             <input type="text" class="form-control" id="coupon-id" name="couponId"
-                                placeholder="Enter Coupon ID">
+                                placeholder="Enter Coupon ID" value="<%=couponData.couponId %>">
                             <div id="coupon-id-error" class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
                             <input type="text" class="form-control" id="description" name="description"
-                                placeholder="Enter Description">
+                                placeholder="Enter Description" value="<%= couponData.description %>">
                             <div id="description-error" class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="min-amount" class="form-label">Minimum Amount</label>
                             <input type="text" class="form-control" id="min-amount" name="minimumAmount"
-                                placeholder="Enter Minimum Purchase Amount">
+                                placeholder="Enter Minimum Purchase Amount" value="<%= couponData.minimumAmount %>">
                             <div id="min-amount-error" class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="max-amount" class="form-label">Maximum Amount</label>
                             <input type="text" class="form-control" id="max-amount" name="maximumAmount"
-                                placeholder="Enter Maximum Purchase Amount">
+                                placeholder="Enter Maximum Purchase Amount" value="<%= couponData.maximumAmount %>">
                             <div id="max-amount-error" class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="max-discount" class="form-label">Discount</label>
                             <input type="text" class="form-control" id="max-discount" name="maximumDiscount"
-                                placeholder="Enter Discount">
+                                placeholder="Enter Discount" value="<%= couponData.maximumDiscount %>">
                             <div id="max-discount-error" class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="max-user" class="form-label">Maximum User</label>
                             <input type="text" class="form-control" id="max-user" name="maximumUser"
-                                placeholder="Enter Maximum User">
+                                placeholder="Enter Maximum User" value="<%= couponData.maximumUser %>">
                             <div id="max-user-error" class="invalid-feedback"></div>
                         </div>
                         <div class="mb-3">
                             <label for="expire-date" class="form-label">Expire Date</label>
-                            <input type="date" class="form-control" id="expire-date" name="expireDate">
+                            <input type="date" class="form-control" id="expire-date" name="expireDate" 
+                            value="<%= couponData.expireDate ? new Date(couponData.expireDate).toISOString().split('T')[0] : '' %>">
                             <div id="expire-date-error" class="invalid-feedback"></div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="border-radius: 0;">Create Coupon</button>
+                        <button type="submit" class="btn btn-primary" style="border-radius: 0;">Update Coupon</button>
                     </form>
                 </div>
             </div>
@@ -207,6 +209,18 @@
     <!-- Main Script -->
     <script src="admin_assets/js/main.js" type="text/javascript"></script>
     <script>
+           const couponData = JSON.parse('<%- JSON.stringify(couponData) %>');
+        
+        // Format the date correctly for the input
+        if (couponData.expireDate) {
+            const date = new Date(couponData.expireDate);
+            const formattedDate = date.toISOString().split('T')[0];
+            document.getElementById('expire-date').value = formattedDate;
+        }
+
+        console.log('Coupon Data:', couponData);
+    </script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const couponId = document.getElementById("coupon-id");
             const description = document.getElementById("description");
@@ -215,7 +229,7 @@
             const minAmount = document.getElementById("min-amount");
             const maxUser = document.getElementById("max-user");
             const expireDate = document.getElementById('expire-date');
-            const form = document.getElementById("add-coupon-form");
+            const form = document.getElementById("edit-coupon-form");
 
             // Set min attribute to today for the expire date input to prevent past date selection
             const today = new Date().toISOString().split('T')[0];
@@ -325,11 +339,12 @@
                     return; // Stop the form submission if validation fails
                 }
 
-                // If validation passes, proceed with fetch request
                 const formData = new FormData(form);
+                const couponId = document.getElementById("couponId").value;
+                formData.append("_id", couponId);
 
                 try {
-                    const response = await fetch('/admin/createCoupon', {
+                    const response = await fetch('/admin/updateCoupon', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -342,7 +357,7 @@
                     if (response.ok) {
                         Swal.fire({
                             title: 'Success',
-                            text: 'Coupon created',
+                            text: 'Coupon updated successfully',
                             icon: 'success',
                             timer: 2000
                         });
@@ -352,7 +367,7 @@
                     } else {
                         Swal.fire({
                             title: 'Error',
-                            text: data.message,
+                            text: data.message||'Failed to update coupon',
                             icon: 'error',
                             timer: 2000
                         });
@@ -361,7 +376,7 @@
                     console.error('Error:', error);
                     Swal.fire({
                         title: 'Error',
-                        text: 'Failed to create coupon',
+                        text: 'Failed to update coupon',
                         icon: 'error',
                         timer: 2000
                     });

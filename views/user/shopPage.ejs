@@ -274,14 +274,14 @@
                                                         <div class="product-price">
                                                             <% if (data.offerPrice) { %>
                                                                 <span class="old-price">
-                                                                    <%= data.price.toFixed(2) %>
+                                                                    ₹<%= data.price.toFixed(2) %>
                                                                 </span>
                                                                 <span class="price">
-                                                                    <%= data.offerPrice.toFixed(2) %>₹
+                                                                    ₹<%= data.offerPrice.toFixed(2) %>
                                                                 </span>
                                                                 <% } else { %>
                                                                     <span class="price">
-                                                                        <%= data.price.toFixed(2) %>₹
+                                                                        ₹<%= data.price.toFixed(2) %>
                                                                     </span>
                                                                     <% } %>
                                                         </div>

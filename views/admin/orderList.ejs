@@ -153,11 +153,13 @@
                     <div class="row gx-3">
                         <div class="col-lg-2 col-6 col-md-3">
                             <select class="form-select" id="statusFilter">
-                                <option value="">pending</option>
-                                <option value="pending">Return pending</option>
-                                <option value="Active">delivered</option>
-                                <option value="Disabled">canceled</option>
-                                <option value="All">Show all</option>
+                                <option value="pending" <%=status==='pending' ? 'selected' : '' %>>Pending</option>
+                                <option value="Return pending" <%=status==='Return pending' ? 'selected' : '' %>>Return
+                                    pending</option>
+                                <option value="delivered" <%=status==='delivered' ? 'selected' : '' %>>Delivered
+                                </option>
+                                <option value="canceled" <%=status==='canceled' ? 'selected' : '' %>>Canceled</option>
+                                <option value="All" <%=status==='All' ? 'selected' : '' %>>Show all</option>
                             </select>
                         </div>
                     </div>
@@ -175,37 +177,80 @@
                                     <th scope="col" class="text-end">Action</th>
                                 </tr>
                             </thead>
-                 <tbody>
-    <% AllOrders.forEach(order => { %>
-        <% if (order.status !== 'failed') { %> <!-- Exclude orders with 'failed' status -->
-            <tr>
-                <td><%= order.orderNumber %></td>
-                <td><%= order.userId.email %></td>
-                <td><%= order.totalAmount.toFixed(2) %></td>
-                <td>
-                    <% if (order.status === 'pending') { %>
-                        <span class="badge rounded-pill alert-warning"><%= order.status %></span>
-                    <% } else if (order.status === 'delivered') { %>
-                        <span class="badge rounded-pill alert-success"><%= order.status %></span>
-                    <% } else if (order.status === 'returned') { %>
-                        <span class="badge rounded-pill alert-success"><%= order.status %></span>
-                    <% } else if (order.status === 'canceled') { %>
-                        <span class="badge rounded-pill alert-danger"><%= order.status %></span>
-                    <% } else if (order.status === 'Return pending') { %>
-                        <span class="badge rounded-pill alert-warning"><%= order.status %></span>
-                    <% } %>
-                </td>
-                <td><%= order.orderDate.toDateString() %></td>
-                <td class="text-end">
-                    <a href="/admin/orderDetails?id=<%= order._id %>" class="btn btn-md font-sm" style="border-radius: 0;">Detail</a>
-                </td>
-            </tr>
-        <% } %>
-    <% }); %>
-</tbody>
- 
+                            <tbody>
+                                <% AllOrders.forEach(order=> { %>
+                                    <% if (order.status !=='failed' ) { %> <!-- Exclude orders with 'failed' status -->
+                                        <tr>
+                                            <td>
+                                                <%= order.orderNumber %>
+                                            </td>
+                                            <td>
+                                                <%= order.userId.email %>
+                                            </td>
+                                            <td>
+                                                <%= order.totalAmount.toFixed(2) %>
+                                            </td>
+                                            <td>
+                                                <% if (order.status==='pending' ) { %>
+                                                    <span class="badge rounded-pill alert-warning">
+                                                        <%= order.status %>
+                                                    </span>
+                                                    <% } else if (order.status==='delivered' ) { %>
+                                                        <span class="badge rounded-pill alert-success">
+                                                            <%= order.status %>
+                                                        </span>
+                                                        <% } else if (order.status==='returned' ) { %>
+                                                            <span class="badge rounded-pill alert-success">
+                                                                <%= order.status %>
+                                                            </span>
+                                                            <% } else if (order.status==='canceled' ) { %>
+                                                                <span class="badge rounded-pill alert-danger">
+                                                                    <%= order.status %>
+                                                                </span>
+                                                                <% } else if (order.status==='Return pending' ) { %>
+                                                                    <span class="badge rounded-pill alert-warning">
+                                                                        <%= order.status %>
+                                                                    </span>
+                                                                    <% } %>
+                                            </td>
+                                            <td>
+                                                <%= order.orderDate.toDateString() %>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="/admin/orderDetails?id=<%= order._id %>"
+                                                    class="btn btn-md font-sm" style="border-radius: 0;">Detail</a>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                            <% }); %>
+                            </tbody>
                         </table>
-                        <!-- Assuming currentPage is passed from the backend -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <% if (currentPage> 1) { %>
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&status=<%= status %>">Previous</a>
+                                    </li>
+                                    <% } %>
+
+                                        <% for (let i=1; i <=totalPages; i++) { %>
+                                            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                                <a class="page-link"
+                                                    href="?page=<%= i %>&limit=<%= limit %>&status=<%= status %>">
+                                                    <%= i %>
+                                                </a>
+                                            </li>
+                                            <% } %>
+
+                                                <% if (currentPage < totalPages) { %>
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                            href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&status=<%= status %>">Next</a>
+                                                    </li>
+                                                    <% } %>
+                            </ul>
+                        </nav>
                     </div> <!-- table-responsive //end -->
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
@@ -222,11 +267,43 @@
     <script src="admin_assets/js/main.js" type="text/javascript"></script>
 
     <script>
+        // Function to get query parameter value
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Function to set the selected value of the dropdown
+        function setDropdownValue(value) {
+            const statusFilter = document.getElementById('statusFilter');
+            statusFilter.value = value || 'All'; // Default to 'All' if no value is given
+        }
+
+        // Function to update the URL
+        function updateUrlParam(param, value) {
+            const url = new URL(window.location.href);
+            url.searchParams.set(param, value);
+            history.pushState(null, '', url.toString());
+            window.location.reload();
+        }
+
+        // Initialize the dropdown based on the query parameter
+        document.addEventListener('DOMContentLoaded', function () {
+            const status = getQueryParam('status')
+            const page = getQueryParam('page')
+            setDropdownValue(status); // Set the dropdown value based on the query parameter
+        });
+
+        // Add change event listener to the dropdown
         document.getElementById('statusFilter').addEventListener('change', function () {
             const selectedStatus = this.value;
-            const url = new URL(window.location.href);
-            url.searchParams.set('status', selectedStatus); // Set the status parameter
-            window.location.href = url; // Redirect to the updated URL
+            updateUrlParam('status', selectedStatus); // Update URL with the selected status
+        });
+
+        // Handle browser back and forward navigation
+        window.addEventListener('popstate', function () {
+            const status = getQueryParam('status');
+            setDropdownValue(status); // Update the dropdown value based on the URL
         });
     </script>
 </body>

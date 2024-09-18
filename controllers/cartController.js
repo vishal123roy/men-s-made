@@ -66,11 +66,6 @@ const addTocart = async (req, res) => {
         await findCart.save();
         res.status(200).json({ message: "Your product added successfully" });
 
-        const productSize = product.sizes.find(size => size.size === Size);
-        if (productSize) {
-            productSize.quantity--;
-            await product.save();
-        }
     } catch (error) {
         res.status(500).json({ message: error.message });
         console.log(error.message);
@@ -79,13 +74,13 @@ const addTocart = async (req, res) => {
 
 
 const quantityUpdate = async (req, res) => {
+
     const productId = req.params.productId;
     const action = req.body.action;
     const userId = req.session.user_id;
 
     try {
 
-      
         const cartList = await cart.findOne({ userId: userId });
         if (!cartList) {
             return res.status(404).json({ error: 'Cart not found' });
@@ -111,16 +106,16 @@ const quantityUpdate = async (req, res) => {
         }
 
         if (action === 'increment') {
-            if (sizeObj.quantity > 0) {
+            if (sizeObj.quantity > cartList.items[productIndex].quantity) {
                 cartList.items[productIndex].quantity++;
-                sizeObj.quantity--; 
+                
             } else {
                 return res.status(400).json({ error: 'Cannot exceed available stock' });
             }
         } else if (action === 'decrement') {
             if (cartProduct.quantity > 1) {
                 cartList.items[productIndex].quantity--;
-                sizeObj.quantity++;  
+                
             } else {
                 return res.status(400).json({ error: 'Minimum quantity reached' });
             }
@@ -133,11 +128,9 @@ const quantityUpdate = async (req, res) => {
         const newTotal = cartList.items.reduce((acc, item) => acc + item.subTotal, 0);
         cartList.total = newTotal;
 
-     
-        await product.save(); 
         await cartList.save();
 
-        res.status(200).json({ items: cartList.items, total: cartList.total });
+        res.status(200).json({ items: cartList.items, total: cartList.total,productId,newSubtotal});
 
     } catch (error) {
         console.error('Error:', error);
@@ -147,16 +140,14 @@ const quantityUpdate = async (req, res) => {
 
 const removeCart = async (req, res) => {
     try {
-        const { id } = req.body; // The product ID
+        const { id } = req.body; 
         const userId = req.session.user_id;
 
-        // Find the user's cart
         const userCart = await cart.findOne({ userId: userId });
         if (!userCart) {
             return res.status(404).json({ success: false, message: 'Cart not found' });
         }
 
-        // Find the index of the item to remove
         const itemIndex = userCart.items.findIndex(item => item.product.toString() === id);
         if (itemIndex === -1) {
             return res.status(404).json({ success: false, message: 'Item not found in cart' });
@@ -164,7 +155,6 @@ const removeCart = async (req, res) => {
 
         const removedItem = userCart.items[itemIndex];
 
-        // Find the product in the Product collection to restore stock
         const product = await Product.findById(id);
         if (!product) {
             return res.status(404).json({ success: false, message: 'Product not found' });
@@ -175,21 +165,15 @@ const removeCart = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Size not found for the product' });
         }
 
-        // Restore the stock quantity
-        sizeObj.quantity += removedItem.quantity;
-
-        // Remove the item from the cart
         userCart.items.splice(itemIndex, 1);
 
-        // Update the cart total
         userCart.total -= removedItem.subTotal;
+        
         if (userCart.items.length == 0) {
             userCart.total = 0;
         }
 
-        // Save the changes
         await userCart.save();
-        await product.save(); // Save the updated product with restored stock
 
         res.status(200).json({ success: true });
     } catch (error) {

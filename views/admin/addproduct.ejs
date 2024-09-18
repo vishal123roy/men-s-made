@@ -173,39 +173,42 @@
     </style>
     <style>
         .image-container {
-    position: relative;
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
 
-.image-container img {
-    height: 120px; /* Adjusted height */
-    width: 120px;  /* Adjusted width */
-    object-fit: cover;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+        .image-container img {
+            height: 120px;
+            /* Adjusted height */
+            width: 120px;
+            /* Adjusted width */
+            object-fit: cover;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-.close-button {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    padding: 5px;
-    cursor: pointer;
-    z-index: 10;
-}
+        .close-button {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
 
-#selectedImagesContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; /* Space between images */
-    margin-top: 20px; /* Space between file input and images */
-}
-
+        #selectedImagesContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            /* Space between images */
+            margin-top: 20px;
+            /* Space between file input and images */
+        }
     </style>
 </head>
 
@@ -360,8 +363,8 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="offerPrice" class="form-label">Offer Price</label>
-                                        <input type="number" placeholder="Type here" class="form-control" id="offerPrice"
-                                            name="offerPrice" required min="0" step="0.01">
+                                        <input type="number" placeholder="Type here" class="form-control"
+                                            id="offerPrice" name="offerPrice" required min="0" step="0.01">
                                         <div class="invalid-feedback">Please enter a valid price.</div>
                                     </div>
                                 </div>
@@ -487,13 +490,15 @@
         let cropper;
         let currentImageContainer;
         let currentFile;
+        let selectedFiles = []; // To keep track of all the selected files
 
         function displaySelectedImages(input) {
             const selectedImagesContainer = document.getElementById('selectedImagesContainer');
-            const files = input.files;
+            const files = Array.from(input.files);
 
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
+            files.forEach(file => {
+                selectedFiles.push(file); // Store the selected file
+
                 const imageContainer = document.createElement('div');
                 imageContainer.classList.add('image-container');
 
@@ -507,8 +512,8 @@
                 closeButton.classList.add('close-button');
                 closeButton.addEventListener('click', function () {
                     imageContainer.remove();
-                    const newFileList = Array.from(input.files).filter(f => f !== file);
-                    updateFileInput(input, newFileList);
+                    selectedFiles = selectedFiles.filter(f => f !== file); // Remove the file from the selected files
+                    updateFileInput(input, selectedFiles); // Update the file input with the remaining files
                 });
 
                 image.addEventListener('click', function () {
@@ -518,7 +523,9 @@
                 imageContainer.appendChild(image);
                 imageContainer.appendChild(closeButton);
                 selectedImagesContainer.appendChild(imageContainer);
-            }
+            });
+
+            updateFileInput(input, selectedFiles); // Ensure the input is updated after displaying images
         }
 
         function showCropperModal(file, imageContainer, input) {
@@ -562,9 +569,8 @@
                 currentImageContainer.innerHTML = '';
                 currentImageContainer.appendChild(croppedImage);
 
-                const input = document.getElementById('imageUpload');
-                const newFileList = Array.from(input.files).map(f => f === currentFile ? croppedFile : f);
-                updateFileInput(input, newFileList);
+                selectedFiles = selectedFiles.map(f => f === currentFile ? croppedFile : f); // Replace the file with the cropped one
+                updateFileInput(document.getElementById('imageUpload'), selectedFiles);
 
                 bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
             }, 'image/png');
@@ -579,17 +585,15 @@
 
         function updateFileInput(input, files) {
             const dataTransfer = new DataTransfer();
-            files.forEach(file => {
-                dataTransfer.items.add(file);
-            });
+            files.forEach(file => dataTransfer.items.add(file));
             input.files = dataTransfer.files;
         }
 
         document.getElementById('imageUpload').addEventListener('change', function (event) {
             displaySelectedImages(event.target);
         });
-
     </script>
+
     <script>
         // Add this to your existing JavaScript
         document.getElementById('productForm').addEventListener('submit', function (event) {
@@ -634,7 +638,6 @@
                 }
             });
         });
-
     </script>
 </body>
 

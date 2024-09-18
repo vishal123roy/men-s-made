@@ -84,6 +84,8 @@ admin_Route.post('/deleteCoupon',auth.isLogin,adminController.deleteCoupon);
 
 admin_Route.get('/editCoupon',auth.isLogin,adminController.editCouponPage);
 
+admin_Route.post('/updateCoupon',auth.isLogin,adminController.updateCoupon)
+
 admin_Route.get('/offerPage',auth.isLogin,adminController.offerPage);
 
 admin_Route.post('/addOfferPrice',auth.isLogin,adminController.addOfferPrice);

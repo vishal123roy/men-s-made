@@ -46,6 +46,9 @@ app.use('/admin', admin_Route);
 app.use('*',(req,res)=>{
     res.render('user/404');
 })
+app.all('*',(req,res,next)=>{
+    res.redirect('/error500')
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

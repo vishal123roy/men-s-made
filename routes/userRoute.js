@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const userController = require('../controllers/userController');
 const addressController = require('../controllers/addressController');
 const cartController = require('../controllers/cartController');
-
+const orderController = require('../controllers/orderController');
 const auth = require('../middleware/userAuth');
 
 userRoute.set('view engine', 'ejs');
@@ -96,29 +96,29 @@ userRoute.get('/checkoutPage',auth.isLogin,cartController.checkoutPage);
 userRoute.post('/addCoupon',auth.isLogin,userController.addCoupon);
 
 userRoute.post('/removeCoupon',auth.isLogin,userController.removeCoupon)
+//
+userRoute.post('/placeOrder',auth.isLogin,orderController.placeOrder);
 
-userRoute.post('/placeOrder',auth.isLogin,userController.placeOrder);
+userRoute.get('/orderSuccess',auth.isLogin,orderController.orderSuccess);
 
-userRoute.get('/orderSuccess',auth.isLogin,userController.orderSuccess);
+userRoute.get('/viewOrder',auth.isLogin,orderController.orderDetail);
 
-userRoute.get('/viewOrder',auth.isLogin,userController.orderDetail);
+userRoute.put('/cancelOrder/:orderId',auth.isLogin,orderController.orderCancelation);
 
-userRoute.put('/cancelOrder/:orderId',auth.isLogin,userController.orderCancelation);
+userRoute.put('/returnOrder/:orderId',auth.isLogin,orderController.orderReturn);
 
-userRoute.put('/returnOrder/:orderId',auth.isLogin,userController.orderReturn);
+userRoute.post('/onlinePay',auth.isLogin,orderController.onlinePayment)
 
-userRoute.post('/onlinePay',auth.isLogin,userController.onlinePayment)
+userRoute.post('/orderVerify',auth.isLogin,orderController.verifyPayment);
 
-userRoute.post('/orderVerify',auth.isLogin,userController.verifyPayment);
+userRoute.post('/paymentFailure',auth.isLogin,orderController.failedPayment);
 
-userRoute.post('/paymentFailure',auth.isLogin,userController.failedPayment);
+userRoute.get('/orderFailed',auth.isLogin,orderController.orderFailedPage);
 
-userRoute.get('/orderFailed',auth.isLogin,userController.orderFailedPage);
+userRoute.post('/retryPayment',auth.isLogin,orderController.retryPayment)
 
-userRoute.post('/retryPayment',auth.isLogin,userController.retryPayment)
-
-userRoute.post('/verifyRetryPayment',auth.isLogin,userController.verifyRetryPay);
-
+userRoute.post('/verifyRetryPayment',auth.isLogin,orderController.verifyRetryPay);
+//
 userRoute.get('/wishList',auth.isLogin,userController.wishListPage);
 
 userRoute.post('/addwishList',auth.isLogin,userController.addTowishList);
@@ -129,7 +129,7 @@ userRoute.get('/wallet',auth.isLogin,userController.walletPage);
 
 userRoute.post('/addToWallet',auth.isLogin,userController.addWalletAmount);
 
-userRoute.post('/verifyAddAmount',auth.isLogin,userController.verifyWalletAmount)
+userRoute.post('/verifyAddAmount',auth.isLogin,userController.verifyWalletAmount);
 
 userRoute.post('/walletPayment',auth.isLogin,userController.walletPayment);
 

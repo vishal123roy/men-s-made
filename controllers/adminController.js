@@ -21,42 +21,42 @@ const adminverify = async (req, res) => {
     try {
         const { email, password } = req.body;
         const userData = await User.findOne({ email: email });
-        
-       
-        if(userData != null){
-            req.session.admin_id = userData._id; 
-       
+
+
+        if (userData != null) {
+            req.session.admin_id = userData._id;
+
             const checkpassword = await bcrypt.compare(password, userData.password);
-           
+
             if (checkpassword == true && userData.is_verified === 1) {
                 res.redirect('/admin/home');
             }
             else {
                 res.render('adminlogin', { message: 'wrong password' });
             }
-        }else{
+        } else {
             res.render('adminlogin', { message: 'admin not exist' });
         }
-       
+
     }
     catch (error) {
         console.log(error.message);
     }
 }
 
-const adminLogout = async(req,res)=>{
+const adminLogout = async (req, res) => {
     try {
         req.session.destroy((err) => {
-            if(err){
+            if (err) {
                 console.error("error destroying session").err;
             }
             res.redirect("/admin/login");
         })
-    
+
     } catch (error) {
 
         console.log(error)
-    
+
     }
 }
 
@@ -76,7 +76,7 @@ const adminhome = async (req, res) => {
 
         // Find orders within the current month that are in certain statuses
         const ordersInMonth = await orders.find({
-            status: { $in: ['pending','delivered', 'canceled', 'returned', 'Return pending'] },
+            status: { $in: ['pending', 'delivered', 'canceled', 'returned', 'Return pending'] },
             orderDate: { $gte: firstDayOfMonth, $lte: lastDayOfMonth }
         });
         // Initialize sales data for each day of the month
@@ -140,7 +140,7 @@ const adminhome = async (req, res) => {
 
         sortedCategories.sort((a, b) => b.totalPopularity - a.totalPopularity);
 
-        
+
 
         res.render('adminhome', {
             admin: userData,
@@ -196,7 +196,7 @@ const filterChart = async (req, res) => {
 
             orders.forEach(item => {
                 let month = new Date(item.orderDate).getMonth();
-                month = (month + 9) % 12; 
+                month = (month + 9) % 12;
                 monthlySales[month] += item.totalAmount;
             });
 
@@ -235,7 +235,7 @@ async function getOrdersWithinDateRange(startDate, endDate) {
     return await orders.aggregate([
         {
             $match: {
-                status: { $in: ['pending','delivered', 'canceled', 'returned', 'Return pending'] },
+                status: { $in: ['pending', 'delivered', 'canceled', 'returned', 'Return pending'] },
                 orderDate: { $gte: startDate, $lte: endDate }
             }
         }
@@ -340,7 +340,7 @@ const productlistpage = async (req, res) => {
         const totalPages = Math.ceil(totalProducts / limitNumber);
 
         // Fetch products for the current page
-        const productdata = await Product.find(query)
+        const productdata = await Product.find(query).sort({ createdAt: -1 })
             .skip((pageNumber - 1) * limitNumber)
             .limit(limitNumber);
 
@@ -359,7 +359,7 @@ const productlistpage = async (req, res) => {
 const addproductpage = async (req, res) => {
     try {
         const data = await Category.find();
-        
+
         res.render('addproduct', { categories: data });
     } catch (error) {
         console.log(error.message);
@@ -369,7 +369,7 @@ const addproductpage = async (req, res) => {
 const editproductpage = async (req, res) => {
     try {
         const Id = req.query.id;
-    
+
         const data = await Product.findById({ _id: Id })
         const categorydata = await Category.find();
         res.render('updateproduct', { prodata: data, category: categorydata });
@@ -452,7 +452,7 @@ const insertproduct = async (req, res) => {
             productname: product_title,
             brand: product_brand,
             price: price,
-            offerPrice:offerPrice,
+            offerPrice: offerPrice,
             productcategory: category,
             description: description,
             images: images,
@@ -552,17 +552,29 @@ const editcategory = async (req, res) => {
 
         const { name, description } = req.body;
 
-        const data = await Category.findOne({ _id: id })
+        console.log("cate name is", name);
 
-        const categoryName = data.name;
+        const data = await Category.findOne({ _id: id });
+        console.log("message", name, data);
 
-        const productData = await Product.updateMany({ productcategory: categoryName },
-            { $set: { productcategory: name } });
+        const newData = await Category.findOne({ name: name });
+        console.log("newData is ", newData);
 
-        if (productData) {
-            data.name = name;
-            await data.save();
-            res.redirect('/admin/Category');
+        if (newData == null) {
+
+            const categoryName = data.name;
+
+            const productData = await Product.updateMany({ productcategory: categoryName },
+                { $set: { productcategory: name } });
+
+            if (productData) {
+                data.name = name;
+                data.description = description;
+                await data.save();
+                res.redirect('/admin/Category');
+            }
+        } else {
+            res.render('editcategory', { category: data, message: 'category already exist' });
         }
 
     } catch (error) {
@@ -574,17 +586,17 @@ const enableDisable = async (req, res) => {
     try {
 
         const { Id } = req.body;
-        
+
         const data = await Category.findById({ _id: Id })
-    
+
 
         if (data.is_active === true) {
             const category = await Category.findByIdAndUpdate({ _id: Id }, {
                 is_active: false
             });
-             const categoryProduct = await Product.updateMany({productcategory:data.name},
-                {$set: { is_listed: false }});
-            
+            const categoryProduct = await Product.updateMany({ productcategory: data.name },
+                { $set: { is_listed: false } });
+
 
             if (category) {
 
@@ -598,8 +610,8 @@ const enableDisable = async (req, res) => {
             const category = await Category.findByIdAndUpdate({ _id: Id }, {
                 is_active: true
             })
-            const categoryProduct = await Product.updateMany({productcategory:data.name},
-                {$set: { is_listed: true }});
+            const categoryProduct = await Product.updateMany({ productcategory: data.name },
+                { $set: { is_listed: true } });
             if (category) {
                 res.status(200).json({ success: true, message: 'success' });
             } else {
@@ -613,27 +625,46 @@ const enableDisable = async (req, res) => {
 
 const orderPage = async (req, res) => {
     try {
-        const { status } = req.query;
+        const { status = 'All', page = 1, limit = 10 } = req.query;
+
+        // Ensure page and limit are numbers
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+
         let query = {};
 
-        // Filter based on status
-        if (status === 'Active') {
-            query.status = 'delivered';
-        } else if (status === 'Disabled') {
-            query.status = 'canceled';
-        } else if (status === '') {
-            query.status = 'pending';
+        // Filter by status if it's not 'All'
+        if (status !== 'All') {
+            query.status = status;
         }
 
-        // Fetch orders based on the constructed query
-        const orderList = await orders.find(query).populate('userId');
-        res.render('orderList', { AllOrders: orderList });
+        // Calculate pagination
+        const skip = (pageNumber - 1) * limitNumber;
+        const totalOrders = await orders.countDocuments(query);
+        const totalPages = Math.ceil(totalOrders / limitNumber);
+
+        // Fetch orders with pagination and filtering
+        const orderList = await orders.find(query)
+            .populate('userId')
+            .sort({ orderDate: -1 })
+            .skip(skip)
+            .limit(limitNumber);
+
+        // Render the page with data
+        res.render('orderList', {
+            AllOrders: orderList,
+            currentPage: pageNumber,
+            totalPages: totalPages,
+            status: status,
+            limit: limitNumber
+        });
 
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Server Error");
     }
 };
+
 
 const orderDetails = async (req, res) => {
     try {
@@ -668,7 +699,19 @@ const changeStatus = async (req, res) => {
                 status: action,
                 isReturned: true
             })
+
             await order.save();
+
+            const updateProduct = order.items.map(async (order) => {
+
+                const product = await Product.findById(order.product._id);
+                const sizeObj = product.sizes.find(item => item.size === order.size);
+                sizeObj.quantity += order.quantity;
+                product.save();
+            });
+
+            await Promise.all(updateProduct);
+
             const userId = order.userId;
             const userWallet = await Wallet.findOne({ user: userId })
             userWallet.walletBalance += parseFloat(order.totalAmount);
@@ -690,7 +733,6 @@ const changeStatus = async (req, res) => {
 
                 await order.save();
                 res.status(200).json({ success: true })
-                console.log("order status is changed");
 
             }
         }
@@ -728,6 +770,9 @@ const createCoupon = async (req, res) => {
     try {
 
         const { couponId, description, maximumDiscount, minimumAmount, maximumAmount, maximumUser, expireDate } = req.body;
+        
+        const existingCoupon = await Coupon.findOne({couponId:couponId})
+        if(existingCoupon === null){
 
         const couponData = new Coupon({
             couponId: couponId,
@@ -746,7 +791,10 @@ const createCoupon = async (req, res) => {
         } else {
             res.status(404).json({ message: 'failed to create coupon' });
         }
+    }else{
+        res.status(404).json({ message: 'Coupon already exist' });
 
+    }
 
     } catch (error) {
         console.error('Error creating coupon:', error);
@@ -761,7 +809,7 @@ const deleteCoupon = async (req, res) => {
         const couponData = await Coupon.findByIdAndDelete({ _id: id })
 
         if (couponData) {
-            res.status(200).json({ message: 'Coupon created successfully' });
+            res.status(200).json({ message: 'Coupon deleted successfully' });
         }
 
 
@@ -775,10 +823,10 @@ const deleteCoupon = async (req, res) => {
 const editCouponPage = async (req, res) => {
     try {
 
-        const id = req.query.couponId;
+        const id = req.query.id;
 
         const couponData = await Coupon.findById({ _id: id });
-
+    
         res.render('editCoupon', { couponData })
 
 
@@ -788,6 +836,45 @@ const editCouponPage = async (req, res) => {
 
     }
 }
+
+const updateCoupon = async (req, res) => {
+    try {
+        const { _id, couponId, description, maximumDiscount, minimumAmount, maximumAmount, maximumUser, expireDate } = req.body;
+
+        const couponToUpdate = await Coupon.findById(_id);
+        if (!couponToUpdate) {
+            return res.status(404).json({ message: 'Coupon not found' });
+        }
+
+        const existingCoupon = await Coupon.findOne({ couponId: couponId, _id: { $ne: _id } });
+        if (existingCoupon) {
+            return res.status(409).json({ message: 'Another coupon with this ID already exists' });
+        }
+
+        const updatedCoupon = await Coupon.findByIdAndUpdate(
+            _id,
+            {
+                couponId,
+                description,
+                maximumDiscount,
+                minimumAmount,
+                maximumAmount,
+                maximumUser,
+                expireDate
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (updatedCoupon) {
+            res.status(200).json({ message: 'Coupon updated successfully', coupon: updatedCoupon });
+        } else {
+            res.status(500).json({ message: 'Failed to update coupon' });
+        }
+    } catch (error) {
+        console.error('Error updating coupon:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
 
 const offerPage = async (req, res) => {
     try {
@@ -881,7 +968,7 @@ const salesReportPage = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const pageSize = 10;
-     
+
         const totalOrders = await orders.countDocuments({ status: 'delivered' });
 
         const deliveredList = await orders.find({ status: 'delivered' })
@@ -1009,6 +1096,7 @@ module.exports = {
     createCoupon,
     deleteCoupon,
     editCouponPage,
+    updateCoupon,
     offerPage,
     addOfferPrice,
     editOfferPrice,
