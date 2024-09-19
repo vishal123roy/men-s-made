@@ -152,6 +152,7 @@
                 <header class="card-header">
                     <div class="row gx-3">
                         <div class="col-lg-2 col-6 col-md-3">
+                            <p>Status: <%= status %></p>
                             <select class="form-select" id="statusFilter">
                                 <option value="pending" <%= status==='pending' ? 'selected' : '' %>>Pending</option>
                                 <option value="Return pending" <%= status==='Return pending' ? 'selected' : '' %>>Return
@@ -160,6 +161,7 @@
                                 </option>
                                 <option value="canceled" <%= status==='canceled' ? 'selected' : '' %>>Canceled</option>
                                 <option value="All" <%= status==='All' ? 'selected' : '' %>>Show all</option>
+                                
                             </select>
                         </div>
                     </div>
@@ -267,6 +269,8 @@
     <script src="admin_assets/js/main.js" type="text/javascript"></script>
 
     <script>
+        console.log("status is ", status); // Ensure this is logging correctly
+
         // Function to get query parameter value
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
