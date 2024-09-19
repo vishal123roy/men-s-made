@@ -153,13 +153,13 @@
                     <div class="row gx-3">
                         <div class="col-lg-2 col-6 col-md-3">
                             <select class="form-select" id="statusFilter">
-                                <option value="pending" <%=status==='pending' ? 'selected' : '' %>>Pending</option>
-                                <option value="Return pending" <%=status==='Return pending' ? 'selected' : '' %>>Return
+                                <option value="pending" <%status==='pending' ? 'selected' : '' %>>Pending</option>
+                                <option value="Return pending" <%status==='Return pending' ? 'selected' : '' %>>Return
                                     pending</option>
-                                <option value="delivered" <%=status==='delivered' ? 'selected' : '' %>>Delivered
+                                <option value="delivered" <%status==='delivered' ? 'selected' : '' %>>Delivered
                                 </option>
-                                <option value="canceled" <%=status==='canceled' ? 'selected' : '' %>>Canceled</option>
-                                <option value="All" <%=status==='All' ? 'selected' : '' %>>Show all</option>
+                                <option value="canceled" <%status==='canceled' ? 'selected' : '' %>>Canceled</option>
+                                <option value="All" <%status==='All' ? 'selected' : '' %>>Show all</option>
                             </select>
                         </div>
                     </div>
