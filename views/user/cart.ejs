@@ -380,9 +380,9 @@
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        // const subTotal = document.getElementById(`subTotal-${data.productId}`);
-                        // subTotal.textContent = `₹${data.newSubtotal.toFixed(2)}`;
-                        location.reload();
+                        const subTotal = document.getElementById(`subTotal-${data.productId}`);
+                        subTotal.textContent = `₹${data.newSubtotal.toFixed(2)}`;
+                        // location.reload();
                     } else {
                         const data = await response.json();
                         Swal.fire({
