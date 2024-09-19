@@ -623,6 +623,8 @@ const orderPage = async (req, res) => {
     try {
         const { status = 'All', page = 1, limit = 10 } = req.query;
 
+        console.log("status is ",status);
+        
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
@@ -631,8 +633,8 @@ const orderPage = async (req, res) => {
         if (status !== 'All') {
             query.status = status;
         }
-        console.log("status is ",status);
         
+
         const skip = (pageNumber - 1) * limitNumber;
         const totalOrders = await orders.countDocuments(query);
         const totalPages = Math.ceil(totalOrders / limitNumber);
