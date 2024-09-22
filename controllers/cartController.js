@@ -18,11 +18,19 @@ const cartPage = async (req, res) => {
     try {
         const userId = req.session.user_id;
 
-        const productData = await cart.findOne({ userId: userId }).populate('items.product');
+        const cartData = await cart.findOne({ userId: userId }).populate('items.product');
 
-        const data = productData.items;
+        const productList = cartData.items;
+        cartData.total = 0;
 
-        res.render('cart', { cartList: data });
+        productList.map((obj)=>{
+            obj.subTotal = obj.product.offerPrice*obj.quantity
+            cartData.total += obj.subTotal; 
+        });
+
+        await cartData.save();
+        
+        res.render('cart', { cartList: productList,cartData:cartData});
     } catch (error) {
         console.log(error.message);
     }
@@ -92,7 +100,6 @@ const quantityUpdate = async (req, res) => {
         }
 
         const cartProduct = cartList.items[productIndex];
-
   
         const product = await Product.findById(productId);
         if (!product) {
@@ -192,6 +199,17 @@ const checkoutPage = async (req, res) => {
         const userAddress = await address.find({ user: userId });
 
         const cartProduct = await cart.findOne({ userId: userId }).populate('items.product');
+     
+        const productList = cartProduct.items;
+        cartProduct.total = 0;
+
+        productList.map((obj)=>{
+            obj.subTotal = obj.product.offerPrice*obj.quantity
+            cartProduct.total += obj.subTotal; 
+        });
+
+        await cartProduct.save();
+
         const cartTotal = cartProduct.total
         const coupons = await Coupon.find({
             $and: [

@@ -15,7 +15,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="admin_assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="admin_assets/css/main.css" rel="stylesheet" type="text/css" />
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -195,11 +195,11 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="align-middle" scope="col">Order ID</th>
+                                    <th class="align-middle" scope="col">Order Date</th>
                                     <th class="align-middle" scope="col">Customer</th>
                                     <th class="align-middle" scope="col">Status</th>
-                                    <th class="align-middle" scope="col">Total Products</th>
-                                    <th class="align-middle" scope="col">Total Price</th>
                                     <th class="align-middle" scope="col">Coupon Amount</th>
+                                    <th class="align-middle" scope="col">Total Price</th>
                                     <th class="align-middle" scope="col">Payment Method</th>
                                     <th class="align-middle" scope="col">Bill Amount</th>
                                 </tr>
@@ -211,20 +211,21 @@
                                                 <%= order.orderNumber %>
                                             </a></td>
                                         <td>
+                                            <%= order.orderDate.toDateString() %>
+                                        </td>
+                                        <td>
                                             <%= order.userId.name %>
                                         </td>
                                         <td><span class="badge badge-pill badge-soft-success">
                                                 <%= order.status %>
                                             </span></td>
                                         <td>
-                                            <%= order.items.length %>
+                                            <%= order.couponAmount %>
                                         </td>
                                         <td>
                                             <%= order.totalAmount.toFixed(2) %>
                                         </td>
-                                        <td>
-                                            <%= order.couponAmount %>
-                                        </td>
+
                                         <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>
                                             <%= order.payment %>
                                         </td>
@@ -361,48 +362,49 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <script>
-        function generateHTML(deliveredList) {
-            let html = '';
-            if (deliveredList && deliveredList.length > 0) {
-                let totalAmount = 0;
-                let totalCouponAmount = 0;
-                let totalItems = 0;
+    function generateHTML(deliveredList) {
+    let html = '';
+    if (deliveredList && deliveredList.length > 0) {
+        let totalAmount = 0;
+        let totalCouponAmount = 0;
 
-                deliveredList.forEach((order) => {
-                    html += `
+        deliveredList.forEach((order) => {
+            // Convert order.orderDate to a Date object if it's not already a Date
+            let orderDate = new Date(order.orderDate);
+            let formattedDate = isNaN(orderDate) ? 'Invalid Date' : orderDate.toDateString(); // Handle invalid dates
+
+            html += `
         <tr>
           <td><a href="#" class="fw-bold">${order.orderNumber}</a></td>
+          <td>${formattedDate}</td>
           <td>${order.userId.name}</td>
           <td>
             <span class="badge badge-pill badge-soft-success">${order.status}</span>
           </td>
-          <td>${order.items.length}</td>
           <td>${order.totalAmount.toFixed(2)}</td>
           <td>${order.couponAmount}</td>
           <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.payment}</td>
           <td>${(order.totalAmount - order.couponAmount).toFixed(2)}</td>
         </tr>`;
 
-                    totalAmount += order.totalAmount;
-                    totalCouponAmount += order.couponAmount;
-                    totalItems += order.items.length;
-                });
+            totalAmount += order.totalAmount;
+            totalCouponAmount += order.couponAmount;
+        });
 
-                // Add a summary row
-                html += `
+        html += `
       <tr style="background-color: #f8f9fa; font-weight: bold;">
         <td colspan="3">Total</td>
-        <td>${totalItems}</td>
+        <td></td> <!-- No totalItems here -->
         <td>${totalAmount.toFixed(2)}</td>
         <td>${totalCouponAmount.toFixed(2)}</td>
         <td></td>
         <td>${(totalAmount - totalCouponAmount).toFixed(2)}</td>
       </tr>`;
-            } else {
-                html = '<tr><td colspan="8">No orders found</td></tr>';
-            }
-            return html;
-        }
+    } else {
+        html = '<tr><td colspan="8">No orders found</td></tr>';
+    }
+    return html;
+}
 
         async function filter(option) {
             try {
@@ -455,8 +457,14 @@
                     let deliveredList = data.success;
                     const html = generateHTML(deliveredList);
                     document.getElementById('saleReport').innerHTML = html;
+                }else{
+                    Swal.fire({
+                                title: 'Error',
+                                text: data.message,
+                                icon: 'warning',
+                                timer: 2000
+                            });
                 }
-
             } catch (error) {
                 console.log(error);
             }

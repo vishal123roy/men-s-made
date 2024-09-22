@@ -19,13 +19,15 @@
     <style>
         /* Style for Edit button */
         .btn-edit:hover {
-            color: white; /* Text color when hovering */
-           
+            color: white;
+            /* Text color when hovering */
+
         }
-    
+
         /* Style for Block button */
         .btn-block:hover {
-            color: white; /* Text color when hovering */
+            color: white;
+            /* Text color when hovering */
         }
     </style>
 </head>
@@ -183,16 +185,19 @@
                         <div class="col-lg-1 col-md-1 col-sm-2 col-6">
                             <strong>Price</strong>
                         </div>
+                        <div class="col-lg-1 col-md-1 col-sm-2 col-6">
+                            <strong>Offer Price</strong>
+                        </div>
                         <div class="col-lg-2 col-md-2 col-sm-3 col-6">
                             <strong>Category</strong>
                         </div>
                         <div class="col-lg-2 col-md-4 col-sm-6 col-6">
                             <strong>Sizes</strong>
                         </div>
-                        <div class="col-lg-2 col-md-1 col-sm-2 col-6">
+                        <div class="col-lg-1 col-md-1 col-sm-2 col-6">
                             <strong>Status</strong>
                         </div>
-                        <div class="col-lg-1 col-md-1 col-sm-6 col-6">
+                        <div class="col-lg-1 col-md-1 col-sm-6 col-6 text-end">
                             <strong>Actions</strong>
                         </div>
                     </div>
@@ -220,8 +225,13 @@
                                     </span>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-2 col-6 d-flex">
-                                    <span>
-                                        <%= product.price %>
+                                    <span>₹
+                                        <%= product.price.toFixed(2) %>
+                                    </span>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-2 col-6 d-flex">
+                                    <span>₹
+                                        <%= product.offerPrice.toFixed(2) %>
                                     </span>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-3 col-6 d-flex">
@@ -229,49 +239,45 @@
                                         <%= product.productcategory %>
                                     </span>
                                 </div>
-                                <div class="col-lg-2 col-md-4 col-sm-6 col-6 ">
+                                <div class="col-lg-2 col-md-4 col-sm-6 col-6">
                                     <% for (let i=0; i < product.sizes.length; i++) { %>
                                         <div style="width: fit-content;">
                                             <%= product.sizes[i].size %> : <%= product.sizes[i].quantity %>
                                         </div>
                                         <% } %>
                                 </div>
-                                <div class="col-lg-2 col-md-1 col-sm-2 col-6 col-status d-flex">
-                                    <span>
-                                        <% if (product.is_listed===true) { %>
-                                            <span class="badge rounded-pill alert-success">Active</span>
-                                            <% } else { %>
-                                                <span class="badge rounded-pill alert-danger">Inactive</span>
-                                                <% } %>
-                                    </span>
+                                <div class="col-lg-1 col-md-1 col-sm-2 col-6 col-status d-flex">
+                                    <% if (product.is_listed) { %>
+                                        <span class="badge rounded-pill alert-success">Active</span>
+                                        <% } else { %>
+                                            <span class="badge rounded-pill alert-danger">Inactive</span>
+                                            <% } %>
                                 </div>
                                 <div
                                     class="col-lg-1 col-md-1 col-sm-6 col-6 d-flex justify-content-end align-items-center">
                                     <a href="/admin/updateproduct?id=<%= product._id %>"
-                                        class="btn btn-sm font-sm btn-brand me-1 btn-edit" style="border-radius:0 ;">
-                                        Edit
-                                    </a>
-                                    <a href="/admin/block?id=<%= product._id %>" class="btn btn-sm font-sm btn-brand btn-block"
-                                        style="border-radius:0 ;">
-                                        <span>
-                                            <% if (product.is_listed===true) { %>
-                                                <span>Block</span>
-                                                <% } else { %>
-                                                    <span>Unblock</span>
-                                                    <% } %>
-                                        </span>
+                                        class="btn btn-sm font-sm btn-brand me-1 btn-edit"
+                                        style="border-radius: 0;">Edit</a>
+                                    <a href="/admin/block?id=<%= product._id %>"
+                                        class="btn btn-sm font-sm btn-brand btn-block" style="border-radius: 0;">
+                                        <% if (product.is_listed) { %>
+                                            <span>Block</span>
+                                            <% } else { %>
+                                                <span>Unblock</span>
+                                                <% } %>
                                     </a>
                                 </div>
-                            </div> <!-- row .// -->
-                        </article> <!-- itemlist  .// -->
+                            </div> <!-- row -->
+                        </article> <!-- itemlist -->
                         <% }) %>
-                </div> <!-- card-body end// -->
+                </div>
                 <div class="card-footer">
                     <nav aria-label="Page navigation">
                         <ul class="pagination justify-content-center">
                             <% if (currentPage> 1) { %>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/productlist?page=<%= currentPage - 1 %>">Previous</a>
+                                    <a class="page-link"
+                                        href="/admin/productlist?page=<%= currentPage - 1 %>">Previous</a>
                                 </li>
                                 <% } %>
 

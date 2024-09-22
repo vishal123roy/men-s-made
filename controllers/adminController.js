@@ -1042,7 +1042,7 @@ const customFilterReport = async (req, res) => {
 
         const startOfDay = new Date(startDate);
         const endOfDay = new Date(endDate);
-
+        if(startOfDay<endOfDay){
         startOfDay.setUTCHours(0, 0, 0, 0);
         endOfDay.setUTCHours(23, 59, 59, 999);
 
@@ -1052,6 +1052,9 @@ const customFilterReport = async (req, res) => {
         }).populate('items.product').populate('userId');
 
         res.status(200).json({ success: order });
+    }else{
+        res.status(400).json({success:false,message:"Invalid Date"});
+    }
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: 'Internal Server error' });

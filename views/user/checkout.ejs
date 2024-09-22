@@ -60,7 +60,7 @@
                 <div class="row align-items-center">
                     <!--Desktop Logo-->
                     <div class="logo col-md-2 col-lg-2 d-none d-lg-block">
-                        <a href="index.html">
+                        <a href="/home">
                             <img src="user_assets/images/website3.png" alt="Belle Multipurpose Html Template"
                                 title="Belle Multipurpose Html Template" />
                         </a>
@@ -81,16 +81,6 @@
                                 <img src="user_assets/images/logo.svg" alt="Belle Multipurpose Html Template"
                                     title="Belle Multipurpose Html Template" />
                             </a>
-                        </div>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-3 col-lg-2">
-                        <div class="site-cart">
-                            <a href="/cartPage" class="site-header__cart" title="Cart">
-                                <i class="icon anm anm-bag-l"></i>
-                            </a>
-                        </div>
-                        <div class="site-header__search">
-                            <button type="button" class="search-trigger"><i class="icon anm anm-search-l"></i></button>
                         </div>
                     </div>
                 </div>
@@ -220,7 +210,7 @@
                                                                 <div class="qtyField">
                                                                     <input class="cart__qty-input qty" type="text"
                                                                         name="updates[]" id="qty"
-                                                                        value="<%= item.quantity %>" pattern="[0-9]*">
+                                                                        value="<%= item.quantity %>" pattern="[0-9]*" disabled>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -240,12 +230,12 @@
                                         <tfoot class="font-weight-600">
                                             <tr>
                                                 <td colspan="5" class="text-right">coupon applied</td>
-                                                <td><span id="couponApplied">₹ 0</span>
+                                                <td>₹<span id="couponApplied"> 0</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="5" class="text-right">Total</td>
-                                                <td><span id="totalAmount">₹ <%= cartProduct.total.toFixed(2) %></span>
+                                                <td>₹<span id="totalAmount"> <%= cartProduct.total.toFixed(2) %></span>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -469,8 +459,8 @@
                                             <%=coupon.couponId%><br>
                                                 <strong>Description:</strong>
                                                 <%=coupon.description%><br>
-                                                    <strong> Discount:</strong>
-                                                    <%=coupon.maximumDiscount%>₹<br>
+                                                    <strong> Discount: </strong>₹
+                                                    <%=coupon.maximumDiscount%><br>
                                                         <strong>Expiry Date:</strong>
                                                         <%=coupon.expireDate.toDateString()%><br>
                                                             <div class="d-flex justify-content-end">
@@ -737,14 +727,14 @@
                     })
 
                     if (res.ok) {
-                        const data = await res.json(); // Extract JSON response
+                        const data = await res.json(); 
                         Swal.fire({
                             title: 'Success',
                             text: 'Your order has been placed successfully',
                             icon: 'success',
                             timer: 2000
                         }).then(() => {
-                            // Redirect with orderId as a query parameter
+                        
                             window.location.href = "/orderSuccess?orderId=" + data.orderId;
                         });
                     } else {
@@ -814,10 +804,11 @@
 
                         })
                     } else {
+                        const data = await response.json();
                         Swal.fire({
                             icon: 'error',
                             title: 'error',
-                            text: 'coupon is not available'
+                            text: data.text
                         })
                     }
 

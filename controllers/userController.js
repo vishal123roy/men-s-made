@@ -455,6 +455,7 @@ const sendEmail = async (req, res) => {
             const otp = generateOTP();
             const otpexpiry = otpExpiryTime();
             await sendOTP(email, otp);
+            console.log("otp is ",otp);
             const otpdata = { email, otp, otpexpiry }
             req.session.Data = otpdata;
             res.redirect('newPassword');
@@ -476,6 +477,7 @@ const newPassword = async (req, res) => {
 const updatePassword = async (req, res) => {
     try {
         const { otp, newPassword } = req.body;
+        console.log("otp is ",otp,"new password is",newPassword );
 
         const expiryTime = new Date(req.session.Data.otpexpiry);
         const now = new Date();
@@ -495,7 +497,9 @@ const updatePassword = async (req, res) => {
             if (userData) {
                 res.redirect('login');
             }
-        } 
+        }else{
+            res.render('newPassword',{message:"OTP invalid"});
+        }
 
     } catch (error) {
         console.log(error.message);
@@ -819,13 +823,15 @@ const addCoupon = async (req, res) => {
 
         const { couponId, cartId } = req.body
 
-        const userData = await customer.findById({ _id: userId })
+        const userData = await customer.findById({ _id: userId });
 
         const cartData = await cart.findById({ _id: cartId });
 
         const couponData = await Coupon.findOne({ couponId: couponId });
 
-        let couponAmount = null;
+        console.log("coupon data is",couponData);
+        if(couponData != null){
+            let couponAmount = null;
         if (couponData.expireDate > Date.now()) {
             cartData.total -= couponData.maximumDiscount;
             
@@ -838,8 +844,13 @@ const addCoupon = async (req, res) => {
             res.status(200).json({ success: true, total: total ,couponAmount});
         }
         else {
-            res.status(400).json({ success: false });
+            res.status(400).json({ success: false, text: 'coupon is expired'});
         }
+        }else{
+            res.status(400).json({ success:false ,text:"coupon is invalid" });
+        }
+
+        
 
     } catch (error) {
 

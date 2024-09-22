@@ -183,12 +183,6 @@
                                         <div class="product-sku">Brand: <span class="variant-sku">
                                                 <%=productData.brand%>
                                             </span></div>
-                                        <div class="product-review"><a class="reviewLink" href="#tab2"><i
-                                                    class="font-13 fa fa-star"></i><i class="font-13 fa fa-star"></i><i
-                                                    class="font-13 fa fa-star"></i><i
-                                                    class="font-13 fa fa-star-o"></i><i
-                                                    class="font-13 fa fa-star-o"></i><span class="spr-badge-caption">6
-                                                    reviews</span></a></div>
                                     </div>
                                     <p class="product-single__price product-single__price-product-template">
                                         <span class="visually-hidden">Regular price</span>
@@ -210,7 +204,7 @@
                                             </span>
                                             <span class="off">(<span>
                                                     <%=((productData.price -
-                                                        productData.offerPrice)*100/productData.price).toFixed(2)%>
+                                                        productData.offerPrice)*100/productData.price).toFixed()%>
                                                 </span>%)</span>
                                         </span>
                                     </p>

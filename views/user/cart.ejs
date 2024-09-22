@@ -62,7 +62,7 @@
                 <div class="row align-items-center">
                     <!--Desktop Logo-->
                     <div class="logo col-md-2 col-lg-2 d-none d-lg-block">
-                        <a href="index.html">
+                        <a href="/home">
                             <img src="user_assets/images/website3.png" alt="Belle Multipurpose Html Template"
                                 title="Belle Multipurpose Html Template" />
                         </a>
@@ -169,7 +169,7 @@
                                             </td>
                                             <td class="text-right small--hide cart-price">
                                                 <div><span class="money" id="subTotal-<%=data.product._id%>">₹
-                                                        <%=data.subTotal.toFixed(2)%>
+                                                        <%=data.product.offerPrice.toFixed(2)*data.quantity%>
                                                     </span></div>
                                             </td>
                                             <td class="text-center small--hide"><a href="#"
@@ -184,7 +184,7 @@
                                         <td colspan="3" class="text-left"><a href="/shopPage"
                                                 class="btn btn-secondary btn--small cart-continue">Continue shopping</a>
                                         </td>
-                                        <td colspan="3" class="text-right">
+                                        <td colspan="3" class="text-right"><h4>Total : ₹<span id="totalAmount"><%= cartData.total %></span></h4> 
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -382,6 +382,8 @@
                         const data = await response.json();
                         const subTotal = document.getElementById(`subTotal-${data.productId}`);
                         subTotal.textContent = `₹${data.newSubtotal.toFixed(2)}`;
+                        const Total = document.getElementById('totalAmount');
+                        Total.textContent = data.total;
                         // location.reload();
                     } else {
                         const data = await response.json();

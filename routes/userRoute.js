@@ -53,7 +53,7 @@ userRoute.post('/sendotp',userController.sendEmail);
 
 userRoute.get('/newPassword',userController.newPassword);
 
-userRoute.post('/newPassword',userController.updatePassword);
+userRoute.post('/resetPassword',userController.updatePassword);
 
 userRoute.get('/userProfile',auth.isLogin,userController.userProfile);
 
@@ -96,7 +96,7 @@ userRoute.get('/checkoutPage',auth.isLogin,cartController.checkoutPage);
 userRoute.post('/addCoupon',auth.isLogin,userController.addCoupon);
 
 userRoute.post('/removeCoupon',auth.isLogin,userController.removeCoupon)
-//
+
 userRoute.post('/placeOrder',auth.isLogin,orderController.placeOrder);
 
 userRoute.get('/orderSuccess',auth.isLogin,orderController.orderSuccess);
