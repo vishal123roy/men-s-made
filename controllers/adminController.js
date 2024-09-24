@@ -63,10 +63,9 @@ const adminLogout = async (req, res) => {
 
 const adminhome = async (req, res) => {
     try {
-        // Get the user data
+
         const userData = await User.findById(req.session.user_id);
 
-        // Define the date range for the current month
         const currentDate = new Date();
         const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
         firstDayOfMonth.setUTCHours(0, 0, 0, 0);
@@ -74,27 +73,23 @@ const adminhome = async (req, res) => {
         const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
         lastDayOfMonth.setUTCHours(23, 59, 59, 999);
 
-        // Find orders within the current month that are in certain statuses
         const ordersInMonth = await orders.find({
             status: { $in: ['pending', 'delivered', 'canceled', 'returned', 'Return pending'] },
             orderDate: { $gte: firstDayOfMonth, $lte: lastDayOfMonth }
         });
-        // Initialize sales data for each day of the month
+
         const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
         const yValues = Array(daysInMonth).fill(0);
 
-        // Calculate sales per day
         ordersInMonth.forEach(order => {
             const day = new Date(order.orderDate).getDate();
             yValues[day - 1] += order.totalAmount || 0;
         });
 
-        // Calculate total monthly sales
         const monthlySale = yValues.reduce((total, value) => total + value, 0);
 
-        // Find all orders and count them by status
         const allOrders = await orders.find();
-        const yValue = [0, 0, 0, 0, 0, 0, 0]; // pending, confirmed, failed, delivered, canceled, returned, Return pending
+        const yValue = [0, 0, 0, 0, 0, 0, 0];
 
         allOrders.forEach(order => {
             const statusMap = {
@@ -107,26 +102,23 @@ const adminhome = async (req, res) => {
             yValue[statusMap[order.status]] += 1;
         });
 
-        // Calculate other statistics
         const totalOrderCount = await orders.countDocuments({
             status: { $nin: ['failed'] }
         });
         const totalProductCount = await Product.countDocuments();
         const totalCategoryCount = await Category.countDocuments();
 
-        // Fetch top-selling products
         const topSellingProducts = await Product.find()
             .sort({ popularity: -1 })
             .limit(10);
 
         const topSellingCategories = await Product.aggregate([
-            { $sort: { popularity: -1 } }, // Sort by popularity in descending order
-            { $group: { _id: "$productcategory", totalPopularity: { $sum: "$popularity" } } }, // Group by category and sum popularity
-            { $sort: { totalPopularity: -1 } }, // Sort by totalPopularity in descending order
-            { $limit: 10 } // Limit to top 10 categories
+            { $sort: { popularity: -1 } }, 
+            { $group: { _id: "$productcategory", totalPopularity: { $sum: "$popularity" } } },
+            { $sort: { totalPopularity: -1 } },
+            { $limit: 10 }
         ]);
 
-        // Fetch all active categories
         const categories = await Category.find({ is_active: true }).exec();
 
         const topSellingMap = new Map(topSellingCategories.map(category => [category._id, category.totalPopularity]));
@@ -146,7 +138,6 @@ const adminhome = async (req, res) => {
             admin: userData,
             yValues,
             yValue,
-            // monthlySale,
             totalProductCount,
             totalCategoryCount,
             totalOrderCount,

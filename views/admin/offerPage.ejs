@@ -96,7 +96,7 @@
                 </a>
                 <div class="submenu">
                     <a href="/admin/userlist">User List</a>
-    
+
                 </div>
             </li>
             <li class="menu-item has-submenu">
@@ -107,7 +107,7 @@
                     <a href="/admin/productlist">Product List</a>
                     <a href="/admin/addProduct">Add product </a>
 
-           
+
             <li class="menu-item has-submenu">
                 <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
                     <span class="text">Categories</span>
@@ -123,7 +123,7 @@
                 <div class="submenu">
                     <a href="/admin/orderList">OrderList</a>
                 </div>
-            </li> 
+            </li>
             <li class="menu-item has-submenu">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                     <span class="text">Coupons</span>
@@ -139,7 +139,7 @@
                 <div class="submenu">
                     <a href="/admin/offerPage">offerList</a>
                 </div>
-            </li>  
+            </li>
             <li class="menu-item has-submenu">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                     <span class="text">Sales</span>
@@ -147,8 +147,8 @@
                 <div class="submenu">
                     <a href="/admin/salesReport">saleReport</a>
                 </div>
-            </li> 
-        </ul> 
+            </li>
+        </ul>
         <br>
         <br>
     </nav>
@@ -170,7 +170,8 @@
                 </li>
                 <li class="dropdown nav-item">
                     <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
-                        aria-expanded="false"> <img class="img-xs rounded-circle" src="admin_assets/imgs/people/admin1.png" alt="User"></a>
+                        aria-expanded="false"> <img class="img-xs rounded-circle"
+                            src="admin_assets/imgs/people/admin1.png" alt="User"></a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                         <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
                             Profile</a>
@@ -228,8 +229,8 @@
                                                 </p>
                                                 <button class="btn btn-primary edit-offer-price"
                                                     style="border-radius:0 ;" data-product-id="<%= product._id %>"
-                                                    data-offer-price="<%= product.offerPrice %>">Edit Offer
-                                                    Price</button>
+                                                    data-offer-price="<%= product.offerPrice %>"
+                                                    data-current-price="<%= product.price %>">Edit Offer Price</button>
                                                 <% } else { %>
                                                     <div class="form-group">
                                                         <label for="offerPrice">Offer Price:</label>
@@ -237,10 +238,10 @@
                                                             name="offerPrice" placeholder="Enter offer price"
                                                             data-product-id="<%= product._id %>">
                                                         <button class="btn btn-primary add-offer-price"
-                                                            style="border-radius: 0;">Add Offer
-                                                            Price</button>
+                                                            style="border-radius: 0;">Add Offer Price</button>
                                                     </div>
                                                     <% } %>
+
 
                                         </div>
                                     </div>
@@ -281,8 +282,9 @@
                                                         <input type="number" id="discountPercentage_<%= index %>"
                                                             name="discountPercentage" min="0" max="99" required>
                                                         <br><br>
-                                                        <button type="submit" class="btn btn-sm font-sm btn-brand" style="margin-top:10px ;"
-                                                            style="border-radius: 0;">Apply Discount</button>
+                                                        <button type="submit" class="btn btn-sm font-sm btn-brand"
+                                                            style="margin-top:10px ;" style="border-radius: 0;">Apply
+                                                            Discount</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -315,32 +317,44 @@
 
 
 
+<!-- Modal for editing the offer price -->
+<div class="modal fade" id="editOfferModal" tabindex="-1" aria-labelledby="editOfferModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editOfferModalLabel">Edit Offer Price</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editOfferForm">
+                    <!-- Hidden field for storing product ID -->
+                    <input type="hidden" id="productId" name="productId">
+                    
+                    <!-- Hidden field for storing current price -->
+                    <input type="hidden" id="currentPrice" name="currentPrice">
+                    
+                    <div class="form-group">
+                        <label for="newOfferPrice">New Offer Price:</label>
+                        <input type="number" class="form-control" id="newOfferPrice" name="newOfferPrice"
+                            placeholder="Enter new offer price">
+                    </div>
+                    
+                    <!-- Error message label -->
+                    <label id="offerPriceError" style="color: red; display: none;"></label>
 
-    <!-- Modal for editing offer price -->
-    <div class="modal fade" id="editOfferModal" tabindex="-1" aria-labelledby="editOfferModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editOfferModalLabel">Edit Offer Price</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="submit" style="align-items:center; border-radius: 0;" class="btn btn-primary">
+                        Save changes
                     </button>
-                </div>
-                <div class="modal-body">
-                    <form id="editOfferForm">
-                        <div class="form-group">
-                            <label for="newOfferPrice">New Offer Price:</label>
-                            <input type="number" class="form-control" id="newOfferPrice" name="newOfferPrice"
-                                placeholder="Enter new offer price">
-                            <input type="hidden" id="productId" name="productId">
-                        </div>
-                        <button type="submit" style="align-items:center ; border-radius: 0;"
-                            class="btn btn-primary">Save changes</button>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
+
+
 
 
     <footer class="main-footer font-xs">
@@ -407,12 +421,15 @@
             button.addEventListener('click', function () {
                 const productId = this.dataset.productId;
                 const offerPrice = this.dataset.offerPrice;
-
+                const currentPrice = this.dataset.currentPrice;
 
                 const modal = document.getElementById('editOfferModal');
                 modal.querySelector('#productId').value = productId;
                 modal.querySelector('#newOfferPrice').value = offerPrice;
+                modal.querySelector('#currentPrice').value = currentPrice;
 
+                // Hide error message when the modal opens
+                modal.querySelector('#offerPriceError').style.display = 'none';
 
                 $('#editOfferModal').modal('show');
             });
@@ -421,9 +438,30 @@
         // Submit edited offer price
         document.getElementById('editOfferForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            const productId = this.querySelector('#productId').value;
-            const newOfferPrice = this.querySelector('#newOfferPrice').value;
 
+            const productId = this.querySelector('#productId').value;
+            const newOfferPrice = parseFloat(this.querySelector('#newOfferPrice').value);
+            const currentPrice = parseFloat(this.querySelector('#currentPrice').value);
+            const errorLabel = this.querySelector('#offerPriceError');
+
+            // Validation
+            if (isNaN(newOfferPrice) || newOfferPrice === '') {
+                errorLabel.textContent = 'Offer Price cannot be empty.';
+                errorLabel.style.display = 'block';
+                return;  // Do not proceed if validation fails
+            } else if (newOfferPrice < currentPrice / 2) {
+                errorLabel.textContent = 'Offer Price must be greater than half of the Price.';
+                errorLabel.style.display = 'block';
+                return;
+            } else if (newOfferPrice >= currentPrice) {
+                errorLabel.textContent = 'Offer Price must be less than the Price.';
+                errorLabel.style.display = 'block';
+                return;
+            } else {
+                errorLabel.style.display = 'none';  // Hide error if validation passes
+            }
+
+            // If validation is successful, proceed with the fetch request
             fetch('/admin/editOfferPrice', {
                 method: 'POST',
                 headers: {
@@ -434,76 +472,68 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-
                         $('#editOfferModal').modal('hide');
                         location.reload();
                     } else {
-                        console.error('Failed to edit offer price');
+                        errorLabel.textContent = 'Failed to update offer price. Please try again.';
+                        errorLabel.style.display = 'block';
                     }
                 })
                 .catch(error => {
                     console.error('Internal server error:', error);
+                    errorLabel.textContent = 'Internal server error. Please try again later.';
+                    errorLabel.style.display = 'block';
                 });
         });
 
-        document.querySelector('#editOfferModal .close').addEventListener('click', function () {
-            $('#editOfferModal').modal('hide');
-        });
-
-        // Alternative: Close modal when clicking outside the modal
-        $('#editOfferModal').on('click', function (e) {
-            if (e.target === this) {
-                $(this).modal('hide');
-            }
-        });
     });
 </script>
 
 <script>
-async function applyDiscount(event, index, categoryId) {
-    try {
-        event.preventDefault();
-        const discountPercentage = document.getElementById(`discountPercentage_${index}`).value;
+    async function applyDiscount(event, index, categoryId) {
+        try {
+            event.preventDefault();
+            const discountPercentage = document.getElementById(`discountPercentage_${index}`).value;
 
-        const response = await fetch(`/admin/applyDiscount/${categoryId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ discountPercentage })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            await Swal.fire({
-                icon: 'success',
-                title: "Success",
-                text: "Discount applied successfully",
-                timer: 2000,
-                showConfirmButton: false
+            const response = await fetch(`/admin/applyDiscount/${categoryId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ discountPercentage })
             });
-            window.location.reload();
-        } else {
+
+            const data = await response.json();
+
+            if (response.ok) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: "Success",
+                    text: "Discount applied successfully",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                window.location.reload();
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: "Error",
+                    text: data.message || "Failed to apply discount",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        } catch (error) {
+            console.error("Error applying discount:", error);
             await Swal.fire({
                 icon: 'error',
                 title: "Error",
-                text: data.message || "Failed to apply discount",
+                text: "An unexpected error occurred",
                 timer: 2000,
                 showConfirmButton: false
             });
         }
-    } catch (error) {
-        console.error("Error applying discount:", error);
-        await Swal.fire({
-            icon: 'error',
-            title: "Error",
-            text: "An unexpected error occurred",
-            timer: 2000,
-            showConfirmButton: false
-        });
     }
-}
 </script>
 
 </body>
