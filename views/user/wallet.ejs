@@ -117,7 +117,7 @@
                                                         <span id="walletBalance">
                                                             <% if (walletData && walletData.walletBalance !==null &&
                                                                 walletData.walletBalance !==undefined) { %>
-                                                                <%= walletData.walletBalance.toFixed(2) %>
+                                                                    ₹<%= walletData.walletBalance.toFixed(2) %>
                                                                     <% } else { %>
                                                                         0.00
                                                                         <% } %>
@@ -127,7 +127,7 @@
                                                         <span id="totalRefund">
                                                             <% if (walletData && walletData.totalRefund !==null &&
                                                                 walletData.totalRefund !==undefined) { %>
-                                                                <%= walletData.totalRefund.toFixed(2) %>
+                                                                    ₹<%= walletData.totalRefund.toFixed(2) %>
                                                                     <% } else { %>
                                                                         0.00
                                                                         <% } %>
@@ -171,8 +171,8 @@
                                                             <td>
                                                                 <%=data.paymentType%>
                                                             </td>
-                                                            <td>
-                                                                <%=data.transactionAmount%>
+                                                            <td>₹
+                                                                <%=data.transactionAmount.toFixed(2)%>
                                                             </td>
                                                         </tr>
                                                         <% }) %>
