@@ -113,7 +113,7 @@ const adminhome = async (req, res) => {
             .limit(10);
 
         const topSellingCategories = await Product.aggregate([
-            { $sort: { popularity: -1 } }, 
+            { $sort: { popularity: -1 } },
             { $group: { _id: "$productcategory", totalPopularity: { $sum: "$popularity" } } },
             { $sort: { totalPopularity: -1 } },
             { $limit: 10 }
@@ -614,8 +614,8 @@ const orderPage = async (req, res) => {
     try {
         const { status = 'All', page = 1, limit = 10 } = req.query;
 
-        console.log("status is ",status);
-        
+        console.log("status is ", status);
+
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
@@ -624,7 +624,7 @@ const orderPage = async (req, res) => {
         if (status !== 'All') {
             query.status = status;
         }
-        
+
 
         const skip = (pageNumber - 1) * limitNumber;
         const totalOrders = await orders.countDocuments(query);
@@ -755,31 +755,31 @@ const createCoupon = async (req, res) => {
     try {
 
         const { couponId, description, maximumDiscount, minimumAmount, maximumAmount, maximumUser, expireDate } = req.body;
-        
-        const existingCoupon = await Coupon.findOne({couponId:couponId})
-        if(existingCoupon === null){
 
-        const couponData = new Coupon({
-            couponId: couponId,
-            description: description,
-            maximumDiscount: maximumDiscount,
-            minimumAmount: minimumAmount,
-            maximumAmount: maximumAmount,
-            maximumUser: maximumUser,
-            expireDate: expireDate
-        })
+        const existingCoupon = await Coupon.findOne({ couponId: couponId })
+        if (existingCoupon === null) {
 
-        await couponData.save();
+            const couponData = new Coupon({
+                couponId: couponId,
+                description: description,
+                maximumDiscount: maximumDiscount,
+                minimumAmount: minimumAmount,
+                maximumAmount: maximumAmount,
+                maximumUser: maximumUser,
+                expireDate: expireDate
+            })
 
-        if (couponData) {
-            res.status(200).json({ message: 'Coupon created successfully' });
+            await couponData.save();
+
+            if (couponData) {
+                res.status(200).json({ message: 'Coupon created successfully' });
+            } else {
+                res.status(404).json({ message: 'failed to create coupon' });
+            }
         } else {
-            res.status(404).json({ message: 'failed to create coupon' });
-        }
-    }else{
-        res.status(404).json({ message: 'Coupon already exist' });
+            res.status(404).json({ message: 'Coupon already exist' });
 
-    }
+        }
 
     } catch (error) {
         console.error('Error creating coupon:', error);
@@ -811,7 +811,7 @@ const editCouponPage = async (req, res) => {
         const id = req.query.id;
 
         const couponData = await Coupon.findById({ _id: id });
-    
+
         res.render('editCoupon', { couponData })
 
 
@@ -981,7 +981,6 @@ const salesReportPage = async (req, res) => {
     }
 };
 
-
 const filterReport = async (req, res) => {
     try {
         const option = req.body.option;
@@ -990,30 +989,55 @@ const filterReport = async (req, res) => {
 
         switch (option) {
             case 'daily':
+                // Today
                 startDate = new Date();
                 startDate.setUTCHours(0, 0, 0, 0);
                 endDate = new Date();
                 endDate.setUTCHours(23, 59, 59, 999);
                 break;
+
             case 'weekly':
+                // Start of the current week (Monday) to today
                 startDate = new Date();
-                startDate.setDate(startDate.getDate() - 7);
+                const dayOfWeek = startDate.getUTCDay();  // Sunday = 0, Monday = 1, etc.
+                const distanceToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                startDate.setDate(startDate.getDate() - distanceToMonday);
+                startDate.setUTCHours(0, 0, 0, 0);
                 endDate = new Date();
+                endDate.setUTCHours(23, 59, 59, 999);
                 break;
+
             case 'monthly':
+                // Start of the current month to today
                 startDate = new Date();
-                startDate.setMonth(startDate.getMonth() - 1);
+                startDate.setUTCDate(1);  // First day of the month
+                startDate.setUTCHours(0, 0, 0, 0);
                 endDate = new Date();
+                endDate.setUTCHours(23, 59, 59, 999);
                 break;
+
             case 'yearly':
+                // Start of the current year to today
                 startDate = new Date();
-                startDate.setFullYear(startDate.getFullYear() - 1);
+                startDate.setUTCMonth(0);  // First month (January)
+                startDate.setUTCDate(1);    // First day of the year
+                startDate.setUTCHours(0, 0, 0, 0);
                 endDate = new Date();
+                endDate.setUTCHours(23, 59, 59, 999);
                 break;
+
+            case 'all':
+                // No date filter for 'all', return all delivered orders
+                order = await orders.find({
+                    status: 'delivered'
+                }).populate('items.product').populate('userId');
+                return res.status(200).json({ success: order });
+
             default:
                 return res.status(400).json({ error: 'Invalid option' });
         }
 
+        // Query orders based on status and date range
         order = await orders.find({
             status: 'delivered',
             orderDate: { $gte: startDate, $lte: endDate }
@@ -1027,25 +1051,26 @@ const filterReport = async (req, res) => {
     }
 };
 
+
 const customFilterReport = async (req, res) => {
     try {
         const { startDate, endDate } = req.body;
 
         const startOfDay = new Date(startDate);
         const endOfDay = new Date(endDate);
-        if(startOfDay<endOfDay){
-        startOfDay.setUTCHours(0, 0, 0, 0);
-        endOfDay.setUTCHours(23, 59, 59, 999);
+        if (startOfDay < endOfDay) {
+            startOfDay.setUTCHours(0, 0, 0, 0);
+            endOfDay.setUTCHours(23, 59, 59, 999);
 
-        const order = await orders.find({
-            status: 'delivered',
-            orderDate: { $gte: startOfDay, $lte: endOfDay }
-        }).populate('items.product').populate('userId');
+            const order = await orders.find({
+                status: 'delivered',
+                orderDate: { $gte: startOfDay, $lte: endOfDay }
+            }).populate('items.product').populate('userId');
 
-        res.status(200).json({ success: order });
-    }else{
-        res.status(400).json({success:false,message:"Invalid Date"});
-    }
+            res.status(200).json({ success: order });
+        } else {
+            res.status(400).json({ success: false, message: "Invalid Date" });
+        }
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: 'Internal Server error' });

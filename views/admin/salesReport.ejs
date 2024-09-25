@@ -169,7 +169,7 @@
                                 <option value="weekly">Weekly</option>
                                 <option value="monthly">Monthly</option>
                                 <option value="yearly">Yearly</option>
-                                <option value="custom">Custom</option>
+                                <option value="all">Show All</option>
                             </select>
                         </div>
                         <div class="col-lg-4 col-md-6">
@@ -220,17 +220,17 @@
                                                 <%= order.status %>
                                             </span></td>
                                         <td>
-                                            <%= order.couponAmount %>
+                                            <%=`₹ ${order.couponAmount}` %>
                                         </td>
                                         <td>
-                                            <%= order.totalAmount.toFixed(2) %>
+                                            <%= `₹${order.totalAmount.toFixed(2)}` %>
                                         </td>
 
                                         <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>
                                             <%= order.payment %>
                                         </td>
                                         <td>
-                                            <%=(order.totalAmount - order.couponAmount).toFixed(2) %>
+                                            <%=`₹${(order.totalAmount - order.couponAmount).toFixed(2)}` %>
                                         </td>
                                     </tr>
                                     <% }) %>
@@ -267,7 +267,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="pdfModal" class="modal">
                 <div class="modal-content">
                     <div style="display: flex; justify-content: space-between;">
@@ -278,7 +277,6 @@
                     <iframe id="pdfPreview" style="width: 80%; height: 80vh;"></iframe>
                 </div>
             </div>
-
             <style>
                 .modal {
                     display: none;
@@ -345,8 +343,6 @@
                     width: 100%;
                 }
             </style>
-
-
         </section>
     </main>
 
@@ -362,18 +358,24 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <script>
-    function generateHTML(deliveredList) {
-    let html = '';
-    if (deliveredList && deliveredList.length > 0) {
-        let totalAmount = 0;
-        let totalCouponAmount = 0;
+        const today = new Date().toISOString().split('T')[0];
 
-        deliveredList.forEach((order) => {
-            // Convert order.orderDate to a Date object if it's not already a Date
-            let orderDate = new Date(order.orderDate);
-            let formattedDate = isNaN(orderDate) ? 'Invalid Date' : orderDate.toDateString(); // Handle invalid dates
+        document.getElementById('startDate').setAttribute('max', today);
+        document.getElementById('endDate').setAttribute('max', today);
+    </script>
+    <script>
+        function generateHTML(deliveredList) {
+            let html = '';
+            if (deliveredList && deliveredList.length > 0) {
+                let totalAmount = 0;
+                let totalCouponAmount = 0;
 
-            html += `
+                deliveredList.forEach((order) => {
+                    // Convert order.orderDate to a Date object if it's not already a Date
+                    let orderDate = new Date(order.orderDate);
+                    let formattedDate = isNaN(orderDate) ? 'Invalid Date' : orderDate.toDateString(); // Handle invalid dates
+
+                    html += `
         <tr>
           <td><a href="#" class="fw-bold">${order.orderNumber}</a></td>
           <td>${formattedDate}</td>
@@ -381,30 +383,30 @@
           <td>
             <span class="badge badge-pill badge-soft-success">${order.status}</span>
           </td>
-          <td>${order.totalAmount.toFixed(2)}</td>
-          <td>${order.couponAmount}</td>
+          <td> ₹${order.couponAmount}</td>
+          <td> ₹${order.totalAmount.toFixed(2)}</td>
           <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.payment}</td>
-          <td>${(order.totalAmount - order.couponAmount).toFixed(2)}</td>
+          <td> ₹${(order.totalAmount - order.couponAmount).toFixed(2)}</td>
         </tr>`;
 
-            totalAmount += order.totalAmount;
-            totalCouponAmount += order.couponAmount;
-        });
+                    totalCouponAmount += order.couponAmount;
+                    totalAmount += order.totalAmount;
+                });
 
-        html += `
+                html += `
       <tr style="background-color: #f8f9fa; font-weight: bold;">
         <td colspan="3">Total</td>
         <td></td> <!-- No totalItems here -->
-        <td>${totalAmount.toFixed(2)}</td>
-        <td>${totalCouponAmount.toFixed(2)}</td>
+        <td>₹${totalCouponAmount.toFixed(2)}</td>
+        <td>₹${totalAmount.toFixed(2)}</td>
         <td></td>
-        <td>${(totalAmount - totalCouponAmount).toFixed(2)}</td>
+        <td> ₹${(totalAmount - totalCouponAmount).toFixed(2)}</td>
       </tr>`;
-    } else {
-        html = '<tr><td colspan="8">No orders found</td></tr>';
-    }
-    return html;
-}
+            } else {
+                html = '<tr><td colspan="8">No orders found</td></tr>';
+            }
+            return html;
+        }
 
         async function filter(option) {
             try {
@@ -457,13 +459,13 @@
                     let deliveredList = data.success;
                     const html = generateHTML(deliveredList);
                     document.getElementById('saleReport').innerHTML = html;
-                }else{
+                } else {
                     Swal.fire({
-                                title: 'Error',
-                                text: data.message,
-                                icon: 'warning',
-                                timer: 2000
-                            });
+                        title: 'Error',
+                        text: data.message,
+                        icon: 'warning',
+                        timer: 2000
+                    });
                 }
             } catch (error) {
                 console.log(error);
@@ -519,8 +521,6 @@
                 console.error('jsPDF library is not available');
             }
         }
-
-
 
         function excelConvert() {
             const table = document.querySelector('.table-responsive table');

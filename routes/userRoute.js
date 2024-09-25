@@ -118,7 +118,7 @@ userRoute.get('/orderFailed',auth.isLogin,orderController.orderFailedPage);
 userRoute.post('/retryPayment',auth.isLogin,orderController.retryPayment)
 
 userRoute.post('/verifyRetryPayment',auth.isLogin,orderController.verifyRetryPay);
-//
+
 userRoute.get('/wishList',auth.isLogin,userController.wishListPage);
 
 userRoute.post('/addwishList',auth.isLogin,userController.addTowishList);
