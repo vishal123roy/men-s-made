@@ -543,7 +543,6 @@ const ShopPage = async (req, res) => {
             ];
         }
 
-        // Build sort object
         let sort = {};
         switch (selectedSort) {
             case 'price_asc':
@@ -559,10 +558,9 @@ const ShopPage = async (req, res) => {
                 sort.productname = -1;
                 break;
             default:
-                break; // No sorting applied
+                break; 
         }
 
-        // Fetch data concurrently
         const [totalProducts, productList, categories, brands] = await Promise.all([
             Product.countDocuments(filter),
             Product.find(filter).skip(skip).limit(productsPerPage).sort(sort).lean(),
@@ -572,7 +570,7 @@ const ShopPage = async (req, res) => {
 
         const totalPages = Math.ceil(totalProducts / productsPerPage);
 
-        // Handle AJAX requests
+
         if (req.xhr || req.headers.accept.indexOf('json') > -1) {
             res.render('partials/productList', {
                 product: productList,
@@ -607,17 +605,15 @@ const filterProducts = async (req, res) => {
         const { brand = [], category, sort, search, page = 1 } = req.body;
         const productsPerPage = 8;
 
-        // Initialize filter object
         let filter = {is_listed:true};
 
-        // Apply category filter if selected
+
         if (category) {
             filter.productcategory = category;
         }
-
-        // Apply brand filter if selected
+    
         if (brand.length > 0) {
-            filter.brand = { $in: brand }; // Allow multiple brands
+            filter.brand = { $in: brand }; 
         }
 
         if (search && search.trim() !== '') {
@@ -643,7 +639,7 @@ const filterProducts = async (req, res) => {
                 sortCriteria = { productname: -1 };
                 break;
             default:
-                break; // No sorting applied
+                break;
         }
 
 
@@ -654,7 +650,7 @@ const filterProducts = async (req, res) => {
             .limit(productsPerPage)
             .lean();
 
-        const totalProducts = await Product.countDocuments(filter); // Get total count of filtered products
+        const totalProducts = await Product.countDocuments(filter); 
         const totalPages = Math.ceil(totalProducts / productsPerPage);
 
         res.json({ productList, totalPages, currentPage: page });
@@ -823,13 +819,10 @@ const addCoupon = async (req, res) => {
 
         const { couponId, cartId } = req.body
 
-        const userData = await customer.findById({ _id: userId });
-
         const cartData = await cart.findById({ _id: cartId });
 
         const couponData = await Coupon.findOne({ couponId: couponId });
 
-        console.log("coupon data is",couponData);
         if(couponData != null){
             let couponAmount = null;
         if (couponData.expireDate > Date.now()) {

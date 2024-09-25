@@ -15,6 +15,31 @@
     <link rel="shortcut icon" type="image/x-icon" href="admin_assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="admin_assets/css/main.css" rel="stylesheet" type="text/css" />
+    <style>
+        .disable-btn {
+            background-color: #f8f9fa;
+            /* Light color for normal state */
+        }
+
+        .disable-btn:hover {
+            background-color: red;
+            /* Red background on hover when 'Disable' */
+            color: white;
+            /* Optional: Change text color */
+        }
+
+        .enable-btn {
+            background-color: #f8f9fa;
+            /* Light color for normal state */
+        }
+
+        .enable-btn:hover {
+            background-color: black;
+            /* Black background on hover when 'Enable' */
+            color: white;
+            /* Optional: Change text color */
+        }
+    </style>
 </head>
 
 <body>
@@ -42,7 +67,7 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/userlist">User List</a>
-        
+
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -53,7 +78,7 @@
                         <a href="/admin/productlist">Product List</a>
                         <a href="/admin/addProduct">Add product </a>
 
-               
+
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
                         <span class="text">Categories</span>
@@ -69,7 +94,7 @@
                     <div class="submenu">
                         <a href="/admin/orderList">OrderList</a>
                     </div>
-                </li> 
+                </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                         <span class="text">Coupons</span>
@@ -85,7 +110,7 @@
                     <div class="submenu">
                         <a href="/admin/offerPage">offerList</a>
                     </div>
-                </li>  
+                </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                         <span class="text">Sales</span>
@@ -93,8 +118,8 @@
                     <div class="submenu">
                         <a href="/admin/salesReport">saleReport</a>
                     </div>
-                </li> 
-            </ul> 
+                </li>
+            </ul>
             <br>
             <br>
         </nav>
@@ -152,7 +177,7 @@
                                     <label for="product_name" class="form-label">Name</label>
                                     <input type="text" placeholder="Type here" class="form-control" id="name"
                                         name="categoryname">
-                                        <label id="message" style="color: crimson;"></label>
+                                    <label id="message" style="color: crimson;"></label>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Description</label>
@@ -160,7 +185,8 @@
                                         name="description"></textarea>
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" style="border-radius: 0;" class="btn btn-primary">Create category</button>
+                                    <button type="submit" style="border-radius: 0;" class="btn btn-primary">Create
+                                        category</button>
                                 </div>
                             </form>
                         </div>
@@ -186,11 +212,11 @@
                                                 </td>
                                                 <th>
                                                     <span>
-                                                    <%if(category.is_active === true) {%>
-                                                        <span>Active</span>
-                                                    <% }else{ %>
-                                                        <span>Inactive</span>
-                                                       <% } %>
+                                                        <%if(category.is_active===true) {%>
+                                                            <span>Active</span>
+                                                            <% }else{ %>
+                                                                <span>Inactive</span>
+                                                                <% } %>
                                                     </span>
                                                 </th>
 
@@ -198,16 +224,17 @@
 
                                                     <a class="btn-icon"
                                                         href="/admin/editcategory?id=<%=category._id%>">Edit info</a>
-                                                    <a class="btn-light" id="enable"
-                                                        onclick="status('<%=category._id%>')">
-                                                            <span>
-                                                                <% if(category.is_active === true){ %>
-                                                                    <span>Disable</span>
-                                                                <% }else{ %> 
-                                                                    <span>Enable</span> 
-                                                                    <% }%>
-                                                            </span>   
+                                                    <a class="btn-light <%= category.is_active ? 'disable-btn' : 'enable-btn' %>"
+                                                        id="enable" onclick="status('<%=category._id%>')">
+                                                        <span>
+                                                            <% if(category.is_active===true){ %>
+                                                                <span>Disable</span>
+                                                                <% } else { %>
+                                                                    <span>Enable</span>
+                                                                    <% } %>
+                                                        </span>
                                                     </a>
+
 
                                                 </td>
                                             </tr>
@@ -264,16 +291,16 @@
             if (response.ok) {
                 window.location.href = '/admin/Category';
             }
-            else{
+            else {
                 const msm = document.getElementById('message').innerHTML = 'Already exist';
-                setTimeout(()=>{
-                    const msm = document.getElementById('message').innerHTML ='';
-                },4000);
-                setTimeout(()=>{
+                setTimeout(() => {
+                    const msm = document.getElementById('message').innerHTML = '';
+                }, 4000);
+                setTimeout(() => {
                     const msm = document.getElementById('message');
                     msm.style.display = 'b';
-                },8000);
-                
+                }, 8000);
+
             }
         })
 
@@ -290,9 +317,9 @@
                 body: JSON.stringify(formdata)
             })
             if (response.ok) {
-                    // document.getElementById('enable').innerText = 'Disable'
-                        window.location.href ="/admin/Category";
-                }
+                // document.getElementById('enable').innerText = 'Disable'
+                window.location.href = "/admin/Category";
+            }
         }
     </script>
 </body>
