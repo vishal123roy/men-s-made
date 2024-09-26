@@ -242,8 +242,6 @@ const loadOTP = async (req, res) => {
 }
 
 
-
-
 const verifyOTP = async (req, res) => {
     try {
         const otptimer = new Date(req.session.Data.otpexpiry);

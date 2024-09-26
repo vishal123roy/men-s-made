@@ -169,7 +169,7 @@
                                             </td>
                                             <td class="text-right small--hide cart-price">
                                                 <div><span class="money" id="subTotal-<%=data.product._id%>">₹
-                                                        <%=data.product.offerPrice.toFixed(2)*data.quantity%>
+                                                        <%=data.subTotal.toFixed(2)%>
                                                     </span></div>
                                             </td>
                                             <td class="text-center small--hide"><a href="#"
@@ -393,7 +393,7 @@
                             text: data.error
                         }).then(() => {
                             console.error('failed to update quantity');
-                            // location.reload();
+                            location.reload();
                         })
                     }
                 } catch (error) {

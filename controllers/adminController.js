@@ -989,7 +989,7 @@ const filterReport = async (req, res) => {
 
         switch (option) {
             case 'daily':
-                // Today
+
                 startDate = new Date();
                 startDate.setUTCHours(0, 0, 0, 0);
                 endDate = new Date();
@@ -997,9 +997,9 @@ const filterReport = async (req, res) => {
                 break;
 
             case 'weekly':
-                // Start of the current week (Monday) to today
+
                 startDate = new Date();
-                const dayOfWeek = startDate.getUTCDay();  // Sunday = 0, Monday = 1, etc.
+                const dayOfWeek = startDate.getUTCDay();  
                 const distanceToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
                 startDate.setDate(startDate.getDate() - distanceToMonday);
                 startDate.setUTCHours(0, 0, 0, 0);
@@ -1008,26 +1008,25 @@ const filterReport = async (req, res) => {
                 break;
 
             case 'monthly':
-                // Start of the current month to today
+
                 startDate = new Date();
-                startDate.setUTCDate(1);  // First day of the month
+                startDate.setUTCDate(1);  
                 startDate.setUTCHours(0, 0, 0, 0);
                 endDate = new Date();
                 endDate.setUTCHours(23, 59, 59, 999);
                 break;
 
             case 'yearly':
-                // Start of the current year to today
                 startDate = new Date();
-                startDate.setUTCMonth(0);  // First month (January)
-                startDate.setUTCDate(1);    // First day of the year
+                startDate.setUTCMonth(0); 
+                startDate.setUTCDate(1);    
                 startDate.setUTCHours(0, 0, 0, 0);
                 endDate = new Date();
                 endDate.setUTCHours(23, 59, 59, 999);
                 break;
 
             case 'all':
-                // No date filter for 'all', return all delivered orders
+
                 order = await orders.find({
                     status: 'delivered'
                 }).populate('items.product').populate('userId');
@@ -1037,7 +1036,6 @@ const filterReport = async (req, res) => {
                 return res.status(400).json({ error: 'Invalid option' });
         }
 
-        // Query orders based on status and date range
         order = await orders.find({
             status: 'delivered',
             orderDate: { $gte: startDate, $lte: endDate }
