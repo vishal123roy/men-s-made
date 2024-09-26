@@ -85,6 +85,7 @@ const quantityUpdate = async (req, res) => {
 
     const productId = req.params.productId;
     const action = req.body.action;
+    const chosenSize = req.body.size;
     const userId = req.session.user_id;
 
     try {
@@ -94,34 +95,34 @@ const quantityUpdate = async (req, res) => {
             return res.status(404).json({ error: 'Cart not found' });
         }
 
-        const productIndex = cartList.items.findIndex(item => item.product.toString() === productId);
+        const productIndex = cartList.items.findIndex(item => item.product.toString() === productId && item.size === chosenSize);
         if (productIndex === -1) {
             return res.status(404).json({ error: 'Product not in cart' });
         }
 
         const cartProduct = cartList.items[productIndex];
+        console.log(cartProduct);
   
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        const chosenSize = cartProduct.size;
         const sizeObj = product.sizes.find(size => size.size === chosenSize);
         if (!sizeObj) {
             return res.status(404).json({ error: 'Size not found for the product' });
         }
 
         if (action === 'increment') {
-            if (sizeObj.quantity > cartList.items[productIndex].quantity) {
-                cartList.items[productIndex].quantity++;
+            if (sizeObj.quantity >  cartProduct.quantity) {
+                cartProduct.quantity++;
                 
             } else {
                 return res.status(400).json({ error: 'Cannot exceed available stock' });
             }
         } else if (action === 'decrement') {
             if (cartProduct.quantity > 1) {
-                cartList.items[productIndex].quantity--;
+                cartProduct.quantity--;
                 
             } else {
                 return res.status(400).json({ error: 'Minimum quantity reached' });
@@ -129,8 +130,8 @@ const quantityUpdate = async (req, res) => {
         }
         
         const price = product.offerPrice || product.price;
-        const newSubtotal = cartList.items[productIndex].quantity * price;
-        cartList.items[productIndex].subTotal = newSubtotal;
+        const newSubtotal = cartProduct.quantity * price;
+        cartProduct.subTotal = newSubtotal;
 
         const newTotal = cartList.items.reduce((acc, item) => acc + item.subTotal, 0);
         cartList.total = newTotal;
@@ -143,7 +144,7 @@ const quantityUpdate = async (req, res) => {
         console.error('Error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-};
+}
 
 const removeCart = async (req, res) => {
     try {

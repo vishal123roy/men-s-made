@@ -16,6 +16,8 @@ const wishList = require('../models/wishListModel');
 const Wallet = require('../models/walletModel');
 require('dotenv').config();
 
+<input class="cart__qty-input qty" type="text" disabled name="updates[]"
+                                                            id="qty" value="<%= data.quantity %>" pattern="[0-9]*"></input>
 
 var instance = new Razorpay({
     key_id: process.env.KEY_ID,

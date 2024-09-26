@@ -129,62 +129,68 @@
                                 </thead>
                                 <tbody>
                                     <% cartList.forEach((data)=> { %>
-                                        <tr class="cart__row border-bottom line1 cart-flex border-top">
-                                            <td class="cart__image-wrapper cart-flex-item">
-                                                <a href="#"><img class="cart__image"
-                                                        src="product_Assets/<%=data.product.images[0]%>"
-                                                        alt="Elastic Waist Dress - Navy / Small"></a>
-                                            </td>
-                                            <td class="cart__meta small--text-left cart-flex-item">
-                                                <div class="list-view-item__title">
-                                                    <a href="/productPage?id=<%=data.product._id%>">
-                                                        <%=data.product.productname%>
-                                                    </a>
-                                                </div>
-
-                                                <div class="cart__meta-text">
-                                                    Size: <%=data.size%><br>
-                                                </div>
-                                            </td>
-                                            <td class="cart__price-wrapper cart-flex-item">
-                                                <span class="money">
-                                                    ₹<%=data.product.offerPrice !== undefined?data.product.offerPrice.toFixed(2):data.product.price.toFixed(2)%>
-                                                </span>
-                                            </td>
-                                            <td class="cart__update-wrapper cart-flex-item text-right">
-                                                <div class="cart__qty text-center">
-                                                    <div class="qtyField">
-                                                        <a class="qtyBtn minus"
-                                                            onclick="updateQuantity('<%=data.product._id%>','decrement')"
-                                                            href="javascript:void(0);"><i
-                                                                class="icon icon-minus"></i></a>
-                                                        <input class="cart__qty-input qty" type="text" disabled name="updates[]"
-                                                            id="qty" value="<%= data.quantity %>" pattern="[0-9]*">
-                                                        <a class="qtyBtn plus"
-                                                            onclick="updateQuantity('<%=data.product._id%>','increment')"
-                                                            href="javascript:void(0);"><i
-                                                                class="icon icon-plus"></i></a>
+                                        <% const uniqueId=`${data.product._id}-${data.size}` %>
+                                            <tr class="cart__row border-bottom line1 cart-flex border-top">
+                                                <td class="cart__image-wrapper cart-flex-item">
+                                                    <a href="#"><img class="cart__image"
+                                                            src="product_Assets/<%=data.product.images[0]%>"
+                                                            alt="Elastic Waist Dress - Navy / Small"></a>
+                                                </td>
+                                                <td class="cart__meta small--text-left cart-flex-item">
+                                                    <div class="list-view-item__title">
+                                                        <a href="/productPage?id=<%=data.product._id%>">
+                                                            <%=data.product.productname%>
+                                                        </a>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right small--hide cart-price">
-                                                <div><span class="money" id="subTotal-<%=data.product._id%>">₹
-                                                        <%=data.subTotal.toFixed(2)%>
-                                                    </span></div>
-                                            </td>
-                                            <td class="text-center small--hide"><a href="#"
-                                                    class="btn btn--secondary cart__remove"
-                                                    onclick="remove('<%=data.product._id%>')" title="Remove tem"><i
-                                                        class="icon icon anm anm-times-l"></i></a></td>
-                                        </tr>
-                                        <% }) %>
+
+                                                    <div class="cart__meta-text">
+                                                        Size: <%=data.size%><br>
+                                                    </div>
+                                                </td>
+                                                <td class="cart__price-wrapper cart-flex-item">
+                                                    <span class="money">
+                                                        ₹<%=data.product.offerPrice
+                                                            !==undefined?data.product.offerPrice.toFixed(2):data.product.price.toFixed(2)%>
+                                                    </span>
+                                                </td>
+                                                <td class="cart__update-wrapper cart-flex-item text-right">
+                                                    <div class="cart__qty text-center">
+                                                        <div class="qtyField">
+                                                            <a class="qtyBtn minus"
+                                                                onclick="updateQuantity('<%= data.product._id %>', 'decrement', '<%= data.size %>', '<%= uniqueId %>')"
+                                                                href="javascript:void(0);"><i
+                                                                    class="icon icon-minus"></i></a>
+                                                            <input class="cart__qty-input qty" type="text" disabled
+                                                                name="updates[]" id="qty" value="<%= data.quantity %>"
+                                                                pattern="[0-9]*">
+                                                            <a class="qtyBtn plus"
+                                                                onclick="updateQuantity('<%= data.product._id %>', 'increment', '<%= data.size %>', '<%= uniqueId %>')"
+                                                                href="javascript:void(0);"><i
+                                                                    class="icon icon-plus"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-right small--hide cart-price">
+                                                    <div><span class="money" id="subTotal-<%= uniqueId %>">₹
+                                                            <%= data.subTotal.toFixed(2) %>
+                                                        </span></div>
+                                                </td>
+                                                <td class="text-center small--hide"><a href="#"
+                                                        class="btn btn--secondary cart__remove"
+                                                        onclick="remove('<%=data.product._id%>')" title="Remove tem"><i
+                                                            class="icon icon anm anm-times-l"></i></a></td>
+                                            </tr>
+                                            <% }) %>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="3" class="text-left"><a href="/shopPage"
                                                 class="btn btn-secondary btn--small cart-continue">Continue shopping</a>
                                         </td>
-                                        <td colspan="3" class="text-right"><h4>Total : ₹<span id="totalAmount"><%= cartData.total.toFixed(2) %></span></h4> 
+                                        <td colspan="3" class="text-right">
+                                            <h4>Total : ₹<span id="totalAmount">
+                                                    <%= cartData.total.toFixed(2) %>
+                                                </span></h4>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -194,10 +200,10 @@
                 </div>
                 <div>
                     <form action="/checkoutPage">
-                    <div class="row" style="justify-content: center;">
-                        <input type="submit" name="checkout" id="cartCheckout" style="width: fit-content;"
-                        class="btn btn--small-wide checkout" value="Proceed To Checkout">
-                    </div>
+                        <div class="row" style="justify-content: center;">
+                            <input type="submit" name="checkout" id="cartCheckout" style="width: fit-content;"
+                                class="btn btn--small-wide checkout" value="Proceed To Checkout">
+                        </div>
                     </form>
                 </div>
             </div>
@@ -210,7 +216,8 @@
             <div class="newsletter-section">
                 <div class="container">
                     <div class="row" style="justify-content: center;">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-5 d-flex justify-content-center align-items-center">
+                        <div
+                            class="col-12 col-sm-12 col-md-12 col-lg-5 d-flex justify-content-center align-items-center">
                             <div class="footer-social">
                                 <ul class="list--inline site-footer__social-icons social-icons">
                                     <li><a class="social-icons__link" href="#" target="_blank"
@@ -368,38 +375,53 @@
 
         </script>
         <script>
-            
-            async function updateQuantity(productId, action) {
+            async function updateQuantity(productId, action, size, uniqueId) {
                 try {
+                    // Get the quantity input element
+                    const qtyInput = document.querySelector(`#subTotal-${uniqueId}`).closest('tr').querySelector('.cart__qty-input');
+
+                    // Store the current quantity value
+                    const currentQuantity = parseInt(qtyInput.value);
+
+                    // Send the request to update quantity
                     const response = await fetch(`/updateQuantity/${productId}`, {
                         method: 'PATCH',
                         headers: {
                             'content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ action: action })
+                        body: JSON.stringify({ action, size })
                     });
+
                     if (response.ok) {
+                        // If response is successful, update the subtotal and total
                         const data = await response.json();
-                        const subTotal = document.getElementById(`subTotal-${data.productId}`);
+                        const subTotal = document.getElementById(`subTotal-${uniqueId}`);
                         subTotal.textContent = `₹${data.newSubtotal.toFixed(2)}`;
-                        const Total = document.getElementById('totalAmount');
-                        Total.textContent = data.total.toFixed(2);
-                        // location.reload();
+
+                        // Update the quantity input field
+                        qtyInput.value = data.items.find(item => item.product.toString() === productId && item.size === size).quantity;
+
+                        // Update the total amount
+                        const total = document.getElementById('totalAmount');
+                        total.textContent = data.total.toFixed(2);
                     } else {
+                        // Handle errors (e.g., stock limit reached)
                         const data = await response.json();
                         Swal.fire({
                             icon: 'error',
-                            title: 'Out of stock',
+                            title: 'Error',
                             text: data.error
-                        }).then(() => {
-                            console.error('failed to update quantity');
-                            location.reload();
-                        })
+                        });
+
+                        // Revert to the previous quantity if the request fails
+                        qtyInput.value = currentQuantity;
                     }
                 } catch (error) {
                     console.log(error.message);
                 }
             }
+
+
         </script>
     </div>
 </body>
