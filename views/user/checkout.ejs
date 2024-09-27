@@ -175,6 +175,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <input type="hidden" id="stock-error-input" value="<%= stockError %>">
                                             <% if (cartProduct && cartProduct.items && cartProduct.items.length> 0) { %>
                                                 <% cartProduct.items.forEach(item=> { %>
                                                     <tr class="cart__row border-bottom line1 cart-flex border-top">
@@ -210,7 +211,8 @@
                                                                 <div class="qtyField">
                                                                     <input class="cart__qty-input qty" type="text"
                                                                         name="updates[]" id="qty"
-                                                                        value="<%= item.quantity %>" pattern="[0-9]*" disabled>
+                                                                        value="<%= item.quantity %>" pattern="[0-9]*"
+                                                                        disabled>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -235,7 +237,13 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="5" class="text-right">Total</td>
-                                                <td>₹<span id="totalAmount"> <%= cartProduct.total.toFixed(2) %></span>
+                                                <td>₹<span id="totalAmount">
+                                                    <%if(cartProduct.total === undefined){ %>
+                                                        0.00
+                                                    <% }else { %>
+                                                        <%= cartProduct.total.toFixed(2) %>
+                                                        <% } %>
+                                                    </span>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -512,6 +520,20 @@
         <script src="user_assets/js/main.js"></script>
         <script>
 
+            const stockError = document.getElementById('stock-error-input').value === 'true';
+
+            console.log("stock error is true:", stockError);
+
+            if (stockError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Out of Stock',
+                    text: 'Some items in your cart exceed available stock!',
+                })
+            }
+        </script>
+        <script>
+
             document.getElementById('openModalButton').addEventListener('click', function () {
                 var myModal = new bootstrap.Modal(document.getElementById('couponModal'));
                 myModal.show();
@@ -658,7 +680,7 @@
                                                     icon: 'error',
                                                     timer: 2000
                                                 }).then(() => {
-                                                    window.location.href = "/orderFailed?orderId="+ data.orderId;
+                                                    window.location.href = "/orderFailed?orderId=" + data.orderId;
                                                 });
                                             }
                                         } catch (error) {
@@ -727,14 +749,14 @@
                     })
 
                     if (res.ok) {
-                        const data = await res.json(); 
+                        const data = await res.json();
                         Swal.fire({
                             title: 'Success',
                             text: 'Your order has been placed successfully',
                             icon: 'success',
                             timer: 2000
                         }).then(() => {
-                        
+
                             window.location.href = "/orderSuccess?orderId=" + data.orderId;
                         });
                     } else {

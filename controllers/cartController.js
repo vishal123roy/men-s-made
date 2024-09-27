@@ -17,20 +17,51 @@ const Wallet = require('../models/walletModel');
 const cartPage = async (req, res) => {
     try {
         const userId = req.session.user_id;
-
         const cartData = await cart.findOne({ userId: userId }).populate('items.product');
-
-        const productList = cartData.items;
-        cartData.total = 0;
-
-        productList.map((obj)=>{
-            obj.subTotal = obj.product.offerPrice*obj.quantity
-            cartData.total += obj.subTotal; 
-        });
-
-        await cartData.save();
         
-        res.render('cart', { cartList: productList,cartData:cartData});
+        let value = true;
+        let cartItems = [];
+            cartData.items.map((item)=>{
+            let sizeStock = item.product.sizes
+            let stock = sizeStock.find(obj => obj.size === item.size)
+            if (item.quantity>stock.quantity){
+                    value = false;
+                     cartItems.push(item)
+                }
+        })
+
+        if(value !== false){
+            const cartProduct = cartData.items;
+            cartData.total = 0;
+    
+            cartProduct.map((obj)=>{
+                obj.subTotal = obj.product.offerPrice*obj.quantity
+                cartData.total += obj.subTotal; 
+            });
+            await cartData.save();
+    
+            res.render('cart', { cartList: cartProduct,cartData:cartData,stockError:false})
+        }else{
+    
+            cartItems.forEach((item)=>{
+               let index = cartData.items.findIndex(elem => elem.product.toString() === item.product.toString() && elem.size === item.size)
+
+               let pro = cartData.items.splice(index,1)[0];
+                console.log("splice product is",pro);
+                cartData.total -= pro.subTotal;
+
+            })
+            const cartProduct = cartData.items;
+            cartData.total = 0;
+    
+            cartProduct.map((obj)=>{
+                obj.subTotal = obj.product.offerPrice*obj.quantity
+                cartData.total += obj.subTotal; 
+            });
+    
+            await cartData.save();
+            res.render('cart', { cartList:cartProduct, cartData: cartData, stockError: true});
+        }     
     } catch (error) {
         console.log(error.message);
     }
@@ -51,8 +82,7 @@ const addTocart = async (req, res) => {
 
      
         const existingProduct = findCart.items.find(
-            item => item.product.toString() === productId && item.size === Size
-        );
+            item => item.product.toString() === productId && item.size === Size);
 
         if (existingProduct) {
          
@@ -101,7 +131,6 @@ const quantityUpdate = async (req, res) => {
         }
 
         const cartProduct = cartList.items[productIndex];
-        console.log(cartProduct);
   
         const product = await Product.findById(productId);
         if (!product) {
@@ -150,45 +179,44 @@ const removeCart = async (req, res) => {
     try {
         const { id } = req.body; 
         const userId = req.session.user_id;
-
+        const chosenSize = req.body.size;
+        
         const userCart = await cart.findOne({ userId: userId });
         if (!userCart) {
             return res.status(404).json({ success: false, message: 'Cart not found' });
         }
 
-        const itemIndex = userCart.items.findIndex(item => item.product.toString() === id);
+        const itemIndex = userCart.items.findIndex(item => 
+            item.product.toString() === id && item.size === chosenSize
+        );
+
         if (itemIndex === -1) {
             return res.status(404).json({ success: false, message: 'Item not found in cart' });
         }
 
         const removedItem = userCart.items[itemIndex];
 
-        const product = await Product.findById(id);
-        if (!product) {
-            return res.status(404).json({ success: false, message: 'Product not found' });
-        }
-
-        const sizeObj = product.sizes.find(size => size.size === removedItem.size);
-        if (!sizeObj) {
-            return res.status(404).json({ success: false, message: 'Size not found for the product' });
-        }
-
         userCart.items.splice(itemIndex, 1);
 
+
         userCart.total -= removedItem.subTotal;
-        
-        if (userCart.items.length == 0) {
+
+        if (userCart.items.length === 0) {
             userCart.total = 0;
         }
 
         await userCart.save();
 
-        res.status(200).json({ success: true });
+        res.status(200).json({ 
+            success: true, 
+            newTotal: userCart.total 
+        });
     } catch (error) {
         console.error('Error removing item from cart:', error);
         res.status(500).json({ success: false, message: 'Error removing item from cart' });
     }
 };
+
 
 
 const checkoutPage = async (req, res) => {
@@ -200,7 +228,19 @@ const checkoutPage = async (req, res) => {
         const userAddress = await address.find({ user: userId });
 
         const cartProduct = await cart.findOne({ userId: userId }).populate('items.product');
-     
+        
+        let value = true;
+        let cartItems = [];
+            cartProduct.items.map((item)=>{
+            let sizeStock = item.product.sizes
+            let stock = sizeStock.find(obj => obj.size === item.size)
+            if (item.quantity>stock.quantity){
+                    value = false;
+                     cartItems.push(item)
+                }
+        })
+
+       if(value !== false){
         const productList = cartProduct.items;
         cartProduct.total = 0;
 
@@ -224,8 +264,47 @@ const checkoutPage = async (req, res) => {
             userAddress: userAddress,
             cartProduct: cartProduct,
             userData,
-            coupons
+            coupons,
+            stockError:false
         });
+    }else{
+
+        cartItems.forEach((item)=>{
+            let index = cartProduct.items.findIndex(elem => elem.product.toString() === item.product.toString() && elem.size === item.size)
+     
+            let pro = cartProduct.items.splice(index,1)[0];
+     
+             cartProduct.total -= pro.subTotal;
+
+         })
+
+         const productList = cartProduct.items;
+         cartProduct.total = 0;
+ 
+         productList.map((obj)=>{
+             obj.subTotal = obj.product.offerPrice*obj.quantity
+             cartProduct.total += obj.subTotal; 
+         });
+ 
+         await cartProduct.save();
+ 
+         const cartTotal = cartProduct.total
+         const coupons = await Coupon.find({
+             $and: [
+                 { minimumAmount: { $lte: cartTotal } },
+                 { maximumAmount: { $gte: cartTotal } },
+                 { expireDate: { $gt: Date.now() } }
+             ]
+         });
+ 
+         res.render('checkout', {
+             userAddress: userAddress,
+             cartProduct: cartProduct,
+             userData,
+             coupons,
+             stockError:true
+         });
+    }
 
     } catch (error) {
         console.log(error.message);

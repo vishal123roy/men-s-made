@@ -128,9 +128,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <input type="hidden" id="stock-error-input" value="<%= stockError %>">
                                     <% cartList.forEach((data)=> { %>
                                         <% const uniqueId=`${data.product._id}-${data.size}` %>
-                                            <tr class="cart__row border-bottom line1 cart-flex border-top">
+                                            <tr class="cart__row border-bottom line1 cart-flex border-top"
+                                                id="cart-row-<%= uniqueId %>">
                                                 <td class="cart__image-wrapper cart-flex-item">
                                                     <a href="#"><img class="cart__image"
                                                             src="product_Assets/<%=data.product.images[0]%>"
@@ -175,12 +177,17 @@
                                                             <%= data.subTotal.toFixed(2) %>
                                                         </span></div>
                                                 </td>
-                                                <td class="text-center small--hide"><a href="#"
+                                                <td class="text-center small--hide">
+                                                    <a id="cart-item-<%= uniqueId %>"
                                                         class="btn btn--secondary cart__remove"
-                                                        onclick="remove('<%=data.product._id%>')" title="Remove tem"><i
-                                                            class="icon icon anm anm-times-l"></i></a></td>
+                                                        onclick="remove('<%=data.product._id%>','<%=data.size%>','<%=uniqueId%>')"
+                                                        title="Remove item">
+                                                        <i class="icon icon anm anm-times-l"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                             <% }) %>
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -189,7 +196,11 @@
                                         </td>
                                         <td colspan="3" class="text-right">
                                             <h4>Total : ₹<span id="totalAmount">
-                                                    <%= cartData.total.toFixed(2) %>
+                                                    <% if (cartData && cartData.total !==undefined) { %>
+                                                        <%= cartData.total.toFixed(2) %>
+                                                            <% } else { %>
+                                                                0.00
+                                                                <% } %>
                                                 </span></h4>
                                         </td>
                                     </tr>
@@ -349,20 +360,45 @@
         <script src="user_assets/js/lazysizes.js"></script>
         <script src="user_assets/js/main.js"></script>
         <script>
-            async function remove(productId) {
+
+            const stockError = document.getElementById('stock-error-input').value === 'true';
+
+            console.log("stock error is true:", stockError);
+
+            if (stockError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Out of Stock',
+                    text: 'Some items in your cart exceed available stock!',
+                })
+            }
+        </script>
+        <script>
+
+            async function remove(productId, size, uniqueId) {
                 try {
                     const response = await fetch('/remove-cart', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ id: productId })
+                        body: JSON.stringify({ id: productId, size })
                     });
 
                     const data = await response.json();
 
                     if (response.ok && data.success) {
-                        window.location.reload();
+                        // Remove the entire cart row
+                        const cartRow = document.getElementById(`cart-row-${uniqueId}`);
+                        if (cartRow) {
+                            cartRow.remove(); // Removes the entire row from the DOM
+                        }
+
+                        // Update the total amount on the page
+                        const totalAmountElement = document.getElementById('totalAmount');
+                        if (totalAmountElement && data.newTotal !== undefined) {
+                            totalAmountElement.textContent = `${data.newTotal.toFixed(2)}`;
+                        }
                     } else {
                         console.error('Error removing item from cart:', data.message);
                         alert('Failed to remove item from cart. Please try again.');
@@ -377,13 +413,11 @@
         <script>
             async function updateQuantity(productId, action, size, uniqueId) {
                 try {
-                    // Get the quantity input element
+
                     const qtyInput = document.querySelector(`#subTotal-${uniqueId}`).closest('tr').querySelector('.cart__qty-input');
 
-                    // Store the current quantity value
                     const currentQuantity = parseInt(qtyInput.value);
 
-                    // Send the request to update quantity
                     const response = await fetch(`/updateQuantity/${productId}`, {
                         method: 'PATCH',
                         headers: {
@@ -393,19 +427,18 @@
                     });
 
                     if (response.ok) {
-                        // If response is successful, update the subtotal and total
+
                         const data = await response.json();
                         const subTotal = document.getElementById(`subTotal-${uniqueId}`);
                         subTotal.textContent = `₹${data.newSubtotal.toFixed(2)}`;
 
-                        // Update the quantity input field
+
                         qtyInput.value = data.items.find(item => item.product.toString() === productId && item.size === size).quantity;
 
-                        // Update the total amount
                         const total = document.getElementById('totalAmount');
                         total.textContent = data.total.toFixed(2);
                     } else {
-                        // Handle errors (e.g., stock limit reached)
+
                         const data = await response.json();
                         Swal.fire({
                             icon: 'error',
@@ -413,19 +446,17 @@
                             text: data.error
                         });
 
-                        // Revert to the previous quantity if the request fails
                         qtyInput.value = currentQuantity;
                     }
                 } catch (error) {
                     console.log(error.message);
                 }
             }
-
-
         </script>
-    </div>
-</body>
 
+    </div>
+
+</body>
 <!-- belle/cart-variant1.html   11 Nov 2019 12:44:32 GMT -->
 
 </html>
