@@ -30,83 +30,162 @@ function generateOrder() {
 
 const placeOrder = async (req, res) => {
     try {
+
         const userId = req.session.user_id;
         const { cartId, addressId, paymentOption, couponId } = req.body;
 
         const userCart = await cart.findById(cartId).populate('items.product');
+        console.log("usercart is", userCart.items);
+        if (userCart.items.length != 0) {
 
-        const orderNumber = generateOrder();
-
-        const orderProduct = userCart.items.map((cartItem) => ({
-            product: cartItem.product,
-            size: cartItem.size,
-            quantity: cartItem.quantity,
-            price: cartItem.subTotal
-        }))
-
-        // console.log("orderProduct is",orderProduct);
-
-        const updatePromises = orderProduct.map(async (order) => {
-
-            const product = await Product.findById(order.product._id);
-
-            if (product) {
-                product.popularity++;
-                return product.save();
-            }
-        });
-
-        await Promise.all(updatePromises);
-
-        const updateProduct = orderProduct.map(async(order)=>{
-
-            const product = await Product.findById(order.product._id);
-            const sizeObj = product.sizes.find(item => item.size === order.size);
-
-            sizeObj.quantity -= order.quantity;
-      
-
-            product.save();
-        }) 
-        
-        await Promise.all(updateProduct);
-
-        const userAddress = await address.findById(addressId);
-
-        const orderData = new orders({
-            userId: userId,
-            orderNumber: orderNumber,
-            items: orderProduct,
-            totalAmount: userCart.total,
-            shippingAddress: userAddress,
-            payment: paymentOption,
-        })
-        await orderData.save();
-
-        const orderId = orderData._id;
-        if (couponId) {
-            const couponData = await Coupon.findOne({ couponId: couponId })
-            const userData = await customer.findById({ _id: userId })
-            userData.appliedCoupon.push(couponId);
-            await userData.save();
-            const recentOrder = await orders.findByIdAndUpdate({ _id: orderId }, {
-                couponApplied: true,
-                couponAmount: couponData.maximumDiscount
+            let value = true;
+            let cartItems = [];
+            userCart.items.map((item) => {
+                let sizeStock = item.product.sizes;
+                let stock = sizeStock.find(obj => obj.size === item.size);
+                if (item.quantity > stock.quantity) {
+                    value = false;
+                    cartItems.push(item);
+                }
             });
-            await recentOrder.save();
-        }
+            let block = true;
+            let blockedItems = [];
+            userCart.items.map((item) => {
+                let product = item.product.is_listed;
+                if (product === false) {
+                    block = false;
+                    blockedItems.push(item.product)
+                }
+            });
+            if(block){
+            if (value) {
+                const orderNumber = generateOrder();
 
-        if (orderData) {
-            res.status(200).json({ message: 'order placed successfully', orderId });
-            userCart.items = [];
+                const orderProduct = userCart.items.map((cartItem) => ({
+                    product: cartItem.product,
+                    size: cartItem.size,
+                    quantity: cartItem.quantity,
+                    price: cartItem.subTotal
+                }));
+
+                // Update product popularity
+                const updatePromises = orderProduct.map(async (order) => {
+                    const product = await Product.findById(order.product._id);
+                    if (product) {
+                        product.popularity++;
+                        await product.save();
+                    }
+                });
+
+                await Promise.all(updatePromises);
+
+                // Update stock quantity
+                const updateProduct = orderProduct.map(async (order) => {
+                    const product = await Product.findById(order.product._id);
+                    const sizeObj = product.sizes.find(item => item.size === order.size);
+                    sizeObj.quantity -= order.quantity;
+                    await product.save();
+                });
+
+                await Promise.all(updateProduct);
+
+                // Get user address
+                const userAddress = await address.findById(addressId);
+
+                // Create new order
+                const orderData = new orders({
+                    userId: userId,
+                    orderNumber: orderNumber,
+                    items: orderProduct,
+                    totalAmount: userCart.total,
+                    shippingAddress: userAddress,
+                    payment: paymentOption,
+                });
+                await orderData.save();
+
+                const orderId = orderData._id;
+
+
+                if (couponId) {
+                    const couponData = await Coupon.findOne({ couponId: couponId });
+                    const userData = await customer.findById({ _id: userId });
+                    userData.appliedCoupon.push(couponId);
+                    await userData.save();
+                    await orders.findByIdAndUpdate(orderId, {
+                        couponApplied: true,
+                        couponAmount: couponData.maximumDiscount
+                    });
+                }
+
+
+                if (orderData) {
+                    res.status(200).json({ message: 'Order placed successfully', orderId });
+                    userCart.items = [];
+                    userCart.total = 0;
+                    await userCart.save();
+                }
+            } else {
+
+                const removedItems = [];
+                cartItems.forEach((item) => {
+                    let index = userCart.items.findIndex(elem => elem.product._id.toString() === item._id.toString() && elem.size === item.size);
+                    let removedItem = userCart.items.splice(index, 1)[0];
+                    removedItems.push({
+                        productId: removedItem.product._id,
+                        size: removedItem.size
+                    });
+                    userCart.total -= removedItem.subTotal;
+                });
+
+                userCart.total = 0;
+                userCart.items.forEach((obj) => {
+                    obj.subTotal = obj.product.offerPrice * obj.quantity;
+                    userCart.total += obj.subTotal;
+                });
+
+                await userCart.save();
+                return res.status(400).json({
+                    error: 'Some items in your cart exceed available stock!',
+                    removedItems,
+                    newTotal: userCart.total
+                });
+            }
+        }else{
+            const removedItems = [];
+            blockedItems.forEach((item) => {
+                let index = userCart.items.findIndex(elem =>  elem.product._id.toString() === item._id.toString())
+
+                let removedItem = userCart.items.splice(index, 1)[0];
+                removedItems.push({
+                    productId: removedItem.product._id,
+                });
+                userCart.total -= removedItem.subTotal;
+            })
+
+            const productList = userCart.items;
             userCart.total = 0;
-            userCart.save();
-        }
 
+            productList.map((obj) => {
+                obj.subTotal = obj.product.offerPrice * obj.quantity
+                userCart.total += obj.subTotal;
+            });
+
+            await userCart.save();
+            return res.status(404).json({
+                error: "Some products are not available",
+                removedItems,
+                newTotal: userCart.total
+            });
+        }
+        } else {
+            res.status(404).json({ error: 'No product in the cart list' })
+        }
     } catch (error) {
-        console.log(error.message);
+        console.error("Error occurred in placeOrder:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-} 
+};
+
 
 const orderSuccess = async (req, res) => {
     try {
@@ -145,17 +224,15 @@ const orderCancelation = async (req, res) => {
             reasonForCancel: reason,
             status: 'canceled'
         })
-        console.log("nowOrder is",nowOrder);
 
-
-        const updateProduct =  nowOrder.items.map(async(order)=>{
+        const updateProduct = nowOrder.items.map(async (order) => {
 
             const product = await Product.findById(order.product._id);
             const sizeObj = product.sizes.find(item => item.size === order.size);
             sizeObj.quantity += order.quantity;
             product.save();
         });
-        
+
         await Promise.all(updateProduct);
 
 
@@ -209,24 +286,100 @@ const onlinePayment = async (req, res) => {
 
     try {
 
-        const { cartId, addressId, paymentOption } = req.body;
-
+        const { cartId, addressId } = req.body;
         const userCart = await cart.findById(cartId).populate('items.product');
-
         const orderNumber = generateOrder();
+        if (userCart.items != 0) {
 
+            let value = true;
+            let cartItems = [];
+            userCart.items.map((item) => {
+                let sizeStock = item.product.sizes;
+                let stock = sizeStock.find(obj => obj.size === item.size);
+                if (item.quantity > stock.quantity) {
+                    value = false;
+                    cartItems.push(item);
+                }
+            });
+            let block = true;
+            let blockedItems = [];
+            userCart.items.map((item) => {
+                let product = item.product.is_listed;
+                if (product === false) {
+                    block = false;
+                    blockedItems.push(item.product)
+                }
+            });
+            if(block){
+            if (value) {
+                var options = {
+                    amount: userCart.total * 100,
+                    currency: "INR",
+                    receipt: "" + orderNumber
+                };
 
-        var options = {
-            amount: userCart.total * 100,
-            currency: "INR",
-            receipt: "" + orderNumber
-        };
+                instance.orders.create(options, function (err, order) {
+                    if (!err) {
+                        res.json({ status: true, order: order, addressId: addressId })
+                    }
+                });
+            } else {
 
-        instance.orders.create(options, function (err, order) {
-            if (!err) {
-                res.json({ status: true, order: order, addressId: addressId })
+                const removedItems = [];
+                cartItems.forEach((item) => {
+                    let index = userCart.items.findIndex(elem => elem.product._id.toString() === item._id.toString() && elem.size === item.size);
+                    let removedItem = userCart.items.splice(index, 1)[0];
+                    removedItems.push({
+                        productId: removedItem.product._id,
+                        size: removedItem.size
+                    });
+                    userCart.total -= removedItem.subTotal;
+                });
+
+                userCart.total = 0;
+                userCart.items.forEach((obj) => {
+                    obj.subTotal = obj.product.offerPrice * obj.quantity;
+                    userCart.total += obj.subTotal;
+                });
+
+                await userCart.save();
+                return res.status(400).json({
+                    error: 'Some items in your cart exceed available stock!',
+                    removedItems,
+                    newTotal: userCart.total
+                });
             }
-        });
+         } else{
+                const removedItems = [];
+                blockedItems.forEach((item) => {
+                    let index = userCart.items.findIndex(elem =>  elem.product._id.toString() === item._id.toString())
+    
+                    let removedItem = userCart.items.splice(index, 1)[0];
+                    removedItems.push({
+                        productId: removedItem.product._id,
+                    });
+                    userCart.total -= removedItem.subTotal;
+                })
+    
+                const productList = userCart.items;
+                userCart.total = 0;
+    
+                productList.map((obj) => {
+                    obj.subTotal = obj.product.offerPrice * obj.quantity
+                    userCart.total += obj.subTotal;
+                });
+    
+                await userCart.save();
+                return res.status(404).json({
+                    error: "Some products are not available",
+                    removedItems,
+                    newTotal: userCart.total
+                });
+            }
+            
+        } else {
+            res.status(500).json({ error: 'No product in the cart list' })
+        }
 
     } catch (error) {
 
@@ -268,17 +421,17 @@ const verifyPayment = async (req, res) => {
 
             await Promise.all(updatePromises);
 
-            const updateProduct = cartProduct.map(async(order)=>{
+            const updateProduct = cartProduct.map(async (order) => {
 
                 const product = await Product.findById(order.product._id);
                 const sizeObj = product.sizes.find(item => item.size === order.size);
-    
+
                 sizeObj.quantity -= order.quantity;
-          
-    
+
+
                 product.save();
-            }) 
-            
+            })
+
             await Promise.all(updateProduct);
 
             const orderData = new orders({
@@ -431,7 +584,177 @@ const verifyRetryPay = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-    
+
+}
+
+const walletPayment = async (req, res) => {
+
+    try {
+        const userId = req.session.user_id;
+        const { cartId, addressId, paymentOption, couponId } = req.body;
+
+        const userCart = await cart.findById(cartId).populate('items.product');
+        
+        if (userCart.items.length != 0) {
+            let value = true;
+            let cartItems = [];
+            userCart.items.map((item) => {
+                let sizeStock = item.product.sizes;
+                let stock = sizeStock.find(obj => obj.size === item.size);
+                if (item.quantity > stock.quantity) {
+                    value = false;
+                    cartItems.push(item);
+                }
+            });
+            let block = true;
+            let blockedItems = [];
+            userCart.items.map((item) => {
+                let product = item.product.is_listed;
+                if (product === false) {
+                    block = false;
+                    blockedItems.push(item.product)
+                }
+            });
+            if(block) {
+            if (value) {
+                const orderNumber = generateOrder();
+                const userWallet = await Wallet.findOne({ user: userId });
+                if (userWallet.walletBalance >= userCart.total) {
+                    userWallet.walletBalance -= userCart.total;
+                    const paymentData = {
+                        createdAt: Date.now(),
+                        paymentType: 'Purchased',
+                        transactionMode: 'Debited',
+                        transactionAmount: userCart.total
+                    }
+                    userWallet.transactionHistory.push(paymentData);
+                    await userWallet.save();
+
+                    const orderProduct = userCart.items.map((cartItem) => ({
+                        product: cartItem.product,
+                        size: cartItem.size,
+                        quantity: cartItem.quantity,
+                        price: cartItem.subTotal
+                    }))
+
+                    const updatePromises = orderProduct.map(async (order) => {
+
+                        const product = await Product.findById(order.product._id);
+
+                        if (product) {
+                            product.popularity++;
+                            return product.save();
+                        }
+                    });
+
+                    await Promise.all(updatePromises);
+
+                    const updateProduct = orderProduct.map(async (order) => {
+
+                        const product = await Product.findById(order.product._id);
+                        const sizeObj = product.sizes.find(item => item.size === order.size);
+
+                        sizeObj.quantity -= order.quantity;
+
+                        product.save();
+                    })
+
+                    await Promise.all(updateProduct);
+
+                    const userAddress = await address.findById(addressId);
+                    const orderData = new orders({
+                        userId: userId,
+                        orderNumber: orderNumber,
+                        items: orderProduct,
+                        totalAmount: userCart.total,
+                        shippingAddress: userAddress,
+                        payment: paymentOption
+                    })
+
+                    await orderData.save();
+
+                    const orderId = orderData._id;
+                    if (couponId) {
+                        const couponData = await Coupon.findOne({ couponId: couponId })
+                        const userData = await customer.findById({ _id: userId })
+                        userData.appliedCoupon.push(couponId);
+                        await userData.save();
+                        const recentOrder = await orders.findByIdAndUpdate({ _id: orderId }, {
+                            couponApplied: true,
+                            couponAmount: couponData.maximumDiscount
+                        });
+                        await recentOrder.save();
+                    }
+                    if (orderData) {
+                        res.status(200).json({ message: 'order placed successfully', orderId });
+                        userCart.items = [];
+                        userCart.total = 0;
+                        userCart.save();
+                    }
+
+                } else {
+                    res.status(500).json({ message: 'Insufficient balance' });
+                }
+            } else {
+                const removedItems = [];
+                cartItems.forEach((item) => {
+                    let index = userCart.items.findIndex(elem => elem.product._id.toString() === item._id.toString() && elem.size === item.size);
+                    let removedItem = userCart.items.splice(index, 1)[0];
+                    removedItems.push({
+                        productId: removedItem.product._id,
+                        size: removedItem.size
+                    });
+                    userCart.total -= removedItem.subTotal;
+                });
+
+                userCart.total = 0;
+                userCart.items.forEach((obj) => {
+                    obj.subTotal = obj.product.offerPrice * obj.quantity;
+                    userCart.total += obj.subTotal;
+                });
+
+                await userCart.save();
+                return res.status(403).json({
+                    error: 'Some items in your cart exceed available stock!',
+                    removedItems,
+                    newTotal: userCart.total
+                });
+            }
+        }else{
+            const removedItems = [];
+            blockedItems.forEach((item) => {
+                let index = userCart.items.findIndex(elem =>  elem.product._id.toString() === item._id.toString())
+
+                let removedItem = userCart.items.splice(index, 1)[0];
+                removedItems.push({
+                    productId: removedItem.product._id,
+                });
+                userCart.total -= removedItem.subTotal;
+            })
+
+            const productList = userCart.items;
+            userCart.total = 0;
+
+            productList.map((obj) => {
+                obj.subTotal = obj.product.offerPrice * obj.quantity
+                userCart.total += obj.subTotal;
+            });
+
+            await userCart.save();
+            return res.status(404).json({
+                error: "Some products are not available",
+                removedItems,
+                newTotal: userCart.total
+            });
+        }
+        } else {
+            res.status(400).json({ error: 'No product in the cart list' })
+        }
+    } catch (error) {
+
+        console.log(error);
+
+    }
 }
 
 
@@ -447,4 +770,5 @@ module.exports = {
     orderFailedPage,
     retryPayment,
     verifyRetryPay,
+    walletPayment
 }

@@ -176,9 +176,13 @@
                                         </thead>
                                         <tbody>
                                             <input type="hidden" id="stock-error-input" value="<%= stockError %>">
+                                            <input type="hidden" id="product-error-input" value="<%= productError %>">
                                             <% if (cartProduct && cartProduct.items && cartProduct.items.length> 0) { %>
+
                                                 <% cartProduct.items.forEach(item=> { %>
-                                                    <tr class="cart__row border-bottom line1 cart-flex border-top">
+                                                    <tr class="cart__row border-bottom line1 cart-flex border-top"
+                                                        data-product-id="<%= item.product._id %>"
+                                                        data-size="<%= item.size %>">
                                                         <td class="cart__image-wrapper cart-flex-item">
                                                             <a href="#"><img class="cart__image"
                                                                     src="/product_Assets/<%= item.product.images[0] %>"
@@ -195,16 +199,13 @@
                                                             </div>
                                                         </td>
                                                         <td class="cart__price-wrapper cart-flex-item">
-                                                            <span class="money">₹
-                                                                <%= item.product.price.toFixed(2) %>
+                                                            <span class="money">₹ <%= item.product.price.toFixed(2) %>
                                                             </span>
                                                         </td>
                                                         <td class="cart__price-wrapper cart-flex-item">
-                                                            <span class="money"> ₹
-                                                                <%= item.product.offerPrice
-                                                                    !==undefined?item.product.offerPrice.toFixed(2):0 %>
-
-                                                            </span>
+                                                            <span class="money">₹ <%= item.product.offerPrice
+                                                                    !==undefined ? item.product.offerPrice.toFixed(2) :
+                                                                    0 %></span>
                                                         </td>
                                                         <td class="cart__update-wrapper cart-flex-item text-right">
                                                             <div class="cart__qty text-center">
@@ -238,11 +239,11 @@
                                             <tr>
                                                 <td colspan="5" class="text-right">Total</td>
                                                 <td>₹<span id="totalAmount">
-                                                    <%if(cartProduct.total === undefined){ %>
-                                                        0.00
-                                                    <% }else { %>
-                                                        <%= cartProduct.total.toFixed(2) %>
-                                                        <% } %>
+                                                        <%if(cartProduct.total===undefined){ %>
+                                                            0.00
+                                                            <% }else { %>
+                                                                <%= cartProduct.total.toFixed(2) %>
+                                                                    <% } %>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -521,14 +522,18 @@
         <script>
 
             const stockError = document.getElementById('stock-error-input').value === 'true';
-
-            console.log("stock error is true:", stockError);
-
+            const productError = document.getElementById("product-error-input").value === 'true';
             if (stockError) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Out of Stock',
                     text: 'Some items in your cart exceed available stock!',
+                })
+            } else if (productError) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'error',
+                    text: 'Some products are not available',
                 })
             }
         </script>
@@ -605,15 +610,63 @@
                                         window.location.href = "/orderSuccess?orderId=" + response.orderId;
                                     });
                                 },
-                                error: function (xhr, status, error) {
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: 'An error occurred while placing the order',
-                                        icon: 'error',
-                                        timer: 2000
-                                    });
+                                error: function (xhr) {
+                                    // Handle stock error (status 400)
+                                    if (xhr.status === 400) {
+                                        Swal.fire({
+                                            title: 'Stock Error',
+                                            text: xhr.responseJSON.error, // Use responseJSON.error for the error message
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+
+                                        const removedItems = xhr.responseJSON.removedItems;
+                                        const newTotal = xhr.responseJSON.newTotal;
+
+                                        // Remove the unavailable items from the cart
+                                        removedItems.forEach((item) => {
+                                            $(`tr[data-product-id="${item.productId}"][data-size="${item.size}"]`).remove();
+                                        });
+
+                                        // Update the total amount in the cart
+                                        $('#totalAmount').text(newTotal.toFixed(2));
+                                    }
+                                    // Handle internal server error (status 500)
+                                    else if (xhr.status === 500) {
+                                        Swal.fire({
+                                            title: 'Internal Server Error',
+                                            text: 'Something went wrong on our side. Please try again later.',
+                                            icon: 'error',
+                                            timer: 3000
+                                        });
+                                    } else if (xhr.status === 404) {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+                                        const removedItems = xhr.responseJSON.removedItems;
+                                        const newTotal = xhr.responseJSON.newTotal;
+
+                                        // Remove the unavailable items from the cart
+                                        removedItems.forEach((item) => {
+                                            $(`tr[data-product-id="${item.productId}"]`).remove();
+                                        });
+
+                                        // Update the total amount in the cart
+                                        $('#totalAmount').text(newTotal.toFixed(2));
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Cart Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        })
+                                    }
                                 }
-                            });
+                            })
+
                         } else if (selectedPayment.val() === 'online') {
                             $.ajax({
                                 url: "/onlinePay",
@@ -684,16 +737,58 @@
                                                 });
                                             }
                                         } catch (error) {
-
+                                            console.log(error)
                                         }
 
                                     });
 
                                     rzp1.open();
 
+                                },
+                                error: function (xhr, status, error) {
+                                    if (xhr.status == 400) {
+                                        Swal.fire({
+                                            title: 'Stock Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+                                        const removedItems = xhr.responseJSON.removedItems;
+                                        const newTotal = xhr.responseJSON.newTotal;
+
+                                        removedItems.forEach((item) => {
+                                            $(`tr[data-product-id="${item.productId}"][data-size="${item.size}"]`).remove();
+                                        });
+
+                                        $('#totalAmount').text(newTotal.toFixed(2));
+
+                                    } else if (xhr.status == 404) {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+                                        const removedItems = xhr.responseJSON.removedItems;
+                                        const newTotal = xhr.responseJSON.newTotal;
+
+                                        // Remove the unavailable items from the cart
+                                        removedItems.forEach((item) => {
+                                            $(`tr[data-product-id="${item.productId}"]`).remove();
+                                        });
+
+                                        // Update the total amount in the cart
+                                        $('#totalAmount').text(newTotal.toFixed(2));
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Cart Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
 
 
-
+                                    }
                                 }
                             })
                         } else if (selectedPayment.val() === 'walletPay') {
@@ -717,12 +812,55 @@
                                     });
                                 },
                                 error: function (xhr, status, error) {
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: 'Insufficient Balance',
-                                        icon: 'error',
-                                        timer: 2000
-                                    });
+                                    if (xhr.status == 500) {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: 'Insufficient Balance',
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+                                    } else if (xhr.status == 400) {
+                                        Swal.fire({
+                                            title: 'Cart Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+                                    } else if (xhr.status == 403) {
+                                        Swal.fire({
+                                            title: 'Stock Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+                                        const removedItems = xhr.responseJSON.removedItems;
+                                        const newTotal = xhr.responseJSON.newTotal;
+
+                                        // Remove the unavailable items from the cart
+                                        removedItems.forEach((item) => {
+                                            $(`tr[data-product-id="${item.productId}"][data-size="${item.size}"]`).remove();
+                                        });
+
+                                        // Update the total amount in the cart
+                                        $('#totalAmount').text(newTotal.toFixed(2));
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: xhr.responseJSON.error,
+                                            icon: 'error',
+                                            timer: 2000
+                                        });
+                                        const removedItems = xhr.responseJSON.removedItems;
+                                        const newTotal = xhr.responseJSON.newTotal;
+
+                                        // Remove the unavailable items from the cart
+                                        removedItems.forEach((item) => {
+                                            $(`tr[data-product-id="${item.productId}"]`).remove();
+                                        });
+
+                                        // Update the total amount in the cart
+                                        $('#totalAmount').text(newTotal.toFixed(2));
+                                    }
                                 }
                             })
 

@@ -965,97 +965,6 @@ const verifyWalletAmount = async (req, res) => {
     }
 }
 
-const walletPayment = async (req, res) => {
-
-    try {
-        const userId = req.session.user_id;
-        const { cartId, addressId, paymentOption, couponId } = req.body;
-
-        const userCart = await cart.findById(cartId).populate('items.product');
-        const orderNumber = generateOrder();
-        const userWallet = await Wallet.findOne({ user: userId });
-        if (userWallet.walletBalance >= userCart.total) {
-            userWallet.walletBalance -= userCart.total;
-            const paymentData = {
-                createdAt: Date.now(),
-                paymentType: 'Purchased',
-                transactionMode: 'Debited',
-                transactionAmount: userCart.total
-            }
-            userWallet.transactionHistory.push(paymentData);
-            await userWallet.save();
-
-            const orderProduct = userCart.items.map((cartItem) => ({
-                product: cartItem.product,
-                size: cartItem.size,
-                quantity: cartItem.quantity,
-                price: cartItem.subTotal
-            }))
-
-            const updatePromises = orderProduct.map(async (order) => {
-
-                const product = await Product.findById(order.product._id);
-
-                if (product) {
-                    product.popularity++;
-                    return product.save();
-                }
-            });
-
-            await Promise.all(updatePromises);
-
-            const updateProduct = orderProduct.map(async(order)=>{
-
-                const product = await Product.findById(order.product._id);
-                const sizeObj = product.sizes.find(item => item.size === order.size);
-    
-                sizeObj.quantity -= order.quantity;
-          
-    
-                product.save();
-            }) 
-            
-            await Promise.all(updateProduct);
-
-            const userAddress = await address.findById(addressId);
-            const orderData = new orders({
-                userId: userId,
-                orderNumber: orderNumber,
-                items: orderProduct,
-                totalAmount: userCart.total,
-                shippingAddress: userAddress,
-                payment: paymentOption
-            })
-
-            await orderData.save();
-
-            const orderId = orderData._id;
-            if (couponId) {
-                const couponData = await Coupon.findOne({ couponId: couponId })
-                const userData = await customer.findById({ _id: userId })
-                userData.appliedCoupon.push(couponId);
-                await userData.save();
-                const recentOrder = await orders.findByIdAndUpdate({ _id: orderId }, {
-                    couponApplied: true,
-                    couponAmount: couponData.maximumDiscount
-                });
-                await recentOrder.save();
-            }
-            if (orderData) {
-                res.status(200).json({ message: 'order placed successfully',orderId });
-                userCart.items = [];
-                userCart.total = 0;
-                userCart.save();
-            }
-        } else {
-            res.status(500).json({ message: 'Insufficient balance' });
-        }
-    } catch (error) {
-
-        console.log(error);
-
-    }
-}
 
 module.exports = {
     landingPage,
@@ -1093,6 +1002,6 @@ module.exports = {
     walletPage,
     addWalletAmount,
     verifyWalletAmount,
-    walletPayment
+
 };
 

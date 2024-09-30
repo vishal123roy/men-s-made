@@ -131,6 +131,6 @@ userRoute.post('/addToWallet',auth.isLogin,userController.addWalletAmount);
 
 userRoute.post('/verifyAddAmount',auth.isLogin,userController.verifyWalletAmount);
 
-userRoute.post('/walletPayment',auth.isLogin,userController.walletPayment);
+userRoute.post('/walletPayment',auth.isLogin,orderController.walletPayment);
 
 module.exports = userRoute;

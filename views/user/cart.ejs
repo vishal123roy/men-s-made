@@ -129,6 +129,7 @@
                                 </thead>
                                 <tbody>
                                     <input type="hidden" id="stock-error-input" value="<%= stockError %>">
+                                    <input type="hidden" id="product-error-input" value="<%= productError %>">
                                     <% cartList.forEach((data)=> { %>
                                         <% const uniqueId=`${data.product._id}-${data.size}` %>
                                             <tr class="cart__row border-bottom line1 cart-flex border-top"
@@ -362,14 +363,18 @@
         <script>
 
             const stockError = document.getElementById('stock-error-input').value === 'true';
-
-            console.log("stock error is true:", stockError);
-
+            const productError = document.getElementById("product-error-input").value === 'true';
             if (stockError) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Out of Stock',
                     text: 'Some items in your cart exceed available stock!',
+                })
+            }else if(productError){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'product not available',
+                    text: 'Some products are not available',
                 })
             }
         </script>
@@ -457,6 +462,4 @@
     </div>
 
 </body>
-<!-- belle/cart-variant1.html   11 Nov 2019 12:44:32 GMT -->
-
 </html>
