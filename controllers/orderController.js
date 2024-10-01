@@ -68,7 +68,7 @@ const placeOrder = async (req, res) => {
                     price: cartItem.subTotal
                 }));
 
-                // Update product popularity
+        
                 const updatePromises = orderProduct.map(async (order) => {
                     const product = await Product.findById(order.product._id);
                     if (product) {
@@ -79,7 +79,6 @@ const placeOrder = async (req, res) => {
 
                 await Promise.all(updatePromises);
 
-                // Update stock quantity
                 const updateProduct = orderProduct.map(async (order) => {
                     const product = await Product.findById(order.product._id);
                     const sizeObj = product.sizes.find(item => item.size === order.size);
@@ -89,10 +88,8 @@ const placeOrder = async (req, res) => {
 
                 await Promise.all(updateProduct);
 
-                // Get user address
                 const userAddress = await address.findById(addressId);
 
-                // Create new order
                 const orderData = new orders({
                     userId: userId,
                     orderNumber: orderNumber,
@@ -105,7 +102,6 @@ const placeOrder = async (req, res) => {
 
                 const orderId = orderData._id;
 
-
                 if (couponId) {
                     const couponData = await Coupon.findOne({ couponId: couponId });
                     const userData = await customer.findById({ _id: userId });
@@ -116,7 +112,6 @@ const placeOrder = async (req, res) => {
                         couponAmount: couponData.maximumDiscount
                     });
                 }
-
 
                 if (orderData) {
                     res.status(200).json({ message: 'Order placed successfully', orderId });

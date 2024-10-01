@@ -507,10 +507,19 @@ const updatePassword = async (req, res) => {
 
 const loadHome = async (req, res) => {
     try {
+        const userData = await customer.findOne({_id:req.session.user_id})
         const productdata = await Product.find({ is_listed: true });
-
-        res.render('home', { products: productdata });
-
+        console.log(userData);
+        if(userData.is_blocked !== true){
+            res.render('home', { products: productdata });
+        }else{
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error("Error destroying session", err);
+                }
+                res.redirect("/login");
+            })
+        }
     } catch (error) {
         console.log(error.message);
     }
@@ -518,6 +527,9 @@ const loadHome = async (req, res) => {
 
 const ShopPage = async (req, res) => {
     try {
+        const userData = await customer.findOne({_id:req.session.user_id})
+        if(userData.is_blocked !== true){
+
         const page = parseInt(req.query.page) || 1;
         const productsPerPage = 8;
         const skip = (page - 1) * productsPerPage;
@@ -592,6 +604,14 @@ const ShopPage = async (req, res) => {
                 searchQuery
             });
         }
+    }else{
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session", err);
+            }
+            res.redirect("/login");
+        })
+    }
     } catch (error) {
         console.error('Error in ShopPage:', error);
         res.status(500).send('Server Error: ' + error.message);
@@ -663,6 +683,8 @@ const filterProducts = async (req, res) => {
 
 const productpage = async (req, res) => {
     try {
+        const userData = await customer.findOne({_id:req.session.user_id})
+        if(userData.is_blocked !== true){
 
         const Id = req.query.id;
 
@@ -671,7 +693,14 @@ const productpage = async (req, res) => {
         const prodata = await Product.find();
 
         res.render('productPage', { productData: data, product: prodata });
-
+    }else{
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session", err);
+            }
+            res.redirect("/login");
+        })
+    }
     } catch (error) {
         console.log(error.message);
     }
@@ -683,9 +712,7 @@ const wishListPage = async (req, res) => {
         res.render('wishList', { productData: wishListData })
 
     } catch (error) {
-
-        console.log(error)
-
+        console.log(error);
     }
 }
 
@@ -725,9 +752,18 @@ const addTowishList = async (req, res) => {
 
 const userProfile = async (req, res) => {
     try {
-        const id = req.session.user_id;
-        const userData = await customer.findById({ _id: id });
+        const userData = await customer.findOne({_id:req.session.user_id})
+        if(userData.is_blocked !== true){
+
         res.render('userProfile', { user: userData });
+    }else{
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session", err);
+            }
+            res.redirect("/login");
+        })
+    }
     } catch (error) {
         console.log(error.message);
     }
@@ -737,8 +773,8 @@ const orderPage = async (req, res) => {
     try {
         const userId = req.session.user_id;
         const page = parseInt(req.query.page) || 1; // Current page, default is 1
-        const limit = parseInt(req.query.limit) || 10; // Orders per page, default is 10
-        const skip = (page - 1) * limit; // Calculate how many records to skip
+        const limit = parseInt(req.query.limit) || 10; 
+        const skip = (page - 1) * limit; 
 
         // Fetch the total count of user's orders
         const totalOrders = await orders.countDocuments({ userId: userId });
