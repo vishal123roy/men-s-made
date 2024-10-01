@@ -707,6 +707,7 @@ const changeStatus = async (req, res) => {
                 transactionAmount: parseFloat(order.totalAmount)
             }
             userWallet.transactionHistory.push(amountDetail);
+            userWallet.totalRefund += parseFloat(order.totalAmount);;
             await userWallet.save();
             res.status(200).json({ success: true })
         } else {
