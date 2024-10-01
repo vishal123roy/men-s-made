@@ -304,8 +304,13 @@
 
                 // Expiry date validation
                 const selectedDate = new Date(expireDate.value.trim());
+                const todayDate = new Date(today); // Today's date without time
+
                 if (isNaN(selectedDate.getTime())) {
                     showError(expireDate, "Select a valid expiry date.");
+                    formIsValid = false;
+                } else if (selectedDate < todayDate) {
+                    showError(expireDate, "Expiry date cannot be in the past.");
                     formIsValid = false;
                 } else {
                     hideError(expireDate);
