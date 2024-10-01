@@ -39,7 +39,7 @@ const cartPage = async (req, res) => {
             }
         })
 
-        
+
         if (block !== false) {
             if (value !== false) {
                 const cartProduct = cartData.items;
@@ -51,9 +51,9 @@ const cartPage = async (req, res) => {
                 });
                 await cartData.save();
 
-                res.render('cart', { cartList: cartProduct, cartData: cartData, stockError: false,productError:false })
+                res.render('cart', { cartList: cartProduct, cartData: cartData, stockError: false, productError: false })
             } else {
-          
+
                 cartItems.forEach((item) => {
                     let index = cartData.items.findIndex(elem => elem.product._id.toString() === item._id.toString() && elem.size === item.size)
 
@@ -71,13 +71,13 @@ const cartPage = async (req, res) => {
                 });
 
                 await cartData.save();
-                res.render('cart', { cartList: cartProduct, cartData: cartData, stockError: true,productError:false });
+                res.render('cart', { cartList: cartProduct, cartData: cartData, stockError: true, productError: false });
             }
         } else {
 
             blockedItems.forEach((item) => {
 
-                let index = cartData.items.findIndex(elem =>  elem.product._id.toString() === item._id.toString()) 
+                let index = cartData.items.findIndex(elem => elem.product._id.toString() === item._id.toString())
                 let pro = cartData.items.splice(index, 1)[0];
                 cartData.total -= pro.subTotal;
             })
@@ -90,7 +90,7 @@ const cartPage = async (req, res) => {
             });
 
             await cartData.save();
-            res.render('cart', { cartList: cartProduct, cartData: cartData, stockError:false,productError:true });
+            res.render('cart', { cartList: cartProduct, cartData: cartData, stockError: false, productError: true });
         }
 
     } catch (error) {
@@ -279,45 +279,83 @@ const checkoutPage = async (req, res) => {
             }
         })
         if (block !== false) {
-        if (value !== false) {
-            const productList = cartProduct.items;
-            cartProduct.total = 0;
+            if (value !== false) {
+                const productList = cartProduct.items;
+                cartProduct.total = 0;
 
-            productList.map((obj) => {
-                obj.subTotal = obj.product.offerPrice * obj.quantity
-                cartProduct.total += obj.subTotal;
-            });
+                productList.map((obj) => {
+                    obj.subTotal = obj.product.offerPrice * obj.quantity
+                    cartProduct.total += obj.subTotal;
+                });
 
-            await cartProduct.save();
+                await cartProduct.save();
 
-            const cartTotal = cartProduct.total
-            const coupons = await Coupon.find({
-                $and: [
-                    { minimumAmount: { $lte: cartTotal } },
-                    { maximumAmount: { $gte: cartTotal } },
-                    { expireDate: { $gt: Date.now() } }
-                ]
-            });
+                const cartTotal = cartProduct.total
+                const coupons = await Coupon.find({
+                    $and: [
+                        { minimumAmount: { $lte: cartTotal } },
+                        { maximumAmount: { $gte: cartTotal } },
+                        { expireDate: { $gt: Date.now() } },
+                        { _id: { $nin: userData.appliedCoupon } } 
+                    ]
+                });
 
-            res.render('checkout', {
-                userAddress: userAddress,
-                cartProduct: cartProduct,
-                userData,
-                coupons,
-                stockError: false,
-                productError:false
-            });
+                res.render('checkout', {
+                    userAddress: userAddress,
+                    cartProduct: cartProduct,
+                    userData,
+                    coupons,
+                    stockError: false,
+                    productError: false
+                });
+            } else {
+
+                cartItems.forEach((item) => {
+                    let index = cartProduct.items.findIndex(elem => elem.product.toString() === item.product.toString() && elem.size === item.size)
+
+                    let pro = cartProduct.items.splice(index, 1)[0];
+
+                    cartProduct.total -= pro.subTotal;
+
+                })
+
+                const productList = cartProduct.items;
+                cartProduct.total = 0;
+
+                productList.map((obj) => {
+                    obj.subTotal = obj.product.offerPrice * obj.quantity
+                    cartProduct.total += obj.subTotal;
+                });
+
+                await cartProduct.save();
+
+                const cartTotal = cartProduct.total
+                const coupons = await Coupon.find({
+                    $and: [
+                        { minimumAmount: { $lte: cartTotal } },
+                        { maximumAmount: { $gte: cartTotal } },
+                        { expireDate: { $gt: Date.now() } },
+                        { _id: { $nin: userData.appliedCoupon } }
+                    ]
+                });
+
+                res.render('checkout', {
+                    userAddress: userAddress,
+                    cartProduct: cartProduct,
+                    userData,
+                    coupons,
+                    stockError: true,
+                    productError: false
+                });
+            }
         } else {
 
-            cartItems.forEach((item) => {
-                let index = cartProduct.items.findIndex(elem => elem.product.toString() === item.product.toString() && elem.size === item.size)
+            blockedItems.forEach((item) => {
 
+                let index = cartProduct.items.findIndex(elem => elem.product._id.toString() === item._id.toString())
                 let pro = cartProduct.items.splice(index, 1)[0];
-
                 cartProduct.total -= pro.subTotal;
-
             })
-
             const productList = cartProduct.items;
             cartProduct.total = 0;
 
@@ -333,43 +371,8 @@ const checkoutPage = async (req, res) => {
                 $and: [
                     { minimumAmount: { $lte: cartTotal } },
                     { maximumAmount: { $gte: cartTotal } },
-                    { expireDate: { $gt: Date.now() } }
-                ]
-            });
-
-            res.render('checkout', {
-                userAddress: userAddress,
-                cartProduct: cartProduct,
-                userData,
-                coupons,
-                stockError: true,
-                productError:false
-            });
-        }
-    }else {
-
-        blockedItems.forEach((item) => {
-
-            let index = cartProduct.items.findIndex(elem =>  elem.product._id.toString() === item._id.toString()) 
-            let pro = cartProduct.items.splice(index, 1)[0];
-            cartProduct.total -= pro.subTotal;
-        })
-        const productList = cartProduct.items;
-            cartProduct.total = 0;
-
-            productList.map((obj) => {
-                obj.subTotal = obj.product.offerPrice * obj.quantity
-                cartProduct.total += obj.subTotal;
-            });
-
-            await cartProduct.save();
-
-            const cartTotal = cartProduct.total
-            const coupons = await Coupon.find({
-                $and: [
-                    { minimumAmount: { $lte: cartTotal } },
-                    { maximumAmount: { $gte: cartTotal } },
-                    { expireDate: { $gt: Date.now() } }
+                    { expireDate: { $gt: Date.now() } },
+                    { _id: { $nin: userData.appliedCoupon } } 
                 ]
             });
 
@@ -379,9 +382,9 @@ const checkoutPage = async (req, res) => {
                 userData,
                 coupons,
                 stockError: false,
-                productError:true
+                productError: true
             });
-    }
+        }
 
     } catch (error) {
         console.log(error.message);
