@@ -93,7 +93,8 @@
                                                 Address</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="/wallet"><i class="fi-rs-marker mr-10"></i>My
+                                            <a class="nav-link active" href="/wallet"><i
+                                                    class="fi-rs-marker mr-10"></i>My
                                                 wallet</a>
                                         </li>
                                         <li class="nav-item">
@@ -115,43 +116,41 @@
                                                 <div class="col-md-6">
                                                     <div>Wallet Balance:
                                                         <span id="walletBalance">
-                                                            <% if (walletData && walletData.walletBalance !==null &&
-                                                                walletData.walletBalance !==undefined) { %>
-                                                                    ₹<%= walletData.walletBalance.toFixed(2) %>
-                                                                    <% } else { %>
-                                                                        0.00
-                                                                        <% } %>
+                                                            <% if (walletData && walletData.walletBalance !== null && walletData.walletBalance !== undefined) { %>
+                                                                ₹<%= walletData.walletBalance.toFixed(2) %>
+                                                            <% } else { %>
+                                                                0.00
+                                                            <% } %>
                                                         </span>
                                                     </div>
                                                     <div>Total Refund:
                                                         <span id="totalRefund">
-                                                            <% if (walletData && walletData.totalRefund !==null &&
-                                                                walletData.totalRefund !==undefined) { %>
-                                                                    ₹<%= walletData.totalRefund.toFixed(2) %>
-                                                                    <% } else { %>
-                                                                        0.00
-                                                                        <% } %>
+                                                            <% if (walletData && walletData.totalRefund !== null && walletData.totalRefund !== undefined) { %>
+                                                                ₹<%= walletData.totalRefund.toFixed(2) %>
+                                                            <% } else { %>
+                                                                0.00
+                                                            <% } %>
                                                         </span>
                                                     </div>
                                                 </div>
-
+                                    
                                                 <!-- Second Column -->
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="addAmount" class="form-label">Add Amount to
-                                                            Wallet</label>
-                                                        <input type="number" class="form-control" id="addAmount"
-                                                            placeholder="Enter amount">
+                                                        <label for="addAmount" class="form-label">Add Amount to Wallet</label>
+                                                        <input type="number" class="form-control" id="addAmount" placeholder="Enter amount">
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary" id="addToWallet"
-                                                        style="background-color: #212529;">Add</button>
+                                                    <button type="submit" class="btn btn-primary" id="addToWallet" style="background-color: #212529;">
+                                                        Add
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-
+                                    
+                                        <!-- Transaction Table -->
                                         <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
+                                            <table class="table table-striped table-bordered">
+                                                <thead class="thead-dark">
                                                     <tr>
                                                         <th>Transaction Mode</th>
                                                         <th>Date</th>
@@ -160,26 +159,46 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="transactionTableBody">
-                                                    <% walletData.transactionHistory.forEach((data)=>{ %>
+                                                    <% walletData.transactionHistory.forEach((data)=> { %>
                                                         <tr>
-                                                            <td>
-                                                                <%= data.transactionMode %>
-                                                            </td>
-                                                            <td>
-                                                                <%=data.createdAt.toDateString()%>
-                                                            </td>
-                                                            <td>
-                                                                <%=data.paymentType%>
-                                                            </td>
-                                                            <td>₹
-                                                                <%=data.transactionAmount.toFixed(2)%>
-                                                            </td>
+                                                            <td><%= data.transactionMode %></td>
+                                                            <td><%= data.createdAt.toDateString() %></td>
+                                                            <td><%= data.paymentType %></td>
+                                                            <td>₹<%= data.transactionAmount.toFixed(2) %></td>
                                                         </tr>
-                                                        <% }) %>
+                                                    <% }) %>
                                                 </tbody>
                                             </table>
                                         </div>
+                                    
+                                        <!-- Pagination -->
+                                        <nav aria-label="Page navigation" class="d-flex justify-content-center mt-3">
+                                            <ul class="pagination">
+                                                <% if (currentPage > 1) { %>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                <% } %>
+                                    
+                                                <% for (let i = 1; i <= totalPages; i++) { %>
+                                                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                        <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
+                                                    </li>
+                                                <% } %>
+                                    
+                                                <% if (currentPage < totalPages) { %>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                <% } %>
+                                            </ul>
+                                        </nav>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>

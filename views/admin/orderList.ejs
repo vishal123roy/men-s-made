@@ -32,7 +32,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -54,7 +54,8 @@
                         <a href="/admin/productlist">Product List</a>
                         <a href="/admin/addProduct">Add product </a>
 
-
+                    </div>
+                </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
                         <span class="text">Categories</span>
@@ -63,7 +64,7 @@
                         <a href="/admin/Category">Categories</a>
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu active">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                         <span class="text">Orders</span>
                     </a>
@@ -152,16 +153,17 @@
                 <header class="card-header">
                     <div class="row gx-3">
                         <div class="col-lg-2 col-6 col-md-3">
-                            <p>Status: <%= status %></p>
+                            <p>Status: <%= status %>
+                            </p>
                             <select class="form-select" id="statusFilter">
-                                <option value="pending" <%= status==='pending' ? 'selected' : '' %>>Pending</option>
-                                <option value="Return pending" <%= status==='Return pending' ? 'selected' : '' %>>Return
+                                <option value="pending" <%=status==='pending' ? 'selected' : '' %>>Pending</option>
+                                <option value="Return pending" <%=status==='Return pending' ? 'selected' : '' %>>Return
                                     pending</option>
-                                <option value="delivered" <%= status==='delivered' ? 'selected' : '' %>>Delivered
+                                <option value="delivered" <%=status==='delivered' ? 'selected' : '' %>>Delivered
                                 </option>
-                                <option value="canceled" <%= status==='canceled' ? 'selected' : '' %>>Canceled</option>
-                                <option value="All" <%= status==='All' ? 'selected' : '' %>>Show all</option>
-                                
+                                <option value="canceled" <%=status==='canceled' ? 'selected' : '' %>>Canceled</option>
+                                <option value="All" <%=status==='All' ? 'selected' : '' %>>Show all</option>
+
                             </select>
                         </div>
                     </div>

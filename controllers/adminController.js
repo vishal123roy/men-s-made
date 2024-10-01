@@ -545,7 +545,7 @@ const editcategory = async (req, res) => {
 
         const data = await Category.findOne({ _id: id });
 
-        const newData = await Category.findOne({ name: name });
+        const newData = await Category.findOne({ name: { $regex: new RegExp(name, 'i') } });
 
         if (newData == null) {
 
@@ -635,7 +635,7 @@ const orderPage = async (req, res) => {
             .sort({ orderDate: -1 })
             .skip(skip)
             .limit(limitNumber);
-
+        console.log("orderlist is ",orderList);
         res.render('orderList', {
             AllOrders: orderList,
             currentPage: pageNumber,
@@ -936,8 +936,12 @@ const addDiscountCategory = async (req, res) => {
 
         const updatePromises = products.map(async (product) => {
             const newPrice = product.price - (product.price * (discountPercentage / 100));
-            product.offerPrice = newPrice;
-            return product.save();
+
+
+            if (product.offerPrice === undefined || product.offerPrice > newPrice) {
+                product.offerPrice = newPrice;
+                return product.save();  
+            }
         });
 
         await Promise.all(updatePromises);
@@ -949,6 +953,8 @@ const addDiscountCategory = async (req, res) => {
         res.status(500).json({ success: false, message: "An error occurred while applying the discount" });
     }
 }
+
+
 const salesReportPage = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -1112,5 +1118,6 @@ module.exports = {
     salesReportPage,
     filterReport,
     customFilterReport
+
 }
 

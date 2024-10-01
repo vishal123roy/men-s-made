@@ -53,9 +53,10 @@
                                         <div class="heading_s1">
                                             <h3 class="mb-30 text-center">ADD New Address</h3>
                                         </div>
-                                                <% if(typeof message !=='undefined' ){ %>
-                                                    <h4 id="errormsm">
-                                                 <%= message %></h4>
+                                        <% if(typeof message !=='undefined' ){ %>
+                                            <h4 id="errormsm">
+                                                <%= message %>
+                                            </h4>
                                             <% } %>
                                                 <form action="/insertAddress" method="post" id="addressForm">
                                                     <div class="row">
@@ -116,15 +117,24 @@
                                                             <p id="mobileError" class="alert text-danger"></p>
                                                         </div>
                                                         <div>
-                                                            <div class="form-group" style="display: inline-block; margin-right: 10px; vertical-align: middle;">
-                                                                <input type="radio" name="locationType" value="home" style="width: fit-content; vertical-align: middle;" required>
-                                                                <label style="display: inline; vertical-align: middle;">Home</label>
+                                                            <div class="form-group"
+                                                                style="display: inline-block; margin-right: 10px; vertical-align: middle;">
+                                                                <input type="radio" name="locationType" value="home"
+                                                                    style="width: fit-content; vertical-align: middle;"
+                                                                    required>
+                                                                <label
+                                                                    style="display: inline; vertical-align: middle;">Home</label>
                                                             </div>
-                                                            <div class="form-group" style="display: inline-block; vertical-align: middle;">
-                                                                <input type="radio" name="locationType" value="work" style="width: fit-content; vertical-align: middle;" required>
-                                                                <label style="display: inline; vertical-align: middle;">Work</label>
+                                                            <div class="form-group"
+                                                                style="display: inline-block; vertical-align: middle;">
+                                                                <input type="radio" name="locationType" value="work"
+                                                                    style="width: fit-content; vertical-align: middle;"
+                                                                    required>
+                                                                <label
+                                                                    style="display: inline; vertical-align: middle;">Work</label>
                                                             </div>
-                                                            <p id="locationTypeError" class="alert text-danger"></p> <!-- Add this line -->
+                                                            <p id="locationTypeError" class="alert text-danger"></p>
+                                                            <!-- Add this line -->
                                                         </div>
                                                         <div class="col-md-12 d-flex justify-content-center">
                                                             <button type="submit" class="btn btn-fill-out submit"
@@ -250,7 +260,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Vendor JS-->
     <script src="profile_assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="profile_assets/js/vendor/jquery-3.6.0.min.js"></script>
@@ -279,27 +289,30 @@
             hidmess.style.display = "none";
         }
         setTimeout(hidemessage, 4000);
-    
+
         document.getElementById('addressForm').addEventListener('submit', function (e) {
             e.preventDefault(); // Prevent the default form submission
             if (validateForm()) {
                 this.submit(); // Manually submit the form if validation passes
             }
         });
-    
+
         function validateForm() {
             let isValid = true;
-    
-            // Name validation
+
+            // Regular expression for text-only fields (allows alphabets and spaces)
+            const textRegex = /^[a-zA-Z\s]+$/;
+
+            // Name validation (only text)
             const name = document.getElementById('name');
-            if (name.value.trim() === '') {
-                showError('nameError', 'Name is required');
+            if (name.value.trim() === '' || !textRegex.test(name.value)) {
+                showError('nameError', 'Name is required and should contain only alphabets');
                 isValid = false;
             } else {
                 clearError('nameError');
             }
-    
-            // Pin code validation
+
+            // Pin code validation (only 6 digits)
             const pinCode = document.getElementById('pinCode');
             if (pinCode.value.trim() === '' || !/^\d{6}$/.test(pinCode.value)) {
                 showError('pinCodeError', 'Enter a valid 6-digit pin code');
@@ -307,44 +320,55 @@
             } else {
                 clearError('pinCodeError');
             }
-    
-            // Locality validation
+
+            // Locality validation (only text)
             const locality = document.getElementById('locality');
-            if (locality.value.trim() === '') {
-                showError('localityError', 'Locality is required');
+            if (locality.value.trim() === '' || !textRegex.test(locality.value)) {
+                showError('localityError', 'Locality is required and should contain only alphabets');
                 isValid = false;
             } else {
                 clearError('localityError');
             }
-    
-            // Address validation
+
+            // Address validation (text allowed with basic punctuation for streets, etc.)
             const address = document.getElementById('address');
-            if (address.value.trim() === '') {
-                showError('addressAreaError', 'Address is required');
+            const addressRegex = /^[a-zA-Z0-9\s,.-/()#&]+$/; // Allows alphabets, numbers, and selected punctuation
+            if (address.value.trim() === '' || !addressRegex.test(address.value)) {
+                showError('addressAreaError', 'Address is required and should be valid');
                 isValid = false;
             } else {
                 clearError('addressAreaError');
             }
-    
-            // District validation
+
+
+            // District validation (only text)
             const district = document.getElementById('district');
-            if (district.value.trim() === '') {
-                showError('districtError', 'City/District is required');
+            if (district.value.trim() === '' || !textRegex.test(district.value)) {
+                showError('districtError', 'City/District is required and should contain only alphabets');
                 isValid = false;
             } else {
                 clearError('districtError');
             }
-    
-            // State validation
+
+            // State validation (only text)
             const state = document.getElementById('state');
-            if (state.value.trim() === '') {
-                showError('stateError', 'State is required');
+            if (state.value.trim() === '' || !textRegex.test(state.value)) {
+                showError('stateError', 'State is required and should contain only alphabets');
                 isValid = false;
             } else {
                 clearError('stateError');
             }
-    
-            // Mobile validation
+
+            // Landmark validation (optional but must be text-only if entered)
+            const landmark = document.getElementById('landmark');
+            if (landmark.value.trim() !== '' && !textRegex.test(landmark.value)) {
+                showError('LandmarkError', 'Landmark should contain only alphabets');
+                isValid = false;
+            } else {
+                clearError('LandmarkError');
+            }
+
+            // Mobile validation (only 10 digits)
             const mobile = document.getElementById('mobile');
             if (mobile.value.trim() === '' || !/^\d{10}$/.test(mobile.value)) {
                 showError('mobileError', 'Enter a valid 10-digit mobile number');
@@ -352,8 +376,8 @@
             } else {
                 clearError('mobileError');
             }
-    
-            // Location Type validation
+
+            // Location Type validation (radio button)
             const locationType = document.querySelector('input[name="locationType"]:checked');
             if (!locationType) {
                 showError('locationTypeError', 'Please select a location type');
@@ -361,18 +385,19 @@
             } else {
                 clearError('locationTypeError');
             }
-    
+
             return isValid;
         }
-    
+
         function showError(elementId, message) {
             document.getElementById(elementId).textContent = message;
         }
-    
+
         function clearError(elementId) {
             document.getElementById(elementId).textContent = '';
         }
     </script>
+
 </body>
 
 </html>

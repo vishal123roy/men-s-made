@@ -226,7 +226,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -240,7 +240,7 @@
 
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu active">
                     <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
@@ -343,7 +343,7 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <div class="mb-4">
-                                    <label for="product_title" class="form-label">Product title</label>
+                                    <label for="product_title" class="form-label">Product name</label>
                                     <input type="text" placeholder="Type here" class="form-control" id="product_title"
                                         name="product_title" required>
                                     <div class="invalid-feedback">Please enter a product title.</div>
@@ -603,6 +603,35 @@
                 formIsValid = false;
             }
 
+            // Product title validation (only alphabets)
+            const productTitleInput = document.getElementById('product_title');
+            const productTitlePattern = /^[A-Za-z\s]+$/; // Allows only alphabets and spaces
+            if (!productTitlePattern.test(productTitleInput.value.trim())) {
+                productTitleInput.setCustomValidity('Product title must contain only alphabets.');
+                formIsValid = false;
+            } else {
+                productTitleInput.setCustomValidity('');
+            }
+
+            // Brand validation (only alphabets)
+            const productBrandInput = document.getElementById('product_brand');
+            if (!productTitlePattern.test(productBrandInput.value.trim())) {
+                productBrandInput.setCustomValidity('Brand name must contain only alphabets.');
+                formIsValid = false;
+            } else {
+                productBrandInput.setCustomValidity('');
+            }
+
+            // Description validation (must contain alphabets, but others are optional)
+            const descriptionInput = document.getElementById('description');
+            const descriptionPattern = /[A-Za-z]+/; // At least one alphabet
+            if (!descriptionPattern.test(descriptionInput.value.trim())) {
+                descriptionInput.setCustomValidity('Description must contain at least one alphabet.');
+                formIsValid = false;
+            } else {
+                descriptionInput.setCustomValidity('');
+            }
+
             const priceInput = document.getElementById('price');
             const offerPriceInput = document.getElementById('offerPrice');
             const priceValue = parseFloat(priceInput.value);
@@ -674,6 +703,7 @@
                 }
             });
         });
+
     </script>
 
 

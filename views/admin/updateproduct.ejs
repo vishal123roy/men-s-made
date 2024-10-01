@@ -88,7 +88,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -99,18 +99,19 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/userlist">User List</a>
-        
+
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu active">
                     <a class="menu-link" href="products"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
                         <a href="/admin/productlist">Product List</a>
                         <a href="/admin/addProduct">Add product </a>
+                    </div>
+                </li>
 
-               
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
                         <span class="text">Categories</span>
@@ -126,7 +127,7 @@
                     <div class="submenu">
                         <a href="/admin/orderList">OrderList</a>
                     </div>
-                </li> 
+                </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                         <span class="text">Coupons</span>
@@ -142,7 +143,7 @@
                     <div class="submenu">
                         <a href="/admin/offerPage">offerList</a>
                     </div>
-                </li>  
+                </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                         <span class="text">Sales</span>
@@ -150,8 +151,8 @@
                     <div class="submenu">
                         <a href="/admin/salesReport">saleReport</a>
                     </div>
-                </li> 
-            </ul> 
+                </li>
+            </ul>
             <br>
             <br>
         </nav>
@@ -561,13 +562,16 @@
 
     </script>
     <script>
-        // JavaScript for form validation
         document.getElementById('productForm').addEventListener('submit', function (event) {
             let formIsValid = true;
 
             const productName = document.getElementById('product_title');
             const brandName = document.getElementById('product_brand');
             const description = document.getElementById('description');
+            const price = document.getElementById('price');
+            const imageUpload = document.getElementById('imageUpload');
+            const existingImages = document.querySelectorAll('#existingImages img'); // Images already uploaded
+            const sizeInputs = document.querySelectorAll('input[type="number"]');
 
             const namePattern = /^[A-Za-z\s]+$/;
             const descriptionPattern = /[A-Za-z]+/; // Ensures at least one letter
@@ -576,7 +580,6 @@
             if (!namePattern.test(productName.value)) {
                 productName.setCustomValidity('Product name should only contain letters and spaces.');
                 formIsValid = false;
-                console.log('Invalid product name');
             } else {
                 productName.setCustomValidity('');
             }
@@ -585,7 +588,6 @@
             if (!namePattern.test(brandName.value)) {
                 brandName.setCustomValidity('Brand name should only contain letters and spaces.');
                 formIsValid = false;
-                console.log('Invalid brand name');
             } else {
                 brandName.setCustomValidity('');
             }
@@ -594,10 +596,35 @@
             if (!descriptionPattern.test(description.value)) {
                 description.setCustomValidity('Description must contain at least one letter.');
                 formIsValid = false;
-                console.log('Invalid description');
             } else {
                 description.setCustomValidity('');
             }
+
+            // Custom validation for price (must be above 1000)
+            if (price.value <= 1000) {
+                price.setCustomValidity('Price must be greater than 1000.');
+                formIsValid = false;
+            } else {
+                price.setCustomValidity('');
+            }
+
+            // Custom validation for image upload (must not be empty)
+            if (existingImages.length === 0 && imageUpload.files.length === 0) {
+                imageUpload.setCustomValidity('Please upload at least one image.');
+                formIsValid = false;
+            } else {
+                imageUpload.setCustomValidity('');
+            }
+
+            // Custom validation for sizes (must be positive numbers)
+            sizeInputs.forEach(input => {
+                if (input.value <= 0) {
+                    input.setCustomValidity('Size quantity must be a positive number.');
+                    formIsValid = false;
+                } else {
+                    input.setCustomValidity('');
+                }
+            });
 
             // Check form validity
             if (!formIsValid) {
@@ -610,6 +637,7 @@
             // Enable validation feedback
             this.classList.add('was-validated');
         });
+
     </script>
 </body>
 

@@ -453,12 +453,12 @@ const sendEmail = async (req, res) => {
             const otp = generateOTP();
             const otpexpiry = otpExpiryTime();
             await sendOTP(email, otp);
-            console.log("otp is ",otp);
+            console.log("otp is ", otp);
             const otpdata = { email, otp, otpexpiry }
             req.session.Data = otpdata;
             res.redirect('newPassword');
         }
-        
+
     } catch (error) {
         console.log(error.message);
     }
@@ -475,7 +475,7 @@ const newPassword = async (req, res) => {
 const updatePassword = async (req, res) => {
     try {
         const { otp, newPassword } = req.body;
-        console.log("otp is ",otp,"new password is",newPassword );
+        console.log("otp is ", otp, "new password is", newPassword);
 
         const expiryTime = new Date(req.session.Data.otpexpiry);
         const now = new Date();
@@ -495,8 +495,8 @@ const updatePassword = async (req, res) => {
             if (userData) {
                 res.redirect('login');
             }
-        }else{
-            res.render('newPassword',{message:"OTP invalid"});
+        } else {
+            res.render('newPassword', { message: "OTP invalid" });
         }
 
     } catch (error) {
@@ -524,7 +524,7 @@ const ShopPage = async (req, res) => {
 
         const { brand: selectedBrand, category: selectedCategory, sort: selectedSort, search: searchQuery } = req.query;
 
-        let filter = {is_listed:true};
+        let filter = { is_listed: true };
 
         if (selectedCategory) {
             filter.productcategory = selectedCategory;
@@ -556,7 +556,7 @@ const ShopPage = async (req, res) => {
                 sort.productname = -1;
                 break;
             default:
-                break; 
+                break;
         }
 
         const [totalProducts, productList, categories, brands] = await Promise.all([
@@ -603,15 +603,15 @@ const filterProducts = async (req, res) => {
         const { brand = [], category, sort, search, page = 1 } = req.body;
         const productsPerPage = 8;
 
-        let filter = {is_listed:true};
+        let filter = { is_listed: true };
 
 
         if (category) {
             filter.productcategory = category;
         }
-    
+
         if (brand.length > 0) {
-            filter.brand = { $in: brand }; 
+            filter.brand = { $in: brand };
         }
 
         if (search && search.trim() !== '') {
@@ -648,7 +648,7 @@ const filterProducts = async (req, res) => {
             .limit(productsPerPage)
             .lean();
 
-        const totalProducts = await Product.countDocuments(filter); 
+        const totalProducts = await Product.countDocuments(filter);
         const totalPages = Math.ceil(totalProducts / productsPerPage);
 
         res.json({ productList, totalPages, currentPage: page });
@@ -735,13 +735,33 @@ const userProfile = async (req, res) => {
 
 const orderPage = async (req, res) => {
     try {
-        userId = req.session.user_id;
-        const orderData = await orders.find({ userId: userId });
-        res.render('orders', { orderData: orderData });
+        const userId = req.session.user_id;
+        const page = parseInt(req.query.page) || 1; // Current page, default is 1
+        const limit = parseInt(req.query.limit) || 10; // Orders per page, default is 10
+        const skip = (page - 1) * limit; // Calculate how many records to skip
+
+        // Fetch the total count of user's orders
+        const totalOrders = await orders.countDocuments({ userId: userId });
+
+        // Fetch orders for the current page
+        const orderData = await orders.find({ userId: userId })
+            .skip(skip)
+            .limit(limit)
+            .sort({ orderDate: -1 }); // Sorting by most recent order
+
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        res.render('orders', {
+            orderData: orderData,
+            currentPage: page,
+            totalPages: totalPages,
+            limit: limit // Pass the limit to view
+        });
     } catch (error) {
         console.log(error.message);
     }
 }
+
 
 
 const editUserpage = async (req, res) => {
@@ -821,27 +841,27 @@ const addCoupon = async (req, res) => {
 
         const couponData = await Coupon.findOne({ couponId: couponId });
 
-        if(couponData != null){
+        if (couponData != null) {
             let couponAmount = null;
-        if (couponData.expireDate > Date.now()) {
-            cartData.total -= couponData.maximumDiscount;
-            
-            const total = cartData.total;
+            if (couponData.expireDate > Date.now()) {
+                cartData.total -= couponData.maximumDiscount;
 
-            couponAmount = couponData.maximumDiscount;
+                const total = cartData.total;
 
-            await cartData.save();
+                couponAmount = couponData.maximumDiscount;
 
-            res.status(200).json({ success: true, total: total ,couponAmount});
+                await cartData.save();
+
+                res.status(200).json({ success: true, total: total, couponAmount });
+            }
+            else {
+                res.status(400).json({ success: false, text: 'coupon is expired' });
+            }
+        } else {
+            res.status(400).json({ success: false, text: "coupon is invalid" });
         }
-        else {
-            res.status(400).json({ success: false, text: 'coupon is expired'});
-        }
-        }else{
-            res.status(400).json({ success:false ,text:"coupon is invalid" });
-        }
 
-        
+
 
     } catch (error) {
 
@@ -900,12 +920,40 @@ const removeWishList = async (req, res) => {
 const walletPage = async (req, res) => {
     try {
         const userId = req.session.user_id;
-        const userWallet = await Wallet.findOne({ user: userId });
-        res.render('wallet', { walletData: userWallet });
-    } catch (error) {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
 
+        // Find the wallet data for the user
+        const walletData = await Wallet.findOne({ user: userId });
+
+        if (walletData) {
+            const totalTransactions = walletData.transactionHistory.length;
+            const paginatedTransactions = walletData.transactionHistory
+                .slice(skip, skip + limit); // Get paginated transactions
+
+            // Calculate total pages
+            const totalPages = Math.ceil(totalTransactions / limit);
+
+            // Render the wallet page with paginated data
+            res.render('wallet', {
+                walletData: {
+                    ...walletData.toObject(),
+                    transactionHistory: paginatedTransactions
+                },
+                currentPage: page,
+                totalPages: totalPages,
+                limit: limit
+            });
+        } else {
+            res.status(404).send('Wallet not found');
+        }
+    } catch (error) {
+        console.error('Error in walletPage:', error);
+        res.status(500).send('An error occurred while fetching wallet data');
     }
-}
+};
+
 
 const addWalletAmount = async (req, res) => {
     try {

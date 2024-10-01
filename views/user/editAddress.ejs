@@ -15,6 +15,19 @@
     <link rel="shortcut icon" type="image/x-icon" href="profile_assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="profile_assets/css/main.css?v=3.4">
+    <style>
+        #locationTypeError {
+            display: inline-block;
+            height: 20px;
+            /* Reserve space for the error message */
+            margin-left: 10px;
+            /* Add some margin to separate the message from the radio buttons */
+            vertical-align: middle;
+            /* Keep it aligned with the radio buttons */
+            color: red;
+            /* Optional: Ensures the message stands out */
+        }
+    </style>
 </head>
 
 <body>
@@ -128,20 +141,22 @@
                                                                 <input type="radio" name="locationType" value="home"
                                                                     style="width: fit-content; vertical-align: middle;"
                                                                     required>
-                                                                <label style="display: inline; vertical-align: middle;">
-                                                                    Home </label>
-                                                                <p id="locationTypeError" class="alert text-danger"></p>
+                                                                <label
+                                                                    style="display: inline; vertical-align: middle;">Home</label>
                                                             </div>
                                                             <div class="form-group"
                                                                 style="display: inline-block; vertical-align: middle;">
                                                                 <input type="radio" name="locationType" value="work"
                                                                     style="width: fit-content; vertical-align: middle;"
                                                                     required>
-                                                                <label style="display: inline; vertical-align: middle;">
-                                                                    Work </label>
-                                                                <p id="locationTypeError" class="alert text-danger"></p>
+                                                                <label
+                                                                    style="display: inline; vertical-align: middle;">Work</label>
                                                             </div>
+                                                            <p id="locationTypeError" class="alert text-danger"
+                                                                style="display: inline-block;"></p>
+                                                            <!-- Make sure it doesn't affect alignment -->
                                                         </div>
+
                                                         <div class="col-md-12 d-flex justify-content-center">
                                                             <button type="submit" class="btn btn-fill-out submit"
                                                                 style="width:25% ;" value="Submit">Change</button>
@@ -309,28 +324,29 @@
         }
 
         document.getElementById('addressForm').addEventListener('submit', function (e) {
-            console.log('Form submission attempted');
-            e.preventDefault();
+            e.preventDefault(); // Prevent form submission
+
             if (validateForm()) {
-                console.log('Form validation passed, submitting form');
-                this.submit();
-            } else {
-                console.log('Form validation failed');
+                this.submit(); // Submit the form if validation passes
             }
         });
+
         function validateForm() {
             let isValid = true;
 
-            // Name validation
+            // Name validation (text only)
             const name = document.getElementById('name');
             if (name.value.trim() === '') {
                 showError('nameError', 'Name is required');
+                isValid = false;
+            } else if (!/^[A-Za-z\s]+$/.test(name.value.trim())) {
+                showError('nameError', 'Name can contain only letters');
                 isValid = false;
             } else {
                 clearError('nameError');
             }
 
-            // Pin code validation
+            // Pin code validation (same as before)
             const pinCode = document.getElementById('pinCode');
             if (pinCode.value.trim() === '' || !/^\d{6}$/.test(pinCode.value)) {
                 showError('pinCodeError', 'Enter a valid 6-digit pin code');
@@ -339,43 +355,54 @@
                 clearError('pinCodeError');
             }
 
-            // Locality validation
+            // Locality validation (text only)
             const locality = document.getElementById('locality');
             if (locality.value.trim() === '') {
                 showError('localityError', 'Locality is required');
+                isValid = false;
+            } else if (!/^[A-Za-z\s]+$/.test(locality.value.trim())) {
+                showError('localityError', 'Locality can contain only letters');
                 isValid = false;
             } else {
                 clearError('localityError');
             }
 
-            // Address validation
+
+            // Address validation (same as before)
             const address = document.getElementById('address');
-            if (address.value.trim() === '') {
-                showError('addressAreaError', 'Address is required');
+            const addressRegex = /^[a-zA-Z0-9\s,.-/()#&]+$/; // Allows alphabets, numbers, and selected punctuation
+            if (address.value.trim() === '' || !addressRegex.test(address.value)) {
+                showError('addressAreaError', 'Address is required and should be valid');
                 isValid = false;
             } else {
                 clearError('addressAreaError');
             }
 
-            // District validation
+            // District validation (text only)
             const district = document.getElementById('district');
             if (district.value.trim() === '') {
                 showError('districtError', 'City/District is required');
+                isValid = false;
+            } else if (!/^[A-Za-z\s]+$/.test(district.value.trim())) {
+                showError('districtError', 'District can contain only letters');
                 isValid = false;
             } else {
                 clearError('districtError');
             }
 
-            // State validation
+            // State validation (text only)
             const state = document.getElementById('state');
             if (state.value.trim() === '') {
                 showError('stateError', 'State is required');
+                isValid = false;
+            } else if (!/^[A-Za-z\s]+$/.test(state.value.trim())) {
+                showError('stateError', 'State can contain only letters');
                 isValid = false;
             } else {
                 clearError('stateError');
             }
 
-            // Mobile validation
+            // Mobile validation (same as before)
             const mobile = document.getElementById('mobile');
             if (mobile.value.trim() === '' || !/^\d{10}$/.test(mobile.value)) {
                 showError('mobileError', 'Enter a valid 10-digit mobile number');
@@ -384,7 +411,7 @@
                 clearError('mobileError');
             }
 
-            // Location Type validation
+            // Location Type validation (same as before)
             const locationType = document.querySelector('input[name="locationType"]:checked');
             if (!locationType) {
                 showError('locationTypeError', 'Please select a location type');
@@ -400,6 +427,7 @@
             const errorElement = document.getElementById(elementId);
             if (errorElement) {
                 errorElement.textContent = message;
+                errorElement.style.display = 'block'; // Ensure the error message is visible
             }
         }
 
@@ -407,8 +435,11 @@
             const errorElement = document.getElementById(elementId);
             if (errorElement) {
                 errorElement.textContent = '';
+                errorElement.style.display = 'none'; // Hide the error message
             }
         }
+
+
     </script>
 </body>
 

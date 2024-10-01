@@ -85,7 +85,7 @@
     </div>
     <nav>
         <ul class="menu-aside">
-            <li class="menu-item active">
+            <li class="menu-item ">
                 <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                     <span class="text">Dashboard</span>
                 </a>
@@ -132,7 +132,7 @@
                     <a href="/admin/couponList">CouponList</a>
                 </div>
             </li>
-            <li class="menu-item has-submenu">
+            <li class="menu-item has-submenu active">
                 <a class="menu-link" href="#"> <i class="icon material-icons md-store"></i>
                     <span class="text">Offer</span>
                 </a>
@@ -263,6 +263,7 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <div class="row row-cols-1 row-cols-md-3">
+
                                     <% categories.forEach((category, index)=> { %>
                                         <div class="col">
                                             <div class="card card-product-grid">
@@ -280,10 +281,10 @@
                                                         <label for="discountPercentage_<%= index %>">Discount
                                                             Percentage:</label>
                                                         <input type="number" id="discountPercentage_<%= index %>"
-                                                            name="discountPercentage" min="0" max="99" required>
+                                                            name="discountPercentage" min="1" max="50" required>
                                                         <br><br>
                                                         <button type="submit" class="btn btn-sm font-sm btn-brand"
-                                                            style="margin-top:10px ;" style="border-radius: 0;">Apply
+                                                            style="margin-top:10px;" style="border-radius: 0;">Apply
                                                             Discount</button>
                                                     </form>
                                                 </div>
@@ -317,41 +318,41 @@
 
 
 
-<!-- Modal for editing the offer price -->
-<div class="modal fade" id="editOfferModal" tabindex="-1" aria-labelledby="editOfferModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editOfferModalLabel">Edit Offer Price</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editOfferForm">
-                    <!-- Hidden field for storing product ID -->
-                    <input type="hidden" id="productId" name="productId">
-                    
-                    <!-- Hidden field for storing current price -->
-                    <input type="hidden" id="currentPrice" name="currentPrice">
-                    
-                    <div class="form-group">
-                        <label for="newOfferPrice">New Offer Price:</label>
-                        <input type="number" class="form-control" id="newOfferPrice" name="newOfferPrice"
-                            placeholder="Enter new offer price">
-                    </div>
-                    
-                    <!-- Error message label -->
-                    <label id="offerPriceError" style="color: red; display: none;"></label>
-
-                    <button type="submit" style="align-items:center; border-radius: 0;" class="btn btn-primary">
-                        Save changes
+    <!-- Modal for editing the offer price -->
+    <div class="modal fade" id="editOfferModal" tabindex="-1" aria-labelledby="editOfferModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editOfferModalLabel">Edit Offer Price</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                </form>
+                </div>
+                <div class="modal-body">
+                    <form id="editOfferForm">
+                        <!-- Hidden field for storing product ID -->
+                        <input type="hidden" id="productId" name="productId">
+
+                        <!-- Hidden field for storing current price -->
+                        <input type="hidden" id="currentPrice" name="currentPrice">
+
+                        <div class="form-group">
+                            <label for="newOfferPrice">New Offer Price:</label>
+                            <input type="number" class="form-control" id="newOfferPrice" name="newOfferPrice"
+                                placeholder="Enter new offer price">
+                        </div>
+
+                        <!-- Error message label -->
+                        <label id="offerPriceError" style="color: red; display: none;"></label>
+
+                        <button type="submit" style="align-items:center; border-radius: 0;" class="btn btn-primary">
+                            Save changes
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 
@@ -491,10 +492,24 @@
 
 <script>
     async function applyDiscount(event, index, categoryId) {
-        try {
-            event.preventDefault();
-            const discountPercentage = document.getElementById(`discountPercentage_${index}`).value;
+        event.preventDefault();
 
+        const discountInput = document.getElementById(`discountPercentage_${index}`);
+        const discountPercentage = parseInt(discountInput.value);
+
+        // Validation: Ensure the discount is between 1 and 50
+        if (discountPercentage < 1 || discountPercentage > 50 || isNaN(discountPercentage)) {
+            await Swal.fire({
+                icon: 'error',
+                title: "Invalid Discount",
+                text: "Discount percentage must be between 1 and 50.",
+                timer: 2000,
+                showConfirmButton: false
+            });
+            return;  // Stop the function execution if validation fails
+        }
+
+        try {
             const response = await fetch(`/admin/applyDiscount/${categoryId}`, {
                 method: 'POST',
                 headers: {

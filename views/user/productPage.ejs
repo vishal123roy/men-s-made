@@ -1010,7 +1010,10 @@
                             const productId = button.dataset.productId;
                             const sizeElement = document.querySelector('input[name="option-1"]:checked');
                             if (!sizeElement) {
-                                alert('Please select a size.');
+                                Swal.fire({
+                                    icon:'warning',
+                                    text:'Select a size'
+                                })
                                 return;
                             }
                             const size = sizeElement.value;

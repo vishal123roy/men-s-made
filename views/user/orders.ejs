@@ -106,44 +106,69 @@
                             <div class="col-md-8">
                                 <div class="dashboard-content">
                                     <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="mb-0">Your Orders</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <thead>
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Your Orders</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Order</th>
+                                                            <th>Date</th>
+                                                            <th>Status</th>
+                                                            <th>Total</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% orderData.forEach(element=> { %>
                                                             <tr>
-                                                                <th>Order</th>
-                                                                <th>Date</th>
-                                                                <th>Status</th>
-                                                                <th>Total</th>
-                                                                <th>Actions</th>
+                                                                <td>
+                                                                    <%= element.orderNumber%>
+                                                                </td>
+                                                                <td>
+                                                                    <%= element.orderDate.toDateString()%>
+                                                                </td>
+                                                                <td>
+                                                                    <%= element.status%>
+                                                                </td>
+                                                                <td>₹
+                                                                    <%= element.totalAmount.toFixed(2)%>
+                                                                </td>
+                                                                <td><a href="/viewOrder?id=<%=element._id%>"
+                                                                        class="btn-small d-block">View</a></td>
                                                             </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <% orderData.forEach(element=> { %>
-                                                                <tr>
-                                                                    <td>
-                                                                        <%= element.orderNumber%>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= element.orderDate.toDateString()%>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= element.status%>
-                                                                    </td>
-                                                                    <td>₹
-                                                                        <%= element.totalAmount.toFixed(2)%>
-                                                                    </td>
-                                                                    <td><a href="/viewOrder?id=<%=element._id%>"
-                                                                            class="btn-small d-block">View</a></td>
-                                                                </tr>
-                                                                <% }); %>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                            <% }); %>
+                                                    </tbody>
+                                                </table>
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                        <% if (currentPage > 1) { %>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" aria-label="Previous">
+                                                                    <span aria-hidden="true">&laquo;</span>
+                                                                </a>
+                                                            </li>
+                                                        <% } %>
+                                                
+                                                        <% for (let i = 1; i <= totalPages; i++) { %>
+                                                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                                <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
+                                                            </li>
+                                                        <% } %>
+                                                
+                                                        <% if (currentPage < totalPages) { %>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" aria-label="Next">
+                                                                    <span aria-hidden="true">&raquo;</span>
+                                                                </a>
+                                                            </li>
+                                                        <% } %>
+                                                    </ul>
+                                                </nav>
                                             </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -284,6 +309,7 @@
     <script src="profile_assets/js/plugins/jquery.theia.sticky.js"></script>
     <!-- Template  JS -->
     <script src="./profile_assets/js/main.js?v=3.4"></script>
+
 </body>
 
 </html>

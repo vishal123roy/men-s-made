@@ -56,7 +56,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -79,7 +79,7 @@
                         <a href="/admin/addProduct">Add product </a>
 
 
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu active">
                     <a class="menu-link" href="categories"> <i class="icon material-icons md-store"></i>
                         <span class="text">Categories</span>
                     </a>
@@ -272,56 +272,80 @@
     <script>
         document.getElementById('insert').addEventListener('submit', async function (event) {
             event.preventDefault();
-
-            const input1 = document.getElementById('name').value;
-            const input2 = document.getElementById('description').value;
-
-            const formdata = {
-                categoryname: input1,
-                description: input2
+    
+            const input1 = document.getElementById('name').value.trim();
+            const input2 = document.getElementById('description').value.trim();
+            const messageLabel = document.getElementById('message');
+    
+            // Regular expressions for validation
+            const alphaRegex = /^[A-Za-z]+$/;
+            const descriptionRegex = /^(?=.*[A-Za-z])[A-Za-z0-9\s.,-]*$/; // At least one alphabet required, allows numbers and special characters.
+    
+            // Clear previous messages
+            messageLabel.textContent = '';
+    
+            // Validation flag
+            let isValid = true;
+    
+            // Validate categoryname (only alphabets)
+            if (!alphaRegex.test(input1)) {
+                messageLabel.textContent = 'Category name should contain only alphabets.';
+                isValid = false;
             }
-            const response = await fetch('/admin/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formdata)
-            })
-
-            if (response.ok) {
-                window.location.href = '/admin/Category';
+    
+            // Validate description (must contain at least one alphabet, and optional numbers/special characters)
+            if (!descriptionRegex.test(input2)) {
+                messageLabel.textContent = 'Description must contain at least one alphabet. It can also include numbers, spaces, commas, periods, and hyphens.';
+                isValid = false;
             }
-            else {
-                const msm = document.getElementById('message').innerHTML = 'Already exist';
-                setTimeout(() => {
-                    const msm = document.getElementById('message').innerHTML = '';
-                }, 4000);
-                setTimeout(() => {
-                    const msm = document.getElementById('message');
-                    msm.style.display = 'b';
-                }, 8000);
-
+    
+            // Only make the fetch call if validation passes
+            if (isValid) {
+                const formdata = {
+                    categoryname: input1,
+                    description: input2
+                };
+    
+                const response = await fetch('/admin/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formdata)
+                });
+    
+                if (response.ok) {
+                    window.location.href = '/admin/Category';
+                } else {
+                    messageLabel.textContent = 'Category already exists.';
+                    setTimeout(() => {
+                        messageLabel.textContent = '';
+                    }, 4000);
+                }
             }
-        })
-
+        });
+    
+        // Status function for enabling/disabling category (unchanged)
         async function status(id) {
             const formdata = {
                 Id: id
-            }
-            console.log(id);
+            };
+    
             const response = await fetch("/admin/enable", {
                 method: 'POST',
                 headers: {
                     'content-Type': 'application/json'
                 },
                 body: JSON.stringify(formdata)
-            })
+            });
+    
             if (response.ok) {
-                // document.getElementById('enable').innerText = 'Disable'
                 window.location.href = "/admin/Category";
             }
         }
     </script>
+    
+
 </body>
 
 </html>
