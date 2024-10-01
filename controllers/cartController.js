@@ -13,6 +13,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const wishList = require('../models/wishListModel');
 const Wallet = require('../models/walletModel');
+const mongoose = require('mongoose'); 
 
 const cartPage = async (req, res) => {
     try {
@@ -291,12 +292,14 @@ const checkoutPage = async (req, res) => {
                 await cartProduct.save();
 
                 const cartTotal = cartProduct.total
+                const validCoupons = userData.appliedCoupon.filter(couponId => mongoose.isValidObjectId(couponId));
+
                 const coupons = await Coupon.find({
                     $and: [
                         { minimumAmount: { $lte: cartTotal } },
                         { maximumAmount: { $gte: cartTotal } },
                         { expireDate: { $gt: Date.now() } },
-                        { _id: { $nin: userData.appliedCoupon } } 
+                        { _id: { $nin: validCoupons } }  // Ensure only valid ObjectIds are used
                     ]
                 });
 
@@ -330,12 +333,14 @@ const checkoutPage = async (req, res) => {
                 await cartProduct.save();
 
                 const cartTotal = cartProduct.total
+                const validCoupons = userData.appliedCoupon.filter(couponId => mongoose.isValidObjectId(couponId));
+
                 const coupons = await Coupon.find({
                     $and: [
                         { minimumAmount: { $lte: cartTotal } },
                         { maximumAmount: { $gte: cartTotal } },
                         { expireDate: { $gt: Date.now() } },
-                        { _id: { $nin: userData.appliedCoupon } }
+                        { _id: { $nin: validCoupons } }  // Ensure only valid ObjectIds are used
                     ]
                 });
 
@@ -367,12 +372,14 @@ const checkoutPage = async (req, res) => {
             await cartProduct.save();
 
             const cartTotal = cartProduct.total
+            const validCoupons = userData.appliedCoupon.filter(couponId => mongoose.isValidObjectId(couponId));
+
             const coupons = await Coupon.find({
                 $and: [
                     { minimumAmount: { $lte: cartTotal } },
                     { maximumAmount: { $gte: cartTotal } },
                     { expireDate: { $gt: Date.now() } },
-                    { _id: { $nin: userData.appliedCoupon } } 
+                    { _id: { $nin: validCoupons } }  // Ensure only valid ObjectIds are used
                 ]
             });
 
