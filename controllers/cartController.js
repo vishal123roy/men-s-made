@@ -19,7 +19,8 @@ const cartPage = async (req, res) => {
     try {
         const userId = req.session.user_id;
         const cartData = await cart.findOne({ userId: userId }).populate('items.product');
-
+        const userData = await customer.findOne({_id:req.session.user_id})
+        if(userData.is_blocked !== true){
         let value = true;
         let cartItems = [];
         cartData.items.map((item) => {
@@ -93,6 +94,14 @@ const cartPage = async (req, res) => {
             await cartData.save();
             res.render('cart', { cartList: cartProduct, cartData: cartData, stockError: false, productError: true });
         }
+    }else{
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session", err);
+            }
+            res.redirect("/login");
+        })
+    }
 
     } catch (error) {
         console.log(error.message);
@@ -253,8 +262,9 @@ const removeCart = async (req, res) => {
 const checkoutPage = async (req, res) => {
     try {
         const userId = req.session.user_id;
-
+  
         const userData = await customer.findOne({ _id: userId });
+        if(userData.is_blocked !== true){
 
         const userAddress = await address.find({ user: userId });
 
@@ -392,6 +402,14 @@ const checkoutPage = async (req, res) => {
                 productError: true
             });
         }
+    }else{
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session", err);
+            }
+            res.redirect("/login");
+        })
+    }
 
     } catch (error) {
         console.log(error.message);
